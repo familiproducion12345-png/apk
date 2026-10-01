@@ -2,6 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<!-- ==========================================
+     SOLUCIÓN ANTI-CACHÉ (Evita que el navegador guarde la página)
+     ========================================== -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DiDi Food Rider - Registro & Login</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,7 +23,7 @@
 html, body {
     overscroll-behavior-y: none;
     overscroll-behavior: none;
-    position: fixed; /* Bloquea el rebote nativo del viewport en iOS y Android */
+    position: fixed; 
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -39,7 +46,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 
 /* Tarjeta */
 .scene{position:relative;z-index:10;perspective:1200px;width:100%;display:flex;justify-content:center;}
-/* Se agrega overscroll-behavior y webkit-overflow-scrolling a los elementos con scroll */
 .glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
 .header{text-align:center;margin-bottom:20px}
 .header h1{font-size:30px;font-weight:900;letter-spacing:-1px;text-shadow:0 0 10px rgba(255,122,0,.5)}
@@ -87,7 +93,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 .status-text{text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px;font-weight:500;line-height:1.4}
 .status-text.ok{color:var(--primary)}.status-text.err{color:var(--secondary)}
 
-/* Se agrega overscroll-behavior al panel de admin */
 #adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
 .adm-wrap{max-width:640px;margin:0 auto}
 .adm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -130,9 +135,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 @keyframes laserSweep{0%{left:-100%}50%,100%{left:200%}}
 @media(max-width:480px){.glass-panel{padding:26px 20px}}
 
-/* ==========================================
-   MEJORAS PREMIUM - PANEL ADMIN Y WHATSAPP
-   ========================================== */
 .float-wa {
     position: fixed;
     bottom: 25px;
@@ -309,7 +311,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
   </div>
 </div>
 
-<!-- ====== APLICACIÓN (se muestra solo con sesión iniciada) ====== -->
+<!-- ====== APLICACIÓN ====== -->
 <iframe id="appFrame" allow="geolocation; clipboard-write; autoplay" style="display:none;position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#000;overscroll-behavior:none;"></iframe>
 <div id="topTap" style="display:none;position:fixed;top:0;left:35%;width:30%;height:14px;z-index:199"></div>
 <div id="topBar" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:200;gap:4px;align-items:flex-start;font:700 11px Outfit,sans-serif;white-space:nowrap">
@@ -334,47 +336,42 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </div>
 
 <!-- ============================================================
-     CÓDIGO DE LA APLICACIÓN INTERNA CON SOLUCIÓN PULL-TO-REFRESH
+     CÓDIGO DE LA APLICACIÓN INTERNA
      ============================================================ -->
 <textarea id="appSource" style="display:none"><!DOCTYPE html>
 <html lang="es" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Meta Anti-Caché para el Iframe interno por si acaso -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>DiDi Food - UI de Navegación Exacta</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
         }
     </script>
-
-    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Leaflet JS & CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- Fonts Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* ==========================================
-           SOLUCIÓN DEFINITIVA PULL-TO-REFRESH (APLICACIÓN INTERNA)
-           ========================================== */
         html, body {
             width: 100%;
             height: 100%;
-            position: fixed; /* Esto anula el rebote elástico en iOS y Safari */
+            position: fixed;
             top: 0;
             left: 0;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            overscroll-behavior: none; /* Anula recarga en Android */
+            overscroll-behavior: none;
         }
 
         body {
@@ -390,7 +387,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             background: transparent;
         }
 
-        /* --- Modo Edición Global --- */
         body.edit-mode [contenteditable="true"] {
             outline: 2px dashed #ff5100 !important;
             outline-offset: 2px;
@@ -401,7 +397,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             -webkit-user-select: text !important;
         }
 
-        /* --- Animación de Carga Órbita 3D --- */
         .didi-loader {
             position: absolute;
             left: 50%;
@@ -443,7 +438,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             100% { transform: translate(20px, 0px) scale(1.1); z-index: 3; opacity: 1; }
         }
 
-        /* --- Contenedores de Mapa --- */
         .real-map-container {
             position: absolute;
             top: 0;
@@ -455,14 +449,12 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             transition: background-color 0.3s ease;
         }
 
-        /* MODO OSCURO MAPA CORREGIDO */
         html.dark .real-map-container .leaflet-tile-pane {
             filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%) !important;
         }
 
         .leaflet-control-attribution { display: none !important; }
 
-        /* Bottom Sheet Etapa 2 Adaptable */
         .bottom-sheet {
             position: absolute;
             bottom: 0;
@@ -487,7 +479,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 
         .sheet-handle { display: none; }
 
-        /* --- Animación de Logo y Check --- */
         .animation-slot {
             position: relative;
             width: 60px;
@@ -531,7 +522,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         @keyframes toggleIconAnimation { 0%, 35%, 100% { opacity: 1; transform: scale(1); } 45%, 90% { opacity: 0; transform: scale(0.5); } }
         @keyframes toggleLogoAnimation { 0%, 35%, 100% { opacity: 0; transform: scale(0.5); } 45%, 90% { opacity: 1; transform: scale(1); } }
 
-        /* Botones de Acción */
         .btn-action {
             width: 100%;
             height: 54px;
@@ -548,7 +538,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 
         .stage-transition { transition: opacity 0.3s ease-in-out; }
 
-        /* --- ETAPA 2 & 3: PANELES DESLIZABLES --- */
         #stage2-nav-sheet {
             height: 245px;
             max-height: 86vh;
@@ -570,7 +559,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         #stage3-nav-sheet.stage3-sheet-expanded {
             height: min(86vh, 760px);
             overflow-y: auto;
-            /* Se habilita el scroll de contenido protegiendo contra el pull-to-refresh */
             overscroll-behavior: contain;
             touch-action: pan-y;
             -webkit-overflow-scrolling: touch;
@@ -610,7 +598,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             transform: translateY(0);
         }
 
-        /* Lógica visual de Etapa 3 */
         #stage3-summary-content {
             opacity: 1;
             max-height: 300px;
@@ -678,7 +665,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             margin: 0; 
         }
 
-        /* --- DISEÑO TICKET (MODAL CÓDIGO DE VERIFICACIÓN) --- */
         .ticket-jagged::after {
             content: '';
             position: absolute;
@@ -696,9 +682,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </head>
 <body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center p-0 m-0 transition-colors duration-300">
 
-    <!-- ========================================================= -->
-    <!-- MODAL CÓDIGO DE VERIFICACIÓN (ESTILO BOTTOM SHEET)        -->
-    <!-- ========================================================= -->
+    <!-- MODAL CÓDIGO -->
     <div id="code-modal-overlay" class="fixed inset-0 bg-black/40 z-[2000] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
         <div id="code-modal-content" class="bg-white dark:bg-[#1c1c1e] w-full sm:max-w-md sm:mx-auto rounded-t-[24px] px-5 pt-5 pb-12 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transform translate-y-full transition-transform duration-300">
             <div class="flex items-center mb-10 mt-1">
@@ -730,12 +714,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- CHAT FALSO UNIFICADO                                      -->
-    <!-- ========================================================= -->
+    <!-- CHAT FALSO -->
     <div id="chat-modal-overlay" class="fixed inset-0 bg-black/50 z-[2500] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
         <div id="chat-modal-content" class="bg-[#f5f6f8] dark:bg-[#121212] w-full sm:max-w-md sm:mx-auto h-[85vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
-            <!-- Header Chat -->
             <div class="bg-white dark:bg-[#1c1c1e] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#2c2c2e] shrink-0">
                 <div class="flex items-center gap-3">
                     <button id="btn-close-chat" class="text-gray-800 dark:text-white p-1 active:scale-95">
@@ -758,7 +739,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
-            <!-- Cuerpo de Mensajes -->
             <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
                 <div class="flex justify-start">
                     <div class="bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">
@@ -772,7 +752,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
-            <!-- Input de Enviar Mensaje -->
             <div class="bg-white dark:bg-[#1c1c1e] p-3 border-t border-gray-200 dark:border-[#2c2c2e] flex items-center gap-2 shrink-0">
                 <input type="text" id="chat-input-message" placeholder="Escribe un mensaje..." class="flex-1 bg-[#f5f6f8] dark:bg-[#2c2c2e] text-gray-900 dark:text-white px-4 py-3 rounded-full text-[14.5px] outline-none border border-transparent focus:border-[#ff5a00]">
                 <button id="btn-send-message" class="w-11 h-11 bg-[#ff5a00] text-white rounded-full flex items-center justify-center active:scale-95 shrink-0 shadow-md">
@@ -791,9 +770,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- ETAPA 1: INTERFAZ DE DETALLES REPLICADA    -->
-    <!-- ========================================== -->
+    <!-- ETAPA 1 -->
     <div id="stage-1" class="w-full h-full flex justify-center items-center stage-transition bg-black sm:bg-transparent z-40 relative">
         <div id="app-container" class="w-full h-full sm:max-w-md sm:h-[92vh] sm:rounded-[30px] bg-[#f5f6f8] dark:bg-[#121212] overflow-hidden flex flex-col relative shadow-2xl transition-colors duration-300">
             <div id="header-image-container" class="relative z-10 h-[25vh] min-h-[180px] w-full bg-cover bg-center shrink-0 cursor-pointer group" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80');">
@@ -851,7 +828,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                                     </svg>
                                 </button>
                             </div>
-                            <!-- BOTÓN LLAMADA TIENDA -->
                             <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
                                 <i class="fa-solid fa-phone text-[16px]"></i>
                             </a>
@@ -903,7 +879,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                         </div>
                     </div>
 
-                    <!-- BOTÓN CENTRO DE AYUDA -->
                     <div id="btn-open-help-center-stage1" class="bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
                         <div class="flex items-center gap-3">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gray-900 dark:text-white"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
@@ -926,7 +901,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -1009,9 +983,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- PANEL DESLIZABLE CENTRO DE AYUDA           -->
-            <!-- ========================================== -->
             <div id="help-center-panel" class="absolute inset-0 bg-[#f4f4f5] dark:bg-black z-[120] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
                 <div class="flex items-center justify-between px-4 py-4 shrink-0 bg-[#f4f4f5] dark:bg-black z-10 relative">
                     <button id="btn-close-help-center" class="text-gray-900 dark:text-white active:scale-95 transition-transform p-1">
@@ -1095,10 +1066,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- INTERFAZ COMPARTIDA (ETAPAS 2 y 3)         -->
-    <!-- ========================================== -->
-
+    <!-- ETAPAS 2 y 3 -->
     <div id="shared-top-badge" class="absolute top-12 left-1/2 -translate-x-1/2 z-[1000] bg-white dark:bg-[#1c1c1e] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.5)] font-black text-lg tracking-wide text-gray-900 dark:text-white opacity-0 transition-opacity duration-500 pointer-events-none border border-gray-100 dark:border-[#2c2c2e] flex items-center justify-center gap-2">
         <div class="bg-[#16a34a]/10 dark:bg-[#4ade80]/20 text-[#16a34a] dark:text-[#4ade80] w-6 h-6 rounded-full flex items-center justify-center text-[13px]">
             <i class="fa-solid fa-dollar-sign"></i>
@@ -1107,22 +1075,17 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
     </div>
 
     <div id="shared-fabs" class="absolute right-4 top-[55%] -translate-y-1/2 z-[1000] flex flex-col gap-3 opacity-0 pointer-events-none translate-x-8 transition-all duration-500 ease-out">
-        <!-- BOTÓN CHAT FLOTANTE -->
         <button class="btn-open-chat-trigger w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
             <i class="fa-solid fa-message text-[18px]"></i>
         </button>
         <button id="btn-toggle-stage" class="w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
             <i id="icon-toggle-stage" class="fa-solid fa-list-ul text-[18px]"></i>
         </button>
-        <!-- BOTÓN NAVEGACIÓN GOOGLE MAPS -->
         <a id="btn-google-maps-nav" href="https://www.google.com/maps/search/?api=1&query=Cl.+18+Sur+6+Bogota" target="_blank" class="w-[46px] h-[46px] bg-[#ea580c] rounded-2xl shadow-[0_4px_12px_rgba(234,88,12,0.4)] flex items-center justify-center text-white transition active:scale-95 border border-[#ea580c]">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22l10-3 10 3L12 2z"/></svg>
         </a>
     </div>
 
-    <!-- ========================================== -->
-    <!-- ETAPA 2: MAPA CON RUTA DE NAVEGACIÓN       -->
-    <!-- ========================================== -->
     <div id="stage-2" class="w-full h-screen hidden stage-transition relative overflow-hidden">
         <div id="map-stage2" class="real-map-container"></div>
         
@@ -1170,9 +1133,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                         </div>
 
                         <div class="flex items-center gap-3 shrink-0">
-                            <!-- BOTÓN LLAMADA USUARIO -->
                             <a href="tel:+573009876543" id="stage2-call-user" class="stage2-contact-button" aria-label="Llamar al usuario"><i class="fa-solid fa-phone text-[25px]"></i></a>
-                            <!-- BOTÓN CHAT USUARIO -->
                             <button id="stage2-chat-user" class="btn-open-chat-trigger stage2-contact-button" aria-label="Escribir al usuario"><i class="fa-solid fa-comment text-[24px]"></i></button>
                         </div>
                     </div>
@@ -1206,9 +1167,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- ETAPA 3: MAPA GPS (ESTADÍSTICAS)           -->
-    <!-- ========================================== -->
     <div id="stage-3" class="w-full h-screen hidden stage-transition relative overflow-hidden">
         <div id="map-stage3" class="real-map-container"></div>
         <div class="absolute top-12 left-4 z-[1000]">
@@ -1307,21 +1265,15 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- SCRIPT GENERAL Y CONFIGURACIÓN             -->
-    <!-- ========================================== -->
     <script>
-        // SOLUCIÓN JS CONTRA EL PULL-TO-REFRESH INTERNO
         document.addEventListener('touchmove', function(e) {
             let el = e.target;
             let canScroll = false;
             while (el && el !== document.body && el !== document.documentElement) {
-                // Permitir movimiento si el toque es dentro del mapa de Leaflet
                 if (el.classList && el.classList.contains('leaflet-container')) {
                     canScroll = true;
                     break;
                 }
-                // Permitir movimiento si estamos sobre un div que debe hacer scroll
                 const style = window.getComputedStyle(el);
                 if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
                     if (el.scrollHeight > el.clientHeight) {
@@ -1331,7 +1283,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 }
                 el = el.parentNode;
             }
-            // Si no estamos en un elemento que deba hacer scroll, bloqueamos el evento
             if (!canScroll) {
                 e.preventDefault();
             }
@@ -1374,9 +1325,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             }
         }
 
-        // ===============================================
-        // CHAT FALSO INTERACTIVO
-        // ===============================================
         const chatModalOverlay = document.getElementById('chat-modal-overlay');
         const chatModalContent = document.getElementById('chat-modal-content');
         const btnCloseChat = document.getElementById('btn-close-chat');
@@ -1415,7 +1363,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             const text = chatInputMessage.value.trim();
             if (!text) return;
 
-            // Añadir mensaje del repartidor
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'flex justify-end';
             userMsgDiv.innerHTML = `<div class="bg-[#ff5a00] text-white px-4 py-2.5 rounded-2xl rounded-tr-sm max-w-[80%] text-[14.5px] shadow-sm">${text}</div>`;
@@ -1423,7 +1370,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             chatInputMessage.value = '';
             chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 
-            // Respuesta automática simulada
             setTimeout(() => {
                 const replyDiv = document.createElement('div');
                 replyDiv.className = 'flex justify-start';
@@ -1440,9 +1386,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             });
         }
 
-        // ===============================================
-        // PANEL DESLIZABLE ETAPA 2
-        // ===============================================
         let stage2SheetDragging = false;
         let stage2SheetStartY = 0;
         let stage2SheetLastY = 0;
@@ -1491,9 +1434,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         window.addEventListener('mouseup', endStage2SheetDrag);
         window.addEventListener('touchend', endStage2SheetDrag);
 
-        // ===============================================
-        // PANEL DESLIZABLE ETAPA 3
-        // ===============================================
         const stage3NavSheet = document.getElementById('stage3-nav-sheet');
         let stage3SheetDragging = false;
         let stage3SheetStartY = 0;
@@ -2130,7 +2070,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </body>
 </html></textarea>
 
-<!-- Botón Flotante WhatsApp (Con ID asignado) -->
 <a id="globalWaBtn" href="https://wa.me/573102722613?text=Hola,%20necesito%20ayuda%20con%20DiDi%20Food%20Rider" class="float-wa" target="_blank" rel="noopener">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
@@ -2138,7 +2077,16 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </a>
 
 <script>
-// SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH EXTERNO (Login y Pantalla Principal)
+// ==========================================
+// SOLUCIÓN ANTI-CACHÉ (Evitar carga desde Memoria BFCache)
+// ==========================================
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
+
+// SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH EXTERNO
 document.addEventListener('touchmove', function(e) {
     let el = e.target;
     let isScrollable = false;
@@ -2157,9 +2105,6 @@ document.addEventListener('touchmove', function(e) {
     }
 }, { passive: false });
 
-/* ==========================================
-   1. CONFIGURACIÓN DE SUPABASE
-   ========================================== */
 const SUPABASE_URL = 'https://rpazbrawgoctrnwvbxwd.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_FOL4DYXSy7ifs3PLJJknlQ_hLfFyAFz';
 
@@ -2193,7 +2138,6 @@ function showView(view) {
   view.classList.add('active');
 }
 
-/* ---------- Pestañas ---------- */
 function switchMode(mode) {
   isRegisterMode = mode === 'register';
   tabRegister.classList.toggle('active', isRegisterMode);
@@ -2209,7 +2153,6 @@ function switchMode(mode) {
 tabLogin.addEventListener('click', () => switchMode('login'));
 tabRegister.addEventListener('click', () => switchMode('register'));
 
-/* ---------- Vehículos ---------- */
 const VEHICLES = {
   moto: `<path d="M 60 120 L 90 90 L 150 90 L 180 120 Z" fill="rgba(20,20,20,.8)" stroke-width="2"/>
     <path d="M 120 90 L 140 60 L 170 80"/>
@@ -2235,7 +2178,6 @@ const VEHICLES = {
     <circle cx="75" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>
     <circle cx="175" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>`
 };
-const VEHICLE_LABEL = { moto: 'Moto 🏍️', bike: 'Bicicleta 🚲', car: 'Auto 🚗' };
 function updateVehicleSVG(type) { vehicleSvg.innerHTML = VEHICLES[type] || VEHICLES.moto; }
 updateVehicleSVG('moto');
 
@@ -2248,7 +2190,6 @@ document.querySelectorAll('.v-option').forEach(opt => {
   });
 });
 
-/* ---------- Login / Registro ---------- */
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!db) return setStatus('Error: no se pudo conectar con Supabase.', 'err');
@@ -2304,7 +2245,6 @@ authForm.addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------- Verificar código ---------- */
 $('verifyBtn').addEventListener('click', async () => {
   const token = $('codeInput').value.trim();
   if (token.length < 6) return setStatus('Ingresa el código completo que recibiste.', 'err');
@@ -2331,7 +2271,6 @@ $('backBtn').addEventListener('click', () => {
   switchMode('login');
 });
 
-/* ---------- Sesión iniciada ---------- */
 async function getProfile(user) {
   const { data, error } = await db.from('profiles').select('credits,is_admin,blocked').eq('id', user.id).maybeSingle();
   return error ? null : data;
@@ -2397,7 +2336,6 @@ function showTopBar() {
   showTopBar();
 });
 
-// ESTA FUNCIÓN SE EJECUTA AL INICIAR SESIÓN CON ÉXITO
 async function onLoginSuccess(user) {
   if (!user) return;
 
@@ -2419,7 +2357,6 @@ async function onLoginSuccess(user) {
     return setStatus('Sesión correcta, pero falta pegar el código de tu app en el archivo.', 'err');
   }
 
-  // Descuenta 1 crédito siempre al loguearse con éxito, sin excepciones (excepto para los admins).
   if (!prof.is_admin) {
     if (prof.credits <= 0) {
       showView(noAccessView);
@@ -2444,8 +2381,6 @@ async function onLoginSuccess(user) {
   clearInterval(lineTimer);
   document.querySelector('.environment').style.display = 'none';
   document.querySelector('.scene').style.display = 'none';
-  
-  // AQUÍ OCULTAMOS EL BOTÓN DE WHATSAPP PARA QUE NO SE VEA EN LA APLICACIÓN
   $('globalWaBtn').style.display = 'none';
 
   const frame = $('appFrame');
@@ -2463,7 +2398,6 @@ async function onLoginSuccess(user) {
     if (!p) return;
     const prev = lastCredits;
     handleProfileChange(user, p);
-    // Si se queda sin créditos mientras está conectado, lo expulsa.
     if (!p.is_admin && p.credits <= 0 && prev !== null && p.credits < prev) {
       location.reload(); 
     }
@@ -2480,7 +2414,6 @@ $('blockedLogout').addEventListener('click', logout);$('recheckBtn').addEventLis
   if (data.session) onLoginSuccess(data.session.user); else location.reload();
 });
 
-/* ---------- Panel de administrador ---------- */
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let adminUsers = [], admFilter = 'all';
 
@@ -2563,9 +2496,6 @@ $('adminList').addEventListener('click', async (e) => {
   loadAdmin();
 });
 
-/* ==========================================
-   2. EFECTO 3D / PARALLAX
-   ========================================== */
 const panel = $('panel'), vehicleWrapper = $('vehicleWrapper'), sun =$('sun');
 let mx = 0, my = 0, tx = 0, ty = 0;
 window.addEventListener('mousemove', e => {
@@ -2580,9 +2510,6 @@ window.addEventListener('mousemove', e => {
   requestAnimationFrame(render);
 })();
 
-/* ==========================================
-   3. LÍNEAS DE VELOCIDAD
-   ========================================== */
 const linesContainer = $('speedLines');
 const lineTimer = setInterval(() => {
   const l = document.createElement('div');
