@@ -10,13 +10,20 @@
 :root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#050507;--glass-bg:rgba(15,15,18,.78);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
 
-/* SOLUCIÓN AL DESLIZAR PARA ACTUALIZAR (PULL-TO-REFRESH) */
+/* ==========================================
+   SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH (Página Externa)
+   ========================================== */
 html, body {
     overscroll-behavior-y: none;
     overscroll-behavior: none;
+    position: fixed; /* Bloquea el rebote nativo del viewport en iOS y Android */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    touch-action: none;
 }
 
-body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;color:#fff;padding:12px}
+body{background:var(--dark-bg);display:flex;justify-content:center;align-items:center;color:#fff;padding:12px}
 
 /* Fondo */
 .environment{position:fixed;inset:-10%;perspective:1000px;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at center top,#1a0b08 0%,var(--dark-bg) 70%)}
@@ -31,8 +38,9 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 .light-trail{position:absolute;bottom:50px;left:-50px;width:100px;height:4px;background:linear-gradient(90deg,transparent,var(--secondary));filter:blur(2px);animation:pulseTrail .5s infinite alternate}
 
 /* Tarjeta */
-.scene{position:relative;z-index:10;perspective:1200px}
-.glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out}
+.scene{position:relative;z-index:10;perspective:1200px;width:100%;display:flex;justify-content:center;}
+/* Se agrega overscroll-behavior y webkit-overflow-scrolling a los elementos con scroll */
+.glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
 .header{text-align:center;margin-bottom:20px}
 .header h1{font-size:30px;font-weight:900;letter-spacing:-1px;text-shadow:0 0 10px rgba(255,122,0,.5)}
 .header h1 span{background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -79,7 +87,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 .status-text{text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px;font-weight:500;line-height:1.4}
 .status-text.ok{color:var(--primary)}.status-text.err{color:var(--secondary)}
 
-#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b}
+/* Se agrega overscroll-behavior al panel de admin */
+#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
 .adm-wrap{max-width:640px;margin:0 auto}
 .adm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .adm-sub{font-size:12px;color:#a1a1aa}
@@ -124,7 +133,6 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 /* ==========================================
    MEJORAS PREMIUM - PANEL ADMIN Y WHATSAPP
    ========================================== */
-/* Botón Flotante WhatsApp Global */
 .float-wa {
     position: fixed;
     bottom: 25px;
@@ -149,7 +157,6 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
 }
 
-/* Fondo Admin Premium Glassmorphism */
 #adminPanel {
     background: rgba(5, 5, 7, 0.65);
     backdrop-filter: blur(20px);
@@ -165,7 +172,6 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     letter-spacing: -0.5px;
 }
 
-/* Tarjetas de Usuario Ultra Premium */
 .ucard {
     background: linear-gradient(145deg, rgba(30, 30, 35, 0.6), rgba(15, 15, 18, 0.8));
     border: 1px solid rgba(255, 122, 0, 0.25);
@@ -185,7 +191,6 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     background: linear-gradient(145deg, rgba(40, 10, 10, 0.7), rgba(15, 5, 5, 0.8));
 }
 
-/* Botón de Bloqueo Premium */
 .btn-bloqueo {
     margin-top: 12px;
     width: 100%;
@@ -329,10 +334,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 </div>
 
 <!-- ============================================================
-     PEGA AQUÍ TU APLICACIÓN COMPLETA (sin modificar nada):
-     Borra el texto "PEGA_AQUI_EL_CODIGO_DE_TU_APP" que está entre
-     las etiquetas <textarea> y pega TODO tu código HTML original,
-     desde <!DOCTYPE html> hasta </html>.
+     CÓDIGO DE LA APLICACIÓN INTERNA CON SOLUCIÓN PULL-TO-REFRESH
      ============================================================ -->
 <textarea id="appSource" style="display:none"><!DOCTYPE html>
 <html lang="es" class="">
@@ -360,13 +362,25 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
+        /* ==========================================
+           SOLUCIÓN DEFINITIVA PULL-TO-REFRESH (APLICACIÓN INTERNA)
+           ========================================== */
+        html, body {
+            width: 100%;
+            height: 100%;
+            position: fixed; /* Esto anula el rebote elástico en iOS y Safari */
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            overscroll-behavior: none; /* Anula recarga en Android */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             user-select: none;
             -webkit-user-select: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
             -webkit-text-size-adjust: 100%;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -556,7 +570,16 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         #stage3-nav-sheet.stage3-sheet-expanded {
             height: min(86vh, 760px);
             overflow-y: auto;
+            /* Se habilita el scroll de contenido protegiendo contra el pull-to-refresh */
             overscroll-behavior: contain;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .overflow-y-auto {
+            overscroll-behavior: contain;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
         }
 
         #stage2-nav-sheet .stage2-expand-handle,
@@ -671,7 +694,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
+<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center p-0 m-0 transition-colors duration-300">
 
     <!-- ========================================================= -->
     <!-- MODAL CÓDIGO DE VERIFICACIÓN (ESTILO BOTTOM SHEET)        -->
@@ -1288,6 +1311,32 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- SCRIPT GENERAL Y CONFIGURACIÓN             -->
     <!-- ========================================== -->
     <script>
+        // SOLUCIÓN JS CONTRA EL PULL-TO-REFRESH INTERNO
+        document.addEventListener('touchmove', function(e) {
+            let el = e.target;
+            let canScroll = false;
+            while (el && el !== document.body && el !== document.documentElement) {
+                // Permitir movimiento si el toque es dentro del mapa de Leaflet
+                if (el.classList && el.classList.contains('leaflet-container')) {
+                    canScroll = true;
+                    break;
+                }
+                // Permitir movimiento si estamos sobre un div que debe hacer scroll
+                const style = window.getComputedStyle(el);
+                if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+                    if (el.scrollHeight > el.clientHeight) {
+                        canScroll = true;
+                        break;
+                    }
+                }
+                el = el.parentNode;
+            }
+            // Si no estamos en un elemento que deba hacer scroll, bloqueamos el evento
+            if (!canScroll) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         let isEditMode = false;
         let speechEngineUnlocked = false;
         let isVerificationMode = false;
@@ -2089,6 +2138,25 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 </a>
 
 <script>
+// SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH EXTERNO (Login y Pantalla Principal)
+document.addEventListener('touchmove', function(e) {
+    let el = e.target;
+    let isScrollable = false;
+    while (el && el !== document.body && el !== document.documentElement) {
+        const style = window.getComputedStyle(el);
+        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+            if (el.scrollHeight > el.clientHeight) {
+                isScrollable = true;
+                break;
+            }
+        }
+        el = el.parentNode;
+    }
+    if (!isScrollable) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
 /* ==========================================
    1. CONFIGURACIÓN DE SUPABASE
    ========================================== */
@@ -2097,9 +2165,6 @@ const SUPABASE_ANON_KEY = 'sb_publishable_FOL4DYXSy7ifs3PLJJknlQ_hLfFyAFz';
 
 let db = null;
 try { 
-  // SOLUCIÓN DEFINITIVA DE SESIÓN:
-  // Al configurar persistSession: false, el navegador elimina el inicio de sesión
-  // cada vez que la página o app se cierra. Al abrirla nuevamente pedirá Login, descontando un crédito.
   db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: false }
   }); 
