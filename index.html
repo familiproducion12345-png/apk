@@ -1168,6 +1168,30 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         </a>
     </div>
 
+    <!-- ICONOS LATERALES IZQUIERDOS (solo en etapas con mapa) -->
+    <div id="shared-left-icons" class="absolute left-0 top-[42%] -translate-y-1/2 z-[1000] flex flex-col items-start gap-4 opacity-0 pointer-events-none -translate-x-8 transition-all duration-500 ease-out">
+        <!-- Icono altavoz / anuncios -->
+        <button id="btn-left-announce" aria-label="Anuncios" class="ml-1 w-[58px] h-[58px] rounded-full bg-[#d9d9dc] shadow-[0_4px_14px_rgba(0,0,0,0.3)] flex items-center justify-center overflow-hidden transition active:scale-95">
+            <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+                <rect width="58" height="58" fill="#d9d9dc"/>
+                <path d="M7 40 C10 31 16 28 22 31 L27 40 C21 48 12 50 7 44 Z" fill="#d9a07f"/>
+                <path d="M22 17 L40 8 L47 26 L29 34 Z" fill="#e2520f"/>
+                <path d="M16 22 L25 17 L32 33 L23 37 Z" fill="#f4f4f5"/>
+                <path d="M41 9 C45 7 50 9 51 14 L48 27 L45 25 L47 14 C47 12 44 11 42 12 Z" fill="#c9440a"/>
+                <path d="M24 38 L29 35 L31 41 L26 43 Z" fill="#b5370a"/>
+                <path d="M14 20 L18 15" stroke="#f2b134" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M47 38 L47 46 M43 42 L51 42" stroke="#f08a4b" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+        </button>
+        <!-- Icono escudo de seguridad -->
+        <button id="btn-left-safety" aria-label="Seguridad" class="ml-1 w-[58px] h-[58px] rounded-[20px] bg-[#1b1b1d] shadow-[0_4px_14px_rgba(0,0,0,0.35)] flex items-center justify-center transition active:scale-95">
+            <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 2 L30 7 L30 16 C30 24 24.5 29.5 17 32 C9.5 29.5 4 24 4 16 L4 7 Z" fill="#3b63f5"/>
+                <path d="M17 10 V22 M11 16 H23" stroke="#16162a" stroke-width="3.2" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+
     <!-- ========================================== -->
     <!-- ETAPA 2: MAPA CON RUTA DE NAVEGACIÓN       -->
     <!-- ========================================== -->
@@ -1378,6 +1402,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         
         const sharedTopBadge = document.getElementById('shared-top-badge');
         const sharedFabs = document.getElementById('shared-fabs');
+        const sharedLeftIcons = document.getElementById('shared-left-icons');
 
         const stage2BottomSheet = document.getElementById('stage2-bottom-sheet');
         const stage2NavSheet = document.getElementById('stage2-nav-sheet');
@@ -1857,6 +1882,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     
                     if(sharedTopBadge) sharedTopBadge.classList.remove('opacity-0', 'pointer-events-none');
                     if(sharedFabs) sharedFabs.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-8');
+                    if(sharedLeftIcons) sharedLeftIcons.classList.remove('opacity-0', 'pointer-events-none', '-translate-x-8');
 
                     setTimeout(() => {
                         slideThumb.style.transform = `translateX(0px)`;
