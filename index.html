@@ -2,13 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<!-- ==========================================
-     SOLUCIÓN ANTI-CACHÉ (Evita que el navegador guarde la página)
-     ========================================== -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DiDi Food Rider - Registro & Login</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,20 +10,13 @@
 :root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#050507;--glass-bg:rgba(15,15,18,.78);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
 
-/* ==========================================
-   SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH (Página Externa)
-   ========================================== */
+/* SOLUCIÓN AL DESLIZAR PARA ACTUALIZAR (PULL-TO-REFRESH) */
 html, body {
     overscroll-behavior-y: none;
     overscroll-behavior: none;
-    position: fixed; 
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    touch-action: none;
 }
 
-body{background:var(--dark-bg);display:flex;justify-content:center;align-items:center;color:#fff;padding:12px}
+body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;color:#fff;padding:12px}
 
 /* Fondo */
 .environment{position:fixed;inset:-10%;perspective:1000px;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at center top,#1a0b08 0%,var(--dark-bg) 70%)}
@@ -45,8 +31,8 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 .light-trail{position:absolute;bottom:50px;left:-50px;width:100px;height:4px;background:linear-gradient(90deg,transparent,var(--secondary));filter:blur(2px);animation:pulseTrail .5s infinite alternate}
 
 /* Tarjeta */
-.scene{position:relative;z-index:10;perspective:1200px;width:100%;display:flex;justify-content:center;}
-.glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
+.scene{position:relative;z-index:10;perspective:1200px}
+.glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out}
 .header{text-align:center;margin-bottom:20px}
 .header h1{font-size:30px;font-weight:900;letter-spacing:-1px;text-shadow:0 0 10px rgba(255,122,0,.5)}
 .header h1 span{background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -93,7 +79,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 .status-text{text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px;font-weight:500;line-height:1.4}
 .status-text.ok{color:var(--primary)}.status-text.err{color:var(--secondary)}
 
-#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;}
+#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b}
 .adm-wrap{max-width:640px;margin:0 auto}
 .adm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .adm-sub{font-size:12px;color:#a1a1aa}
@@ -135,6 +121,10 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 @keyframes laserSweep{0%{left:-100%}50%,100%{left:200%}}
 @media(max-width:480px){.glass-panel{padding:26px 20px}}
 
+/* ==========================================
+   MEJORAS PREMIUM - PANEL ADMIN Y WHATSAPP
+   ========================================== */
+/* Botón Flotante WhatsApp Global */
 .float-wa {
     position: fixed;
     bottom: 25px;
@@ -159,6 +149,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
     100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
 }
 
+/* Fondo Admin Premium Glassmorphism */
 #adminPanel {
     background: rgba(5, 5, 7, 0.65);
     backdrop-filter: blur(20px);
@@ -174,6 +165,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
     letter-spacing: -0.5px;
 }
 
+/* Tarjetas de Usuario Ultra Premium */
 .ucard {
     background: linear-gradient(145deg, rgba(30, 30, 35, 0.6), rgba(15, 15, 18, 0.8));
     border: 1px solid rgba(255, 122, 0, 0.25);
@@ -193,6 +185,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
     background: linear-gradient(145deg, rgba(40, 10, 10, 0.7), rgba(15, 5, 5, 0.8));
 }
 
+/* Botón de Bloqueo Premium */
 .btn-bloqueo {
     margin-top: 12px;
     width: 100%;
@@ -311,7 +304,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
   </div>
 </div>
 
-<!-- ====== APLICACIÓN ====== -->
+<!-- ====== APLICACIÓN (se muestra solo con sesión iniciada) ====== -->
 <iframe id="appFrame" allow="geolocation; clipboard-write; autoplay" style="display:none;position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#000;overscroll-behavior:none;"></iframe>
 <div id="topTap" style="display:none;position:fixed;top:0;left:35%;width:30%;height:14px;z-index:199"></div>
 <div id="topBar" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:200;gap:4px;align-items:flex-start;font:700 11px Outfit,sans-serif;white-space:nowrap">
@@ -336,48 +329,44 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </div>
 
 <!-- ============================================================
-     CÓDIGO DE LA APLICACIÓN INTERNA
+     PEGA AQUÍ TU APLICACIÓN COMPLETA (sin modificar nada):
+     Borra el texto "PEGA_AQUI_EL_CODIGO_DE_TU_APP" que está entre
+     las etiquetas <textarea> y pega TODO tu código HTML original,
+     desde <!DOCTYPE html> hasta </html>.
      ============================================================ -->
 <textarea id="appSource" style="display:none"><!DOCTYPE html>
 <html lang="es" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Meta Anti-Caché para el Iframe interno por si acaso -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
     <title>DiDi Food - UI de Navegación Exacta</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
         }
     </script>
+
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet JS & CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Fonts Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            overscroll-behavior: none;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             user-select: none;
             -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             -webkit-text-size-adjust: 100%;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
@@ -387,6 +376,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             background: transparent;
         }
 
+        /* --- Modo Edición Global --- */
         body.edit-mode [contenteditable="true"] {
             outline: 2px dashed #ff5100 !important;
             outline-offset: 2px;
@@ -397,6 +387,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             -webkit-user-select: text !important;
         }
 
+        /* --- Animación de Carga Órbita 3D --- */
         .didi-loader {
             position: absolute;
             left: 50%;
@@ -438,6 +429,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             100% { transform: translate(20px, 0px) scale(1.1); z-index: 3; opacity: 1; }
         }
 
+        /* --- Contenedores de Mapa --- */
         .real-map-container {
             position: absolute;
             top: 0;
@@ -449,12 +441,14 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             transition: background-color 0.3s ease;
         }
 
+        /* MODO OSCURO MAPA CORREGIDO */
         html.dark .real-map-container .leaflet-tile-pane {
             filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%) !important;
         }
 
         .leaflet-control-attribution { display: none !important; }
 
+        /* Bottom Sheet Etapa 2 Adaptable */
         .bottom-sheet {
             position: absolute;
             bottom: 0;
@@ -479,6 +473,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 
         .sheet-handle { display: none; }
 
+        /* --- Animación de Logo y Check --- */
         .animation-slot {
             position: relative;
             width: 60px;
@@ -522,6 +517,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         @keyframes toggleIconAnimation { 0%, 35%, 100% { opacity: 1; transform: scale(1); } 45%, 90% { opacity: 0; transform: scale(0.5); } }
         @keyframes toggleLogoAnimation { 0%, 35%, 100% { opacity: 0; transform: scale(0.5); } 45%, 90% { opacity: 1; transform: scale(1); } }
 
+        /* Botones de Acción */
         .btn-action {
             width: 100%;
             height: 54px;
@@ -538,6 +534,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 
         .stage-transition { transition: opacity 0.3s ease-in-out; }
 
+        /* --- ETAPA 2 & 3: PANELES DESLIZABLES --- */
         #stage2-nav-sheet {
             height: 245px;
             max-height: 86vh;
@@ -560,14 +557,6 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             height: min(86vh, 760px);
             overflow-y: auto;
             overscroll-behavior: contain;
-            touch-action: pan-y;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .overflow-y-auto {
-            overscroll-behavior: contain;
-            touch-action: pan-y;
-            -webkit-overflow-scrolling: touch;
         }
 
         #stage2-nav-sheet .stage2-expand-handle,
@@ -598,6 +587,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             transform: translateY(0);
         }
 
+        /* Lógica visual de Etapa 3 */
         #stage3-summary-content {
             opacity: 1;
             max-height: 300px;
@@ -665,6 +655,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             margin: 0; 
         }
 
+        /* --- DISEÑO TICKET (MODAL CÓDIGO DE VERIFICACIÓN) --- */
         .ticket-jagged::after {
             content: '';
             position: absolute;
@@ -678,11 +669,75 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         html.dark .ticket-jagged::after {
             background: radial-gradient(circle at 50% 100%, transparent 4px, #2c2c2e 4px) repeat-x;
         }
+
+        /* --- GUÍA DE USO OBLIGATORIA: resaltado del elemento --- */
+        html body .guide-hl.guide-hl.guide-hl {
+            outline: 3px solid #facc15 !important;
+            outline-offset: 3px;
+            border-radius: 10px;
+            animation: guidePulse 1.1s ease-in-out infinite;
+        }
+        html body .guide-hl.guide-hl.guide-hl.guide-hl-inset { outline-offset: -5px !important; border-radius: 0; }
+        @keyframes guidePulse {
+            0%, 100% { box-shadow: 0 0 0 4px rgba(250,204,21,0.30), 0 0 14px rgba(250,204,21,0.60); }
+            50%      { box-shadow: 0 0 0 9px rgba(250,204,21,0.15), 0 0 30px rgba(250,204,21,1); }
+        }
+        #guide-card { animation: guideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes guideIn { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center p-0 m-0 transition-colors duration-300">
+<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
 
-    <!-- MODAL CÓDIGO -->
+    <!-- ========================================================= -->
+    <!-- GUÍA DE USO OBLIGATORIA (se muestra en cada inicio)       -->
+    <!-- ========================================================= -->
+    <div id="guide-overlay" class="fixed left-0 right-0 bottom-0 z-[3000] justify-center px-3 pb-3 pointer-events-none" style="display:none;">
+        <div id="guide-card" class="pointer-events-auto w-full sm:max-w-md bg-white dark:bg-[#1c1c1e] rounded-[24px] shadow-[0_-8px_40px_rgba(0,0,0,0.35)] border border-[#ff5a00]/40 p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-black uppercase tracking-wider text-[#ff5a00] flex items-center gap-1.5"><i class="fa-solid fa-book-open"></i> Guía de uso</span>
+                <span id="guide-step-label" class="text-[12px] font-bold text-gray-500 dark:text-[#a0a0a0]">Paso 1 de 5</span>
+            </div>
+            <div class="flex gap-1.5 mb-3" id="guide-dots"></div>
+            <h3 id="guide-title" class="text-[18px] font-black text-gray-900 dark:text-white leading-tight mb-1.5"></h3>
+            <p id="guide-text" class="text-[14px] text-gray-600 dark:text-[#c8c8c8] leading-snug mb-4"></p>
+            <div class="flex gap-2">
+                <button id="guide-prev" class="px-4 h-[46px] rounded-xl bg-gray-100 dark:bg-[#2c2c2e] text-gray-800 dark:text-white font-bold text-[14px] active:scale-95 transition">Atrás</button>
+                <button id="guide-next" class="flex-1 h-[46px] rounded-xl bg-[#ff5a00] text-white font-black text-[15px] active:scale-95 transition">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TIENDAS YA REGISTRADAS                                    -->
+    <!-- ========================================================= -->
+    <div id="stores-overlay" class="fixed inset-0 bg-black/50 z-[2200] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
+        <div id="stores-content" class="bg-[#f5f6f8] dark:bg-[#121212] w-full sm:max-w-md sm:mx-auto h-[78vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
+            <div class="bg-white dark:bg-[#1c1c1e] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#2c2c2e] shrink-0">
+                <div class="flex items-center gap-3">
+                    <button id="btn-close-stores" class="text-gray-800 dark:text-white p-1 active:scale-95">
+                        <i class="fa-solid fa-xmark text-[20px]"></i>
+                    </button>
+                    <div>
+                        <h3 class="font-black text-[17px] text-gray-900 dark:text-white leading-tight">Tiendas registradas</h3>
+                        <span id="stores-count" class="text-[12px] text-gray-500 dark:text-[#a0a0a0] font-medium">0 tiendas</span>
+                    </div>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-[#ff5a00]/10 text-[#ff5a00] flex items-center justify-center"><i class="fa-solid fa-store"></i></div>
+            </div>
+            <div class="px-4 pt-3 pb-1 shrink-0">
+                <button id="btn-save-store-modal" class="w-full bg-[#ff5a00] text-white font-bold py-3 rounded-xl text-[14.5px] active:scale-[0.98] transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar la tienda actual
+                </button>
+            </div>
+            <div id="stores-list" class="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3"></div>
+        </div>
+    </div>
+
+    <div id="app-mini-toast" class="fixed left-1/2 -translate-x-1/2 top-4 z-[3500] bg-[#16a34a] text-white font-bold text-[13.5px] px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 whitespace-nowrap"></div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL CÓDIGO DE VERIFICACIÓN (ESTILO BOTTOM SHEET)        -->
+    <!-- ========================================================= -->
     <div id="code-modal-overlay" class="fixed inset-0 bg-black/40 z-[2000] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
         <div id="code-modal-content" class="bg-white dark:bg-[#1c1c1e] w-full sm:max-w-md sm:mx-auto rounded-t-[24px] px-5 pt-5 pb-12 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transform translate-y-full transition-transform duration-300">
             <div class="flex items-center mb-10 mt-1">
@@ -714,9 +769,12 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- CHAT FALSO -->
+    <!-- ========================================================= -->
+    <!-- CHAT FALSO UNIFICADO                                      -->
+    <!-- ========================================================= -->
     <div id="chat-modal-overlay" class="fixed inset-0 bg-black/50 z-[2500] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
         <div id="chat-modal-content" class="bg-[#f5f6f8] dark:bg-[#121212] w-full sm:max-w-md sm:mx-auto h-[85vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
+            <!-- Header Chat -->
             <div class="bg-white dark:bg-[#1c1c1e] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#2c2c2e] shrink-0">
                 <div class="flex items-center gap-3">
                     <button id="btn-close-chat" class="text-gray-800 dark:text-white p-1 active:scale-95">
@@ -739,6 +797,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
+            <!-- Cuerpo de Mensajes -->
             <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
                 <div class="flex justify-start">
                     <div class="bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">
@@ -752,6 +811,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
+            <!-- Input de Enviar Mensaje -->
             <div class="bg-white dark:bg-[#1c1c1e] p-3 border-t border-gray-200 dark:border-[#2c2c2e] flex items-center gap-2 shrink-0">
                 <input type="text" id="chat-input-message" placeholder="Escribe un mensaje..." class="flex-1 bg-[#f5f6f8] dark:bg-[#2c2c2e] text-gray-900 dark:text-white px-4 py-3 rounded-full text-[14.5px] outline-none border border-transparent focus:border-[#ff5a00]">
                 <button id="btn-send-message" class="w-11 h-11 bg-[#ff5a00] text-white rounded-full flex items-center justify-center active:scale-95 shrink-0 shadow-md">
@@ -770,7 +830,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </button>
     </div>
 
-    <!-- ETAPA 1 -->
+    <!-- ========================================== -->
+    <!-- ETAPA 1: INTERFAZ DE DETALLES REPLICADA    -->
+    <!-- ========================================== -->
     <div id="stage-1" class="w-full h-full flex justify-center items-center stage-transition bg-black sm:bg-transparent z-40 relative">
         <div id="app-container" class="w-full h-full sm:max-w-md sm:h-[92vh] sm:rounded-[30px] bg-[#f5f6f8] dark:bg-[#121212] overflow-hidden flex flex-col relative shadow-2xl transition-colors duration-300">
             <div id="header-image-container" class="relative z-10 h-[25vh] min-h-[180px] w-full bg-cover bg-center shrink-0 cursor-pointer group" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80');">
@@ -782,6 +844,12 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 <div class="absolute top-8 left-4 z-20">
                     <button id="btn-edit-switch" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center shadow-sm active:scale-95 transition-all duration-300">
                         <i id="edit-icon" class="fa-solid fa-chevron-down text-black dark:text-white text-[16px]"></i>
+                    </button>
+                </div>
+                <!-- BOTÓN TIENDAS YA REGISTRADAS -->
+                <div class="absolute top-8 left-[66px] z-20">
+                    <button id="btn-open-stores" class="h-[42px] px-3 bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center gap-2 shadow-sm active:scale-95 transition-all duration-300 text-black dark:text-white text-[13px] font-bold">
+                        <i class="fa-solid fa-store text-[#ff5a00] text-[15px]"></i> Tiendas
                     </button>
                 </div>
                 <div class="absolute top-10 right-4 z-20">
@@ -801,6 +869,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </button>
                 <button id="btn-toggle-qr" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
                     <i class="fa-solid fa-qrcode text-[#ff5a00]"></i> Desactivar QR
+                </button>
+                <button id="btn-save-store" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
+                    <i class="fa-solid fa-floppy-disk text-[#16a34a]"></i> Guardar Tienda
                 </button>
             </div>
 
@@ -828,6 +899,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                                     </svg>
                                 </button>
                             </div>
+                            <!-- BOTÓN LLAMADA TIENDA -->
                             <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
                                 <i class="fa-solid fa-phone text-[16px]"></i>
                             </a>
@@ -879,6 +951,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                         </div>
                     </div>
 
+                    <!-- BOTÓN CENTRO DE AYUDA -->
                     <div id="btn-open-help-center-stage1" class="bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
                         <div class="flex items-center gap-3">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gray-900 dark:text-white"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
@@ -901,6 +974,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -983,6 +1057,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                 </div>
             </div>
 
+            <!-- ========================================== -->
+            <!-- PANEL DESLIZABLE CENTRO DE AYUDA           -->
+            <!-- ========================================== -->
             <div id="help-center-panel" class="absolute inset-0 bg-[#f4f4f5] dark:bg-black z-[120] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
                 <div class="flex items-center justify-between px-4 py-4 shrink-0 bg-[#f4f4f5] dark:bg-black z-10 relative">
                     <button id="btn-close-help-center" class="text-gray-900 dark:text-white active:scale-95 transition-transform p-1">
@@ -1066,7 +1143,10 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
-    <!-- ETAPAS 2 y 3 -->
+    <!-- ========================================== -->
+    <!-- INTERFAZ COMPARTIDA (ETAPAS 2 y 3)         -->
+    <!-- ========================================== -->
+
     <div id="shared-top-badge" class="absolute top-12 left-1/2 -translate-x-1/2 z-[1000] bg-white dark:bg-[#1c1c1e] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.5)] font-black text-lg tracking-wide text-gray-900 dark:text-white opacity-0 transition-opacity duration-500 pointer-events-none border border-gray-100 dark:border-[#2c2c2e] flex items-center justify-center gap-2">
         <div class="bg-[#16a34a]/10 dark:bg-[#4ade80]/20 text-[#16a34a] dark:text-[#4ade80] w-6 h-6 rounded-full flex items-center justify-center text-[13px]">
             <i class="fa-solid fa-dollar-sign"></i>
@@ -1075,17 +1155,22 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
     </div>
 
     <div id="shared-fabs" class="absolute right-4 top-[55%] -translate-y-1/2 z-[1000] flex flex-col gap-3 opacity-0 pointer-events-none translate-x-8 transition-all duration-500 ease-out">
+        <!-- BOTÓN CHAT FLOTANTE -->
         <button class="btn-open-chat-trigger w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
             <i class="fa-solid fa-message text-[18px]"></i>
         </button>
         <button id="btn-toggle-stage" class="w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
             <i id="icon-toggle-stage" class="fa-solid fa-list-ul text-[18px]"></i>
         </button>
+        <!-- BOTÓN NAVEGACIÓN GOOGLE MAPS -->
         <a id="btn-google-maps-nav" href="https://www.google.com/maps/search/?api=1&query=Cl.+18+Sur+6+Bogota" target="_blank" class="w-[46px] h-[46px] bg-[#ea580c] rounded-2xl shadow-[0_4px_12px_rgba(234,88,12,0.4)] flex items-center justify-center text-white transition active:scale-95 border border-[#ea580c]">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22l10-3 10 3L12 2z"/></svg>
         </a>
     </div>
 
+    <!-- ========================================== -->
+    <!-- ETAPA 2: MAPA CON RUTA DE NAVEGACIÓN       -->
+    <!-- ========================================== -->
     <div id="stage-2" class="w-full h-screen hidden stage-transition relative overflow-hidden">
         <div id="map-stage2" class="real-map-container"></div>
         
@@ -1133,7 +1218,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                         </div>
 
                         <div class="flex items-center gap-3 shrink-0">
+                            <!-- BOTÓN LLAMADA USUARIO -->
                             <a href="tel:+573009876543" id="stage2-call-user" class="stage2-contact-button" aria-label="Llamar al usuario"><i class="fa-solid fa-phone text-[25px]"></i></a>
+                            <!-- BOTÓN CHAT USUARIO -->
                             <button id="stage2-chat-user" class="btn-open-chat-trigger stage2-contact-button" aria-label="Escribir al usuario"><i class="fa-solid fa-comment text-[24px]"></i></button>
                         </div>
                     </div>
@@ -1167,6 +1254,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- ETAPA 3: MAPA GPS (ESTADÍSTICAS)           -->
+    <!-- ========================================== -->
     <div id="stage-3" class="w-full h-screen hidden stage-transition relative overflow-hidden">
         <div id="map-stage3" class="real-map-container"></div>
         <div class="absolute top-12 left-4 z-[1000]">
@@ -1265,29 +1355,10 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- SCRIPT GENERAL Y CONFIGURACIÓN             -->
+    <!-- ========================================== -->
     <script>
-        document.addEventListener('touchmove', function(e) {
-            let el = e.target;
-            let canScroll = false;
-            while (el && el !== document.body && el !== document.documentElement) {
-                if (el.classList && el.classList.contains('leaflet-container')) {
-                    canScroll = true;
-                    break;
-                }
-                const style = window.getComputedStyle(el);
-                if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
-                    if (el.scrollHeight > el.clientHeight) {
-                        canScroll = true;
-                        break;
-                    }
-                }
-                el = el.parentNode;
-            }
-            if (!canScroll) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
         let isEditMode = false;
         let speechEngineUnlocked = false;
         let isVerificationMode = false;
@@ -1325,6 +1396,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             }
         }
 
+        // ===============================================
+        // CHAT FALSO INTERACTIVO
+        // ===============================================
         const chatModalOverlay = document.getElementById('chat-modal-overlay');
         const chatModalContent = document.getElementById('chat-modal-content');
         const btnCloseChat = document.getElementById('btn-close-chat');
@@ -1363,6 +1437,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             const text = chatInputMessage.value.trim();
             if (!text) return;
 
+            // Añadir mensaje del repartidor
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'flex justify-end';
             userMsgDiv.innerHTML = `<div class="bg-[#ff5a00] text-white px-4 py-2.5 rounded-2xl rounded-tr-sm max-w-[80%] text-[14.5px] shadow-sm">${text}</div>`;
@@ -1370,6 +1445,7 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             chatInputMessage.value = '';
             chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 
+            // Respuesta automática simulada
             setTimeout(() => {
                 const replyDiv = document.createElement('div');
                 replyDiv.className = 'flex justify-start';
@@ -1386,6 +1462,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             });
         }
 
+        // ===============================================
+        // PANEL DESLIZABLE ETAPA 2
+        // ===============================================
         let stage2SheetDragging = false;
         let stage2SheetStartY = 0;
         let stage2SheetLastY = 0;
@@ -1434,6 +1513,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
         window.addEventListener('mouseup', endStage2SheetDrag);
         window.addEventListener('touchend', endStage2SheetDrag);
 
+        // ===============================================
+        // PANEL DESLIZABLE ETAPA 3
+        // ===============================================
         const stage3NavSheet = document.getElementById('stage3-nav-sheet');
         let stage3SheetDragging = false;
         let stage3SheetStartY = 0;
@@ -1761,6 +1843,9 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
                         if (stage2CustomerTitle) stage2CustomerTitle.innerText = oTitle.innerText;
                     }
 
+                    // Guarda automáticamente la tienda registrada por el usuario
+                    try { if (typeof autoSaveStore === 'function') autoSaveStore(); } catch (err) {}
+
                     setStage2SheetExpanded(false);
                     stage2NavSheet.style.transition = '';
                     stage1.classList.add('hidden');
@@ -2067,9 +2152,428 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
             }
         });
     </script>
+
+    <!-- ========================================== -->
+    <!-- NUEVO: GUÍA OBLIGATORIA + TIENDAS GUARDADAS -->
+    <!-- ========================================== -->
+    <script>
+    (function () {
+        // ---------- Mini aviso ----------
+        let miniToastTimer;
+        function appToast(msg) {
+            const t = document.getElementById('app-mini-toast');
+            if (!t) return;
+            t.textContent = msg;
+            t.classList.remove('opacity-0');
+            clearTimeout(miniToastTimer);
+            miniToastTimer = setTimeout(() => t.classList.add('opacity-0'), 2600);
+        }
+
+        // =====================================================
+        // 1) GUÍA DE USO OBLIGATORIA (cada vez que se inicia sesión)
+        // =====================================================
+        const GUIDE_STEPS = [
+            {
+                title: '1. Cambia el nombre de la tienda',
+                text: 'Toca el nombre resaltado y escribe el nombre de la tienda donde vas a recoger el pedido. Ya activamos el modo edición por ti.',
+                target: 'stage1-restaurant-name',
+                scroll: 'nearest'
+            },
+            {
+                title: '2. Cambia la dirección de la tienda',
+                text: 'Abrimos "Detalles del pedido". En "Detalles de la recolección" toca la dirección resaltada y escribe la dirección de la tienda.',
+                target: 'details-restaurant-address',
+                panel: true,
+                scroll: 'center'
+            },
+            {
+                title: '3. Número del pedido y nombre del usuario',
+                text: 'Toca el título resaltado (por ejemplo #38 Usuario7236) y escribe el número del pedido y el nombre del cliente.',
+                target: 'stage1-order-title',
+                scroll: 'center'
+            },
+            {
+                title: '4. Sube el logo (Etapa 2)',
+                text: 'Pulsa el botón resaltado "Subir Logo (Etapa 2)" y elige el logo de la tienda. Se mostrará cuando recojas el pedido.'
+                ,
+                target: 'btn-change-logo'
+            },
+            {
+                title: '5. Cambia la imagen de la cabecera',
+                text: 'Toca la imagen de arriba (resaltada) y elige una foto de la tienda. Con el botón "Guardar Tienda" la dejas registrada y luego la reutilizas desde "Tiendas".',
+                target: 'header-image-container',
+                inset: true
+            }
+        ];
+
+        let gIdx = 0;
+        const gOverlay = document.getElementById('guide-overlay');
+        const gDots = document.getElementById('guide-dots');
+        const gPrev = document.getElementById('guide-prev');
+        const gNext = document.getElementById('guide-next');
+
+        GUIDE_STEPS.forEach(() => {
+            const d = document.createElement('span');
+            d.className = 'h-1.5 flex-1 rounded-full bg-gray-200 dark:bg-[#3a3a3c] transition-colors';
+            gDots.appendChild(d);
+        });
+
+        function guideClear() {
+            document.querySelectorAll('.guide-hl').forEach(el => el.classList.remove('guide-hl', 'guide-hl-inset'));
+        }
+
+        function guideShow(i) {
+            gIdx = i;
+            const s = GUIDE_STEPS[i];
+            guideClear();
+
+            const panel = document.getElementById('stage1-details-panel');
+            if (panel) {
+                if (s.panel) panel.classList.remove('translate-y-full');
+                else panel.classList.add('translate-y-full');
+            }
+
+            // El modo edición es necesario para todos los pasos
+            if (typeof isEditMode !== 'undefined' && !isEditMode) {
+                document.getElementById('btn-edit-switch').click();
+            }
+
+            const el = document.getElementById(s.target);
+            if (el) {
+                el.classList.add('guide-hl');
+                if (s.inset) el.classList.add('guide-hl-inset');
+                if (s.scroll) {
+                    setTimeout(() => {
+                        try { el.scrollIntoView({ block: s.scroll, behavior: 'smooth' }); } catch (e) {}
+                    }, 350);
+                }
+            }
+
+            document.getElementById('guide-step-label').textContent = 'Paso ' + (i + 1) + ' de ' + GUIDE_STEPS.length;
+            document.getElementById('guide-title').textContent = s.title;
+            document.getElementById('guide-text').textContent = s.text;
+            Array.from(gDots.children).forEach((d, k) => {
+                d.classList.toggle('bg-[#ff5a00]', k <= i);
+                d.classList.toggle('bg-gray-200', k > i);
+            });
+            gPrev.style.display = i === 0 ? 'none' : 'block';
+            gNext.textContent = i === GUIDE_STEPS.length - 1 ? '¡Entendido, empezar!' : 'Siguiente';
+        }
+
+        function guideFinish() {
+            guideClear();
+            const panel = document.getElementById('stage1-details-panel');
+            if (panel) panel.classList.add('translate-y-full');
+            gOverlay.style.display = 'none';
+        }
+
+        gPrev.addEventListener('click', () => { if (gIdx > 0) guideShow(gIdx - 1); });
+        gNext.addEventListener('click', () => {
+            if (gIdx < GUIDE_STEPS.length - 1) guideShow(gIdx + 1);
+            else guideFinish();
+        });
+
+        function guideStart() {
+            gOverlay.style.display = 'flex';
+            guideShow(0);
+        }
+        if (document.readyState === 'complete') setTimeout(guideStart, 600);
+        else window.addEventListener('load', () => setTimeout(guideStart, 600));
+
+        // =====================================================
+        // 2) TIENDAS REGISTRADAS (catálogo COMPARTIDO en la nube - Supabase, tabla "stores":
+        //    toda tienda que un usuario guarde la ven todos; con copia local como respaldo)
+        // =====================================================
+        const DEFAULT_STORE_NAME = 'Little Caesars Pizza (Restrepo)';
+
+        function getDb() {
+            try { return (window.parent && window.parent.appDb) || null; } catch (e) { return null; }
+        }
+        function getUid() {
+            try {
+                const u = window.parent && window.parent.appUser;
+                return (u && u.id) ? u.id : null;
+            } catch (e) { return null; }
+        }
+        // Copia local (respaldo si no hay internet o la tabla aún no existe)
+        function cacheKey() { return 'didi_stores_cache_v3_shared'; }
+        function legacyKey() { return 'didi_stores_v1_' + (getUid() || 'anon'); }
+        let storesState = [];      // lista que se muestra en pantalla
+        let isAdminUser = false;   // los admins pueden borrar cualquier tienda
+        function loadStores() {
+            try { return JSON.parse(localStorage.getItem(cacheKey()) || '[]') || []; }
+            catch (e) { return []; }
+        }
+        function persistStores(list) {
+            try { localStorage.setItem(cacheKey(), JSON.stringify(list)); return true; }
+            catch (e) { return false; }
+        }
+        function nameKey(n) { return String(n || '').trim().toLowerCase(); }
+        function rowToStore(r) {
+            return { id: r.id, owner: r.user_id, name: r.name, address: r.address || '', logo: r.logo || '', header: r.header || '', updated: r.updated_at ? Date.parse(r.updated_at) : 0 };
+        }
+
+        // ---- Operaciones en la nube ----
+        async function cloudUpsert(item) {
+            const db = getDb(), uid = getUid();
+            if (!db || !uid) return { error: { message: 'sin_conexion_supabase' } };
+            return await db.from('stores').upsert({
+                user_id: uid,
+                name: item.name,
+                name_key: nameKey(item.name),
+                address: item.address || '',
+                logo: item.logo || '',
+                header: item.header || '',
+                updated_at: new Date().toISOString()
+            }, { onConflict: 'name_key' }).select().single();
+        }
+        async function cloudDelete(id) {
+            const db = getDb();
+            if (!db) return { error: { message: 'sin_conexion_supabase' } };
+            return await db.from('stores').delete().eq('id', id);
+        }
+
+        // Trae las tiendas de la nube. Devuelve { list, cloud } (cloud=false si usó la copia local)
+        async function fetchStores() {
+            const db = getDb(), uid = getUid();
+            if (!db || !uid) return { list: loadStores(), cloud: false };
+            try {
+                // Catálogo compartido: trae las tiendas de TODOS los usuarios
+                let res = await db.from('stores').select('*').order('updated_at', { ascending: false });
+                if (res.error) throw res.error;
+                let list = (res.data || []).map(rowToStore);
+
+                try {
+                    const pr = await db.from('profiles').select('is_admin').eq('id', uid).maybeSingle();
+                    isAdminUser = !!(pr && pr.data && pr.data.is_admin);
+                } catch (e) {}
+
+                // Migración única: tiendas guardadas antes solo en este dispositivo
+                let legacy = [];
+                try { legacy = JSON.parse(localStorage.getItem(legacyKey()) || '[]') || []; } catch (e) {}
+                if (legacy.length) {
+                    const known = new Set(list.map(s => nameKey(s.name)));
+                    let allOk = true;
+                    for (const s of legacy) {
+                        if (!s || !s.name || known.has(nameKey(s.name))) continue;
+                        const r = await cloudUpsert(s);
+                        if (r.error) { allOk = false; break; }
+                    }
+                    if (allOk) {
+                        try { localStorage.removeItem(legacyKey()); } catch (e) {}
+                        res = await db.from('stores').select('*').order('updated_at', { ascending: false });
+                        if (!res.error) list = (res.data || []).map(rowToStore);
+                    }
+                }
+                persistStores(list);
+                return { list: list, cloud: true };
+            } catch (e) {
+                console.warn('Tiendas: usando copia local.', e && e.message);
+                return { list: loadStores(), cloud: false };
+            }
+        }
+        function bgUrl(el) {
+            if (!el) return '';
+            const m = (el.style.backgroundImage || '').match(/url\(["']?(.*?)["']?\)\s*$/);
+            return m ? m[1] : '';
+        }
+        function shrinkImage(src, maxW, type, quality) {
+            return new Promise(resolve => {
+                if (!src || src.indexOf('data:') !== 0) { resolve(src); return; }
+                const img = new Image();
+                img.onload = () => {
+                    try {
+                        const r = Math.min(1, maxW / img.width);
+                        const c = document.createElement('canvas');
+                        c.width = Math.max(1, Math.round(img.width * r));
+                        c.height = Math.max(1, Math.round(img.height * r));
+                        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                        resolve(c.toDataURL(type, quality));
+                    } catch (e) { resolve(src); }
+                };
+                img.onerror = () => resolve(src);
+                img.src = src;
+            });
+        }
+        function txt(id) {
+            const el = document.getElementById(id);
+            return el ? el.innerText.trim() : '';
+        }
+
+        async function saveCurrentStore(silent) {
+            const name = txt('stage1-restaurant-name');
+            if (!name) { if (!silent) appToast('Escribe primero el nombre de la tienda'); return false; }
+            const address = txt('details-restaurant-address');
+            const logo = await shrinkImage(bgUrl(document.getElementById('stage2-restaurant-logo')), 256, 'image/png');
+            const header = await shrinkImage(bgUrl(document.getElementById('header-image-container')), 700, 'image/jpeg', 0.72);
+
+            const item = { name: name, address: address, logo: logo, header: header };
+
+            // Catálogo compartido: revisa si esa tienda ya existe (de cualquier usuario)
+            const current = await fetchStores();
+            const found = current.list.find(s => nameKey(s.name) === nameKey(name));
+            const existed = !!found;
+            if (found && current.cloud && found.owner && found.owner !== getUid() && !isAdminUser) {
+                // Ya la registró otra persona: no se sobrescribe, se puede usar desde "Tiendas"
+                storesState = current.list;
+                if (!silent) appToast('Esa tienda ya está registrada. Búscala en "Tiendas"');
+                renderStores();
+                return false;
+            }
+
+            // 1) Intenta guardar en la nube
+            const res = await cloudUpsert(item);
+            if (!res.error && res.data) {
+                const saved = rowToStore(res.data);
+                const list = current.list.filter(s => nameKey(s.name) !== nameKey(name));
+                list.unshift(saved);
+                persistStores(list);
+                storesState = list;
+                if (!silent || !existed) appToast(existed ? 'Tienda actualizada ☁️✓' : 'Tienda guardada y visible para todos ☁️✓');
+                renderStores();
+                return true;
+            }
+
+            // 2) Sin nube: se guarda en este dispositivo y se avisa
+            console.warn('Tiendas: no se pudo guardar en la nube.', res.error && res.error.message);
+            const list = loadStores();
+            const idx = list.findIndex(s => nameKey(s.name) === nameKey(name));
+            const local = { id: idx >= 0 ? list[idx].id : 'local_' + Date.now(), name: name, address: address, logo: logo, header: header, updated: Date.now() };
+            if (idx >= 0) list[idx] = local; else list.unshift(local);
+            if (!persistStores(list)) {
+                if (!silent) appToast('No se pudo guardar la tienda');
+                return false;
+            }
+            storesState = list;
+            appToast('Guardada solo en este dispositivo (sin conexión a la nube)');
+            renderStores();
+            return true;
+        }
+
+        // Llamada desde el deslizador "Salir" (registro automático)
+        window.autoSaveStore = function () {
+            const name = txt('stage1-restaurant-name');
+            if (!name || name === DEFAULT_STORE_NAME) return;
+            saveCurrentStore(true);
+        };
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        }
+        function applyStore(s) {
+            ['stage1-restaurant-name', 'details-restaurant-name', 'stage2-restaurant-name', 'stage3-restaurant-name', 'stage3-restaurant-name-summary']
+                .forEach(id => setText(id, s.name));
+            if (s.address) setText('details-restaurant-address', s.address);
+            if (s.logo) document.getElementById('stage2-restaurant-logo').style.backgroundImage = "url('" + s.logo + "')";
+            if (s.header) document.getElementById('header-image-container').style.backgroundImage = "url('" + s.header + "')";
+            appToast('Tienda cargada: ' + s.name);
+        }
+
+        // ---------- Ventana "Tiendas registradas" ----------
+        const sOverlay = document.getElementById('stores-overlay');
+        const sContent = document.getElementById('stores-content');
+        const sList = document.getElementById('stores-list');
+
+        async function openStores() {
+            storesState = loadStores();   // muestra primero la copia local, al instante
+            renderStores();
+            sOverlay.classList.remove('hidden');
+            sOverlay.style.display = 'flex';
+            void sOverlay.offsetWidth;
+            sOverlay.classList.remove('opacity-0');
+            sContent.classList.remove('translate-y-full');
+
+            const countEl = document.getElementById('stores-count');
+            countEl.textContent = 'Sincronizando...';
+            const r = await fetchStores();
+            storesState = r.list;
+            renderStores();
+            if (!r.cloud) countEl.textContent += ' · sin conexión a la nube';
+        }
+        function closeStores() {
+            sOverlay.classList.add('opacity-0');
+            sContent.classList.add('translate-y-full');
+            setTimeout(() => { sOverlay.classList.add('hidden'); sOverlay.style.display = 'none'; }, 300);
+        }
+
+        function renderStores() {
+            const list = storesState;
+            document.getElementById('stores-count').textContent = list.length + (list.length === 1 ? ' tienda' : ' tiendas') + ' · compartidas con todos';
+            sList.innerHTML = '';
+
+            if (!list.length) {
+                const empty = document.createElement('div');
+                empty.className = 'text-center text-gray-500 dark:text-[#a0a0a0] text-[14px] py-10 px-4 leading-snug';
+                empty.textContent = 'Aún no hay tiendas registradas. Edita los datos de una tienda y pulsa "Guardar la tienda actual"; quedará visible para todos.';
+                sList.appendChild(empty);
+                return;
+            }
+
+            list.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'bg-white dark:bg-[#1c1c1e] rounded-2xl p-3.5 shadow-sm border border-gray-100 dark:border-[#2c2c2e] flex items-center gap-3';
+
+                const logo = document.createElement('div');
+                logo.className = 'w-14 h-14 rounded-full bg-cover bg-center border border-gray-200 dark:border-[#333] shrink-0 bg-white';
+                if (s.logo) logo.style.backgroundImage = "url('" + s.logo + "')";
+                card.appendChild(logo);
+
+                const info = document.createElement('div');
+                info.className = 'flex-1 min-w-0';
+                const n = document.createElement('div');
+                n.className = 'text-[15px] font-bold text-gray-900 dark:text-white leading-tight truncate';
+                n.textContent = s.name;
+                const a = document.createElement('div');
+                a.className = 'text-[12.5px] text-gray-500 dark:text-[#a0a0a0] mt-0.5 leading-snug';
+                a.textContent = s.address || 'Sin dirección';
+                info.appendChild(n);
+                info.appendChild(a);
+                card.appendChild(info);
+
+                const actions = document.createElement('div');
+                actions.className = 'flex flex-col gap-1.5 shrink-0';
+                const use = document.createElement('button');
+                use.className = 'bg-[#ff5a00] text-white font-bold text-[13px] px-3.5 py-2 rounded-xl active:scale-95 transition';
+                use.textContent = 'Usar';
+                use.addEventListener('click', () => { applyStore(s); closeStores(); });
+                actions.appendChild(use);
+
+                // Solo quien la registró (o un admin) puede borrarla
+                const isLocalOnly = String(s.id).indexOf('local_') === 0;
+                if (isLocalOnly || isAdminUser || (s.owner && s.owner === getUid())) {
+                    const del = document.createElement('button');
+                    del.className = 'bg-gray-100 dark:bg-[#2c2c2e] text-red-500 font-bold text-[12px] px-3.5 py-1.5 rounded-xl active:scale-95 transition';
+                    del.textContent = 'Borrar';
+                    del.addEventListener('click', async () => {
+                        if (!confirm('¿Borrar la tienda "' + s.name + '" para todos los usuarios?')) return;
+                        if (!isLocalOnly) {
+                            const r = await cloudDelete(s.id);
+                            if (r.error) { appToast('No se pudo borrar: ' + r.error.message); return; }
+                        }
+                        storesState = storesState.filter(x => x.id !== s.id);
+                        persistStores(storesState);
+                        renderStores();
+                    });
+                    actions.appendChild(del);
+                }
+                card.appendChild(actions);
+
+                sList.appendChild(card);
+            });
+        }
+
+        document.getElementById('btn-open-stores').addEventListener('click', (e) => { e.stopPropagation(); openStores(); });
+        document.getElementById('btn-close-stores').addEventListener('click', closeStores);
+        sOverlay.addEventListener('click', (e) => { if (e.target === sOverlay) closeStores(); });
+        document.getElementById('btn-save-store-modal').addEventListener('click', () => saveCurrentStore(false));
+        document.getElementById('btn-save-store').addEventListener('click', (e) => { e.stopPropagation(); saveCurrentStore(false); });
+    })();
+    </script>
 </body>
 </html></textarea>
 
+<!-- Botón Flotante WhatsApp (Con ID asignado) -->
 <a id="globalWaBtn" href="https://wa.me/573102722613?text=Hola,%20necesito%20ayuda%20con%20DiDi%20Food%20Rider" class="float-wa" target="_blank" rel="noopener">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
@@ -2077,44 +2581,24 @@ body{background:var(--dark-bg);display:flex;justify-content:center;align-items:c
 </a>
 
 <script>
-// ==========================================
-// SOLUCIÓN ANTI-CACHÉ (Evitar carga desde Memoria BFCache)
-// ==========================================
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {
-        window.location.reload();
-    }
-});
-
-// SOLUCIÓN DEFINITIVA AL PULL-TO-REFRESH EXTERNO
-document.addEventListener('touchmove', function(e) {
-    let el = e.target;
-    let isScrollable = false;
-    while (el && el !== document.body && el !== document.documentElement) {
-        const style = window.getComputedStyle(el);
-        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
-            if (el.scrollHeight > el.clientHeight) {
-                isScrollable = true;
-                break;
-            }
-        }
-        el = el.parentNode;
-    }
-    if (!isScrollable) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
+/* ==========================================
+   1. CONFIGURACIÓN DE SUPABASE
+   ========================================== */
 const SUPABASE_URL = 'https://rpazbrawgoctrnwvbxwd.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_FOL4DYXSy7ifs3PLJJknlQ_hLfFyAFz';
 
 let db = null;
 try { 
+  // SOLUCIÓN DEFINITIVA DE SESIÓN:
+  // Al configurar persistSession: false, el navegador elimina el inicio de sesión
+  // cada vez que la página o app se cierra. Al abrirla nuevamente pedirá Login, descontando un crédito.
   db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: false }
   }); 
 }
 catch (e) { console.error('Error iniciando Supabase:', e); }
+// Se expone el cliente para que la app (iframe) guarde las tiendas en la nube
+window.appDb = db;
 
 let isRegisterMode = false;
 let selectedVehicle = 'moto';
@@ -2138,6 +2622,7 @@ function showView(view) {
   view.classList.add('active');
 }
 
+/* ---------- Pestañas ---------- */
 function switchMode(mode) {
   isRegisterMode = mode === 'register';
   tabRegister.classList.toggle('active', isRegisterMode);
@@ -2153,6 +2638,7 @@ function switchMode(mode) {
 tabLogin.addEventListener('click', () => switchMode('login'));
 tabRegister.addEventListener('click', () => switchMode('register'));
 
+/* ---------- Vehículos ---------- */
 const VEHICLES = {
   moto: `<path d="M 60 120 L 90 90 L 150 90 L 180 120 Z" fill="rgba(20,20,20,.8)" stroke-width="2"/>
     <path d="M 120 90 L 140 60 L 170 80"/>
@@ -2178,6 +2664,7 @@ const VEHICLES = {
     <circle cx="75" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>
     <circle cx="175" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>`
 };
+const VEHICLE_LABEL = { moto: 'Moto 🏍️', bike: 'Bicicleta 🚲', car: 'Auto 🚗' };
 function updateVehicleSVG(type) { vehicleSvg.innerHTML = VEHICLES[type] || VEHICLES.moto; }
 updateVehicleSVG('moto');
 
@@ -2190,6 +2677,7 @@ document.querySelectorAll('.v-option').forEach(opt => {
   });
 });
 
+/* ---------- Login / Registro ---------- */
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!db) return setStatus('Error: no se pudo conectar con Supabase.', 'err');
@@ -2245,6 +2733,7 @@ authForm.addEventListener('submit', async (e) => {
   }
 });
 
+/* ---------- Verificar código ---------- */
 $('verifyBtn').addEventListener('click', async () => {
   const token = $('codeInput').value.trim();
   if (token.length < 6) return setStatus('Ingresa el código completo que recibiste.', 'err');
@@ -2271,6 +2760,7 @@ $('backBtn').addEventListener('click', () => {
   switchMode('login');
 });
 
+/* ---------- Sesión iniciada ---------- */
 async function getProfile(user) {
   const { data, error } = await db.from('profiles').select('credits,is_admin,blocked').eq('id', user.id).maybeSingle();
   return error ? null : data;
@@ -2336,6 +2826,7 @@ function showTopBar() {
   showTopBar();
 });
 
+// ESTA FUNCIÓN SE EJECUTA AL INICIAR SESIÓN CON ÉXITO
 async function onLoginSuccess(user) {
   if (!user) return;
 
@@ -2357,6 +2848,7 @@ async function onLoginSuccess(user) {
     return setStatus('Sesión correcta, pero falta pegar el código de tu app en el archivo.', 'err');
   }
 
+  // Descuenta 1 crédito siempre al loguearse con éxito, sin excepciones (excepto para los admins).
   if (!prof.is_admin) {
     if (prof.credits <= 0) {
       showView(noAccessView);
@@ -2381,7 +2873,12 @@ async function onLoginSuccess(user) {
   clearInterval(lineTimer);
   document.querySelector('.environment').style.display = 'none';
   document.querySelector('.scene').style.display = 'none';
+  
+  // AQUÍ OCULTAMOS EL BOTÓN DE WHATSAPP PARA QUE NO SE VEA EN LA APLICACIÓN
   $('globalWaBtn').style.display = 'none';
+
+  // El usuario debe estar disponible ANTES de cargar la app (las tiendas se guardan por usuario)
+  window.appUser = user;
 
   const frame = $('appFrame');
   frame.srcdoc = src;
@@ -2398,6 +2895,7 @@ async function onLoginSuccess(user) {
     if (!p) return;
     const prev = lastCredits;
     handleProfileChange(user, p);
+    // Si se queda sin créditos mientras está conectado, lo expulsa.
     if (!p.is_admin && p.credits <= 0 && prev !== null && p.credits < prev) {
       location.reload(); 
     }
@@ -2414,6 +2912,7 @@ $('blockedLogout').addEventListener('click', logout);$('recheckBtn').addEventLis
   if (data.session) onLoginSuccess(data.session.user); else location.reload();
 });
 
+/* ---------- Panel de administrador ---------- */
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let adminUsers = [], admFilter = 'all';
 
@@ -2496,6 +2995,9 @@ $('adminList').addEventListener('click', async (e) => {
   loadAdmin();
 });
 
+/* ==========================================
+   2. EFECTO 3D / PARALLAX
+   ========================================== */
 const panel = $('panel'), vehicleWrapper = $('vehicleWrapper'), sun =$('sun');
 let mx = 0, my = 0, tx = 0, ty = 0;
 window.addEventListener('mousemove', e => {
@@ -2510,6 +3012,9 @@ window.addEventListener('mousemove', e => {
   requestAnimationFrame(render);
 })();
 
+/* ==========================================
+   3. LÍNEAS DE VELOCIDAD
+   ========================================== */
 const linesContainer = $('speedLines');
 const lineTimer = setInterval(() => {
   const l = document.createElement('div');
