@@ -884,7 +884,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     <div class="flex items-center justify-between">
                         <div class="pr-3">
                             <h1 id="stage1-restaurant-name" contenteditable="false" data-editable="true" class="text-[20px] font-bold text-gray-900 dark:text-white tracking-tight leading-tight">Little Caesars Pizza (Restrepo)</h1>
-                            <p contenteditable="false" data-editable="true" class="text-[14px] text-gray-500 dark:text-[#a0a0a0] mt-1 font-medium">Little Caesars Pizza Restrepo</p>
+                            <p id="stage1-restaurant-address" contenteditable="false" data-editable="true" class="text-[14px] text-gray-500 dark:text-[#a0a0a0] mt-1 font-medium">Little Caesars Pizza Restrepo</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
                             <div id="qr-container-stage1" class="relative">
@@ -2181,10 +2181,9 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             },
             {
                 title: '2. Cambia la dirección de la tienda',
-                text: 'Abrimos "Detalles del pedido". En "Detalles de la recolección" toca la dirección resaltada y escribe la dirección de la tienda.',
-                target: 'details-restaurant-address',
-                panel: true,
-                scroll: 'center'
+                text: 'Toca el texto resaltado debajo del nombre y escribe la dirección de la tienda.',
+                target: 'stage1-restaurant-address',
+                scroll: 'nearest'
             },
             {
                 title: '3. Número del pedido y nombre del usuario',
@@ -2403,7 +2402,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         async function saveCurrentStore(silent) {
             const name = txt('stage1-restaurant-name');
             if (!name) { if (!silent) appToast('Escribe primero el nombre de la tienda'); return false; }
-            const address = txt('details-restaurant-address');
+            const address = txt('stage1-restaurant-address');
             const logo = await shrinkImage(bgUrl(document.getElementById('stage2-restaurant-logo')), 256, 'image/png');
             const header = await shrinkImage(bgUrl(document.getElementById('header-image-container')), 700, 'image/jpeg', 0.72);
 
@@ -2464,7 +2463,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         function applyStore(s) {
             ['stage1-restaurant-name', 'details-restaurant-name', 'stage2-restaurant-name', 'stage3-restaurant-name', 'stage3-restaurant-name-summary']
                 .forEach(id => setText(id, s.name));
-            if (s.address) setText('details-restaurant-address', s.address);
+            if (s.address) { setText('stage1-restaurant-address', s.address); setText('details-restaurant-address', s.address); }
             if (s.logo) document.getElementById('stage2-restaurant-logo').style.backgroundImage = "url('" + s.logo + "')";
             if (s.header) document.getElementById('header-image-container').style.backgroundImage = "url('" + s.header + "')";
             appToast('Tienda cargada: ' + s.name);
@@ -2568,6 +2567,22 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         sOverlay.addEventListener('click', (e) => { if (e.target === sOverlay) closeStores(); });
         document.getElementById('btn-save-store-modal').addEventListener('click', () => saveCurrentStore(false));
         document.getElementById('btn-save-store').addEventListener('click', (e) => { e.stopPropagation(); saveCurrentStore(false); });
+
+        // Oculta el botón "Tiendas" a los 30 segundos
+        setTimeout(function () {
+            var b = document.getElementById('btn-open-stores');
+            if (!b) return;
+            b.style.transition = 'opacity .5s';
+            b.style.opacity = '0';
+            b.style.pointerEvents = 'none';
+            setTimeout(function () { b.parentElement.style.display = 'none'; }, 500);
+        }, 30000);
+
+        // Mantiene sincronizadas las dos direcciones
+        ['stage1-restaurant-address', 'details-restaurant-address'].forEach(function (id, i, arr) {
+            var el = document.getElementById(id), other = document.getElementById(arr[1 - i]);
+            if (el && other) el.addEventListener('input', function () { other.innerText = el.innerText; });
+        });
     })();
     </script>
 </body>
