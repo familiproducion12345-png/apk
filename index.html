@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
-:root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#050507;--glass-bg:rgba(15,15,18,.78);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
+:root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#161921;--glass-bg:rgba(36,40,51,.8);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
 
 /* SOLUCIÓN AL DESLIZAR PARA ACTUALIZAR (PULL-TO-REFRESH) */
@@ -19,7 +19,7 @@ html, body {
 body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;color:#fff;padding:12px}
 
 /* Fondo */
-.environment{position:fixed;inset:-10%;perspective:1000px;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at center top,#1a0b08 0%,var(--dark-bg) 70%)}
+.environment{position:fixed;inset:-10%;perspective:1000px;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at center top,#2a1710 0%,var(--dark-bg) 70%)}
 .horizon-sun{position:absolute;top:25%;left:50%;width:500px;height:500px;background:linear-gradient(180deg,var(--primary) 0%,transparent 70%);border-radius:50%;transform:translateX(-50%);filter:blur(40px);opacity:.6}
 .road-container{position:absolute;bottom:-20%;left:-50%;width:200%;height:80%;transform:rotateX(78deg);transform-style:preserve-3d}
 .road-grid{position:absolute;width:100%;height:200%;background-image:linear-gradient(rgba(245,82,70,.6) 2px,transparent 2px),linear-gradient(90deg,rgba(255,122,0,.4) 2px,transparent 2px);background-size:80px 80px;animation:moveRoad 1.2s linear infinite;box-shadow:inset 0 100px 100px var(--dark-bg)}
@@ -54,7 +54,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 .input-group input{width:100%;padding:14px 18px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-size:14px;outline:none;transition:all .4s}
 .input-group input:focus,.input-group input:not(:placeholder-shown){border-color:var(--primary);background:rgba(255,122,0,.08);box-shadow:0 0 15px rgba(255,122,0,.2)}
 .input-group label{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#71717a;font-size:14px;pointer-events:none;transition:all .3s}
-.input-group input:focus~label,.input-group input:not(:placeholder-shown)~label{top:-9px;left:14px;font-size:11px;color:var(--primary);background:#0f0f12;padding:0 8px;border-radius:8px;font-weight:700}
+.input-group input:focus~label,.input-group input:not(:placeholder-shown)~label{top:-9px;left:14px;font-size:11px;color:var(--primary);background:#262a35;padding:0 8px;border-radius:8px;font-weight:700}
 .code-input{text-align:center;letter-spacing:8px;font-size:20px!important;font-weight:700}
 
 .auth-btn{width:100%;padding:15px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;font-size:14px;font-weight:900;cursor:pointer;transition:all .3s;margin-bottom:12px;outline:none;text-transform:uppercase;letter-spacing:1px;box-shadow:0 8px 25px rgba(255,122,0,.35)}
@@ -79,7 +79,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 .status-text{text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px;font-weight:500;line-height:1.4}
 .status-text.ok{color:var(--primary)}.status-text.err{color:var(--secondary)}
 
-#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#08080b}
+#adminPanel{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(255,122,0,.22),transparent 45%),radial-gradient(circle at 90% 20%,rgba(245,82,70,.18),transparent 40%),#161921}
 .adm-wrap{max-width:640px;margin:0 auto}
 .adm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .adm-sub{font-size:12px;color:#a1a1aa}
@@ -151,7 +151,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 
 /* Fondo Admin Premium Glassmorphism */
 #adminPanel {
-    background: rgba(5, 5, 7, 0.65);
+    background: rgba(22, 25, 33, 0.78);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 }
@@ -167,7 +167,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 
 /* Tarjetas de Usuario Ultra Premium */
 .ucard {
-    background: linear-gradient(145deg, rgba(30, 30, 35, 0.6), rgba(15, 15, 18, 0.8));
+    background: linear-gradient(145deg, rgba(52, 57, 70, 0.7), rgba(36, 40, 51, 0.85));
     border: 1px solid rgba(255, 122, 0, 0.25);
     box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
     border-radius: 20px;
@@ -308,7 +308,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 <iframe id="appFrame" allow="geolocation; clipboard-write; autoplay" style="display:none;position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#000;overscroll-behavior:none;"></iframe>
 <div id="topTap" style="display:none;position:fixed;top:0;left:35%;width:30%;height:14px;z-index:199"></div>
 <div id="topBar" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:200;gap:4px;align-items:flex-start;font:700 11px Outfit,sans-serif;white-space:nowrap">
-  <span id="creditPill" style="background:rgba(15,15,18,.92);color:#FF7A00;border-radius:0 0 12px 12px;padding:3px 12px;border:1px solid rgba(255,122,0,.4);border-top:0">💳 0</span>
+  <span id="creditPill" style="background:rgba(38,42,53,.94);color:#FF7A00;border-radius:0 0 12px 12px;padding:3px 12px;border:1px solid rgba(255,122,0,.4);border-top:0">💳 0</span>
   <button id="adminBtn" type="button" style="display:none;background:rgba(255,122,0,.95);color:#fff;border:0;border-radius:0 0 12px 12px;padding:3px 12px;font:inherit">👑 ADMIN</button>
   <button id="logoutBtn" type="button" style="background:rgba(245,82,70,.92);color:#fff;border:0;border-radius:0 0 12px 12px;padding:3px 12px;font:inherit">SALIR ✕</button>
 </div>
@@ -442,8 +442,9 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         }
 
         /* MODO OSCURO MAPA CORREGIDO */
+        html.dark .real-map-container { background-color: #2a2e37; }
         html.dark .real-map-container .leaflet-tile-pane {
-            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%) !important;
+            filter: invert(100%) hue-rotate(180deg) brightness(105%) contrast(82%) saturate(.85) !important;
         }
 
         .leaflet-control-attribution { display: none !important; }
@@ -512,7 +513,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             animation: toggleLogoAnimation 4s ease-in-out infinite;
         }
         
-        html.dark .restaurant-badge-logo { border-color: #333; }
+        html.dark .restaurant-badge-logo { border-color: #454b58; }
 
         @keyframes toggleIconAnimation { 0%, 35%, 100% { opacity: 1; transform: scale(1); } 45%, 90% { opacity: 0; transform: scale(0.5); } }
         @keyframes toggleLogoAnimation { 0%, 35%, 100% { opacity: 0; transform: scale(0.5); } 45%, 90% { opacity: 1; transform: scale(1); } }
@@ -571,7 +572,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         }
 
         html.dark #stage2-nav-sheet .stage2-expand-handle,
-        html.dark #stage3-nav-sheet .stage3-expand-handle { background: #55565a; }
+        html.dark #stage3-nav-sheet .stage3-expand-handle { background: #5d6472; }
 
         #stage2-nav-sheet .stage2-details-content {
             opacity: 0;
@@ -627,13 +628,13 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             padding: 26px 20px 22px;
         }
 
-        html.dark .stage2-detail-card { border-color: #3a3a3c; background: #121212; }
+        html.dark .stage2-detail-card { border-color: #454b58; background: #1e2128; }
 
         .stage2-contact-button {
             width: 64px; height: 64px; border-radius: 22px; background: #f1f1f5;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #111827;
         }
-        html.dark .stage2-contact-button { background: #2c2c2e; color: #fff; }
+        html.dark .stage2-contact-button { background: #363b46; color: #fff; }
         .stage2-cash-icon { width: 34px; height: 34px; border: 2px solid currentColor; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; font-weight: 900; }
         .stage2-cash-value { color: #ea580c; font-weight: 800; }
         .stage2-help-card { min-height: 76px; }
@@ -667,7 +668,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             background-size: 12px 10px;
         }
         html.dark .ticket-jagged::after {
-            background: radial-gradient(circle at 50% 100%, transparent 4px, #2c2c2e 4px) repeat-x;
+            background: radial-gradient(circle at 50% 100%, transparent 4px, #363b46 4px) repeat-x;
         }
 
         /* --- GUÍA DE USO OBLIGATORIA: resaltado del elemento --- */
@@ -686,13 +687,13 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         @keyframes guideIn { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
+<body class="bg-gray-100 dark:bg-[#1e2128] text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
 
     <!-- ========================================================= -->
     <!-- GUÍA DE USO OBLIGATORIA (se muestra en cada inicio)       -->
     <!-- ========================================================= -->
     <div id="guide-overlay" class="fixed left-0 right-0 bottom-0 z-[3000] justify-center px-3 pb-3 pointer-events-none" style="display:none;">
-        <div id="guide-card" class="pointer-events-auto w-full sm:max-w-md bg-white dark:bg-[#1c1c1e] rounded-[24px] shadow-[0_-8px_40px_rgba(0,0,0,0.35)] border border-[#ff5a00]/40 p-4">
+        <div id="guide-card" class="pointer-events-auto w-full sm:max-w-md bg-white dark:bg-[#2a2e37] rounded-[24px] shadow-[0_-8px_40px_rgba(0,0,0,0.35)] border border-[#ff5a00]/40 p-4">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-[11px] font-black uppercase tracking-wider text-[#ff5a00] flex items-center gap-1.5"><i class="fa-solid fa-book-open"></i> Guía de uso</span>
                 <span id="guide-step-label" class="text-[12px] font-bold text-gray-500 dark:text-[#a0a0a0]">Paso 1 de 5</span>
@@ -701,7 +702,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             <h3 id="guide-title" class="text-[18px] font-black text-gray-900 dark:text-white leading-tight mb-1.5"></h3>
             <p id="guide-text" class="text-[14px] text-gray-600 dark:text-[#c8c8c8] leading-snug mb-4"></p>
             <div class="flex gap-2">
-                <button id="guide-prev" class="px-4 h-[46px] rounded-xl bg-gray-100 dark:bg-[#2c2c2e] text-gray-800 dark:text-white font-bold text-[14px] active:scale-95 transition">Atrás</button>
+                <button id="guide-prev" class="px-4 h-[46px] rounded-xl bg-gray-100 dark:bg-[#363b46] text-gray-800 dark:text-white font-bold text-[14px] active:scale-95 transition">Atrás</button>
                 <button id="guide-next" class="flex-1 h-[46px] rounded-xl bg-[#ff5a00] text-white font-black text-[15px] active:scale-95 transition">Siguiente</button>
             </div>
         </div>
@@ -711,8 +712,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- TIENDAS YA REGISTRADAS                                    -->
     <!-- ========================================================= -->
     <div id="stores-overlay" class="fixed inset-0 bg-black/50 z-[2200] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
-        <div id="stores-content" class="bg-[#f5f6f8] dark:bg-[#121212] w-full sm:max-w-md sm:mx-auto h-[78vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
-            <div class="bg-white dark:bg-[#1c1c1e] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#2c2c2e] shrink-0">
+        <div id="stores-content" class="bg-[#f5f6f8] dark:bg-[#1e2128] w-full sm:max-w-md sm:mx-auto h-[78vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
+            <div class="bg-white dark:bg-[#2a2e37] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#363b46] shrink-0">
                 <div class="flex items-center gap-3">
                     <button id="btn-close-stores" class="text-gray-800 dark:text-white p-1 active:scale-95">
                         <i class="fa-solid fa-xmark text-[20px]"></i>
@@ -739,7 +740,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- MODAL CÓDIGO DE VERIFICACIÓN (ESTILO BOTTOM SHEET)        -->
     <!-- ========================================================= -->
     <div id="code-modal-overlay" class="fixed inset-0 bg-black/40 z-[2000] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
-        <div id="code-modal-content" class="bg-white dark:bg-[#1c1c1e] w-full sm:max-w-md sm:mx-auto rounded-t-[24px] px-5 pt-5 pb-12 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transform translate-y-full transition-transform duration-300">
+        <div id="code-modal-content" class="bg-white dark:bg-[#2a2e37] w-full sm:max-w-md sm:mx-auto rounded-t-[24px] px-5 pt-5 pb-12 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] transform translate-y-full transition-transform duration-300">
             <div class="flex items-center mb-10 mt-1">
                 <button id="btn-cancel-code" class="text-gray-900 dark:text-white mr-3 active:scale-95 transition-transform p-1">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -748,19 +749,19 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             </div>
 
             <div class="relative flex justify-center items-center h-[90px] mb-8">
-                <div class="absolute w-[140px] h-[100px] bg-[#fafafa] dark:bg-[#2c2c2e] border border-[#f2f2f2] dark:border-[#3a3a3c] rounded-t-md z-0 flex flex-col items-center ticket-jagged">
+                <div class="absolute w-[140px] h-[100px] bg-[#fafafa] dark:bg-[#363b46] border border-[#f2f2f2] dark:border-[#454b58] rounded-t-md z-0 flex flex-col items-center ticket-jagged">
                     <span class="text-[10px] text-[#dcdcdc] dark:text-[#555] mt-[15px] tracking-[1px] font-bold">TICKET</span>
                 </div>
-                <div class="relative z-10 bg-white dark:bg-[#121212] px-6 py-3.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.4)] text-[15.5px] font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                <div class="relative z-10 bg-white dark:bg-[#1e2128] px-6 py-3.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.4)] text-[15.5px] font-bold text-gray-900 dark:text-white whitespace-nowrap">
                     <span contenteditable="false" data-editable="true">N.º de pedido 12345678912345<span class="text-[#ff5a00]">XXXX</span></span>
                 </div>
             </div>
 
             <div class="flex justify-center gap-4 mb-7">
-                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#2c2c2e] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#121212] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all" autofocus>
-                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#2c2c2e] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#121212] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
-                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#2c2c2e] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#121212] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
-                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#2c2c2e] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#121212] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
+                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#363b46] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#1e2128] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all" autofocus>
+                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#363b46] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#1e2128] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
+                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#363b46] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#1e2128] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
+                <input type="tel" maxlength="1" autocomplete="off" class="code-input w-[62px] h-[64px] text-center text-[28px] font-bold bg-[#f4f4f4] dark:bg-[#363b46] text-gray-900 dark:text-white rounded-[14px] border-[2px] border-transparent focus:border-[#ff5a00] focus:bg-white dark:focus:bg-[#1e2128] focus:shadow-[0_0_0_2px_rgba(255,90,0,0.1)] outline-none caret-[#ff5a00] transition-all">
             </div>
 
             <p contenteditable="false" data-editable="true" class="text-[15px] text-gray-800 dark:text-[#d0d0d0] leading-[1.45] text-left px-1">
@@ -773,9 +774,9 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- CHAT FALSO UNIFICADO                                      -->
     <!-- ========================================================= -->
     <div id="chat-modal-overlay" class="fixed inset-0 bg-black/50 z-[2500] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
-        <div id="chat-modal-content" class="bg-[#f5f6f8] dark:bg-[#121212] w-full sm:max-w-md sm:mx-auto h-[85vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
+        <div id="chat-modal-content" class="bg-[#f5f6f8] dark:bg-[#1e2128] w-full sm:max-w-md sm:mx-auto h-[85vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
             <!-- Header Chat -->
-            <div class="bg-white dark:bg-[#1c1c1e] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#2c2c2e] shrink-0">
+            <div class="bg-white dark:bg-[#2a2e37] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#363b46] shrink-0">
                 <div class="flex items-center gap-3">
                     <button id="btn-close-chat" class="text-gray-800 dark:text-white p-1 active:scale-95">
                         <i class="fa-solid fa-arrow-left text-[18px]"></i>
@@ -791,7 +792,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     </div>
                 </div>
                 <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                    <a id="chat-call-direct" href="tel:+573001234567" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#2c2c2e] flex items-center justify-center active:scale-95">
+                    <a id="chat-call-direct" href="tel:+573001234567" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#363b46] flex items-center justify-center active:scale-95">
                         <i class="fa-solid fa-phone text-sm"></i>
                     </a>
                 </div>
@@ -800,7 +801,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             <!-- Cuerpo de Mensajes -->
             <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
                 <div class="flex justify-start">
-                    <div class="bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">
                         ¡Hola! ¿Tienes alguna novedad con el pedido o la entrega?
                     </div>
                 </div>
@@ -812,8 +813,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             </div>
 
             <!-- Input de Enviar Mensaje -->
-            <div class="bg-white dark:bg-[#1c1c1e] p-3 border-t border-gray-200 dark:border-[#2c2c2e] flex items-center gap-2 shrink-0">
-                <input type="text" id="chat-input-message" placeholder="Escribe un mensaje..." class="flex-1 bg-[#f5f6f8] dark:bg-[#2c2c2e] text-gray-900 dark:text-white px-4 py-3 rounded-full text-[14.5px] outline-none border border-transparent focus:border-[#ff5a00]">
+            <div class="bg-white dark:bg-[#2a2e37] p-3 border-t border-gray-200 dark:border-[#363b46] flex items-center gap-2 shrink-0">
+                <input type="text" id="chat-input-message" placeholder="Escribe un mensaje..." class="flex-1 bg-[#f5f6f8] dark:bg-[#363b46] text-gray-900 dark:text-white px-4 py-3 rounded-full text-[14.5px] outline-none border border-transparent focus:border-[#ff5a00]">
                 <button id="btn-send-message" class="w-11 h-11 bg-[#ff5a00] text-white rounded-full flex items-center justify-center active:scale-95 shrink-0 shadow-md">
                     <i class="fa-solid fa-paper-plane text-sm"></i>
                 </button>
@@ -824,17 +825,12 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <input type="file" id="image-file-input" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index: -100;">
     <input type="file" id="logo-file-input" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index: -100;">
 
-    <div id="dark-mode-container" class="fixed top-3 right-3 z-50 flex items-center gap-2 transition-opacity duration-700">
-        <button id="btn-dark-mode-toggle" title="Alternar Modo Oscuro / Claro" class="w-9 h-9 bg-white dark:bg-[#1c1c1e] text-gray-800 dark:text-yellow-400 rounded-full flex items-center justify-center shadow-lg border border-gray-200 dark:border-[#2c2c2e] active:scale-95 transition-all">
-            <i id="dark-mode-icon" class="fa-solid fa-moon text-sm"></i>
-        </button>
-    </div>
-
+    
     <!-- ========================================== -->
     <!-- ETAPA 1: INTERFAZ DE DETALLES REPLICADA    -->
     <!-- ========================================== -->
     <div id="stage-1" class="w-full h-full flex justify-center items-center stage-transition bg-black sm:bg-transparent z-40 relative">
-        <div id="app-container" class="w-full h-full sm:max-w-md sm:h-[92vh] sm:rounded-[30px] bg-[#f5f6f8] dark:bg-[#121212] overflow-hidden flex flex-col relative shadow-2xl transition-colors duration-300">
+        <div id="app-container" class="w-full h-full sm:max-w-md sm:h-[92vh] sm:rounded-[30px] bg-[#f5f6f8] dark:bg-[#1e2128] overflow-hidden flex flex-col relative shadow-2xl transition-colors duration-300">
             <div id="header-image-container" class="relative z-10 h-[25vh] min-h-[180px] w-full bg-cover bg-center shrink-0 cursor-pointer group" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80');">
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div id="camera-indicator" class="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-white gap-1 pointer-events-none">
@@ -842,42 +838,43 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     <span class="text-[11px] font-bold tracking-wide">Cambiar imagen de cabecera</span>
                 </div>
                 <div class="absolute top-8 left-4 z-20">
-                    <button id="btn-edit-switch" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center shadow-sm active:scale-95 transition-all duration-300">
+                    <button id="btn-edit-switch" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-[14px] flex items-center justify-center shadow-sm active:scale-95 transition-all duration-300">
                         <i id="edit-icon" class="fa-solid fa-chevron-down text-black dark:text-white text-[16px]"></i>
                     </button>
                 </div>
                 <!-- BOTÓN TIENDAS YA REGISTRADAS -->
                 <div class="absolute top-8 left-[66px] z-20">
-                    <button id="btn-open-stores" class="h-[42px] px-3 bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center gap-2 shadow-sm active:scale-95 transition-all duration-300 text-black dark:text-white text-[13px] font-bold">
+                    <button id="btn-open-stores" class="h-[42px] px-3 bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-[14px] flex items-center gap-2 shadow-sm active:scale-95 transition-all duration-300 text-black dark:text-white text-[13px] font-bold">
                         <i class="fa-solid fa-store text-[#ff5a00] text-[15px]"></i> Tiendas
                     </button>
                 </div>
-                <div class="absolute top-10 right-4 z-20">
-                    <div class="bg-black/60 text-white text-[13px] font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm">
+                <div class="absolute bottom-9 right-4 z-20">
+                    <div id="btn-dark-mode-toggle" role="button" title="Modo oscuro / claro" class="bg-black/60 text-white text-[13px] font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm cursor-pointer active:scale-95 transition-transform">
                         <span contenteditable="false" data-editable="true">1/1</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        <i id="dark-mode-icon" class="fa-solid fa-moon text-[12px] text-white" style="display:none"></i>
+                        <svg id="dm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     </div>
                 </div>
             </div>
 
             <div id="edit-buttons-container" class="absolute top-[80px] left-4 z-[50] flex flex-col gap-2.5 transition-opacity duration-300 opacity-0 pointer-events-none">
-                <button id="btn-change-logo" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
+                <button id="btn-change-logo" class="bg-white/95 dark:bg-[#2a2e37]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
                     <i class="fa-solid fa-cloud-arrow-up text-[#ff5a00]"></i> Subir Logo (Etapa 2)
                 </button>
-                <button id="btn-toggle-verification" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
+                <button id="btn-toggle-verification" class="bg-white/95 dark:bg-[#2a2e37]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
                     <i class="fa-solid fa-shield-halved text-[#ff5a00]"></i> Código Verificación
                 </button>
-                <button id="btn-toggle-qr" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
+                <button id="btn-toggle-qr" class="bg-white/95 dark:bg-[#2a2e37]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
                     <i class="fa-solid fa-qrcode text-[#ff5a00]"></i> Desactivar QR
                 </button>
-                <button id="btn-save-store" class="bg-white/95 dark:bg-[#1c1c1e]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
+                <button id="btn-save-store" class="bg-white/95 dark:bg-[#2a2e37]/95 text-black dark:text-white px-3 py-2 rounded-xl text-[13px] font-bold shadow-md active:scale-95 transition-all flex items-center gap-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50">
                     <i class="fa-solid fa-floppy-disk text-[#16a34a]"></i> Guardar Tienda
                 </button>
             </div>
 
-            <div class="flex-1 bg-white dark:bg-[#121212] rounded-t-[24px] -mt-5 relative z-20 flex flex-col overflow-y-auto">
+            <div class="flex-1 bg-white dark:bg-[#1e2128] rounded-t-[24px] -mt-5 relative z-20 flex flex-col overflow-y-auto">
                 <div class="w-full flex justify-center pt-3 pb-2 shrink-0">
-                    <div class="w-10 h-[5px] bg-gray-200 dark:bg-[#2c2c2e] rounded-full"></div>
+                    <div class="w-10 h-[5px] bg-gray-200 dark:bg-[#363b46] rounded-full"></div>
                 </div>
 
                 <div class="px-5 pb-4 flex flex-col gap-4">
@@ -888,8 +885,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
                             <div id="qr-container-stage1" class="relative">
-                                <div class="absolute -top-[14px] left-1/2 -translate-x-1/2 bg-[#ff6854] text-white text-[10px] font-semibold px-2 py-[1px] rounded-full shadow-sm z-10 border-[1.5px] border-white dark:border-[#121212] whitespace-nowrap">QR-Code</div>
-                                <button class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
+                                <div class="absolute -top-[14px] left-1/2 -translate-x-1/2 bg-[#ff6854] text-white text-[10px] font-semibold px-2 py-[1px] rounded-full shadow-sm z-10 border-[1.5px] border-white dark:border-[#1e2128] whitespace-nowrap">QR-Code</div>
+                                <button class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M4 7V5a2 2 0 0 1 2-2h2"></path>
                                         <path d="M16 3h2a2 2 0 0 1 2 2v2"></path>
@@ -900,19 +897,19 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                                 </button>
                             </div>
                             <!-- BOTÓN LLAMADA TIENDA -->
-                            <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
+                            <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-[14px] flex items-center justify-center text-black dark:text-white transition active:scale-95">
                                 <i class="fa-solid fa-phone text-[16px]"></i>
                             </a>
                         </div>
                     </div>
 
-                    <div class="bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-2xl p-4">
+                    <div class="bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-2xl p-4">
                         <p contenteditable="false" data-editable="true" class="text-[14px] font-semibold text-gray-900 dark:text-white leading-tight">
                             La tienda ha confirmado que el pedido está listo para recolectar
                         </p>
                     </div>
 
-                    <div class="border border-gray-200 dark:border-[#2c2c2e] rounded-3xl p-5 bg-white dark:bg-[#121212] shadow-sm">
+                    <div class="border border-gray-200 dark:border-[#363b46] rounded-3xl p-5 bg-white dark:bg-[#1e2128] shadow-sm">
                         <div class="mb-4">
                             <span id="stage1-order-title" contenteditable="false" data-editable="true" class="text-[22px] font-black text-gray-900 dark:text-white">#38 Usuario7236</span>
                         </div>
@@ -952,7 +949,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     </div>
 
                     <!-- BOTÓN CENTRO DE AYUDA -->
-                    <div id="btn-open-help-center-stage1" class="bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
+                    <div id="btn-open-help-center-stage1" class="bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
                         <div class="flex items-center gap-3">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gray-900 dark:text-white"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
                             <span contenteditable="false" data-editable="true" class="text-[15px] font-bold text-gray-900 dark:text-white">Centro de ayuda</span>
@@ -960,14 +957,14 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="m9 18 6-6-6-6"/></svg>
                     </div>
 
-                    <div class="bg-[#f5f6f8] dark:bg-[#1c1c1e] rounded-2xl p-4">
+                    <div class="bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-2xl p-4">
                         <p contenteditable="false" data-editable="true" class="text-[13px] text-gray-500 dark:text-[#a0a0a0] font-medium mb-3">¿Te gustó el servicio de la tienda?</p>
                         <div class="flex items-center justify-evenly pt-1 pb-1">
                             <button class="flex items-center gap-2 text-gray-800 dark:text-white font-bold text-[14px]">
                                 <i class="fa-regular fa-thumbs-down text-[18px]"></i>
                                 <span contenteditable="false" data-editable="true">No</span>
                             </button>
-                            <div class="h-6 w-[1px] bg-gray-300 dark:bg-[#38383a]"></div>
+                            <div class="h-6 w-[1px] bg-gray-300 dark:bg-[#454b58]"></div>
                             <button class="flex items-center gap-2 text-gray-800 dark:text-white font-bold text-[14px]">
                                 <i class="fa-regular fa-thumbs-up text-[18px]"></i>
                                 <span contenteditable="false" data-editable="true">Sí</span>
@@ -978,16 +975,16 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-[#121212] px-5 pt-3 pb-6 shrink-0 z-30 shadow-[0_-10px_20px_rgba(255,255,255,1)] dark:shadow-[0_-10px_20px_rgba(18,18,18,1)] flex items-center gap-3 relative">
+            <div class="bg-white dark:bg-[#1e2128] px-5 pt-3 pb-6 shrink-0 z-30 shadow-[0_-10px_20px_rgba(255,255,255,1)] dark:shadow-[0_-10px_20px_rgba(18,18,18,1)] flex items-center gap-3 relative">
                 <button class="w-[50px] h-[50px] bg-transparent flex flex-col items-center justify-center gap-[6px] shrink-0 text-gray-900 dark:text-white">
                     <div class="w-6 h-[2px] bg-current relative rounded-full">
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 border-[2px] border-current bg-white dark:bg-[#121212] rounded-full"></div>
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 border-[2px] border-current bg-white dark:bg-[#1e2128] rounded-full"></div>
                     </div>
                     <div class="w-6 h-[2px] bg-current relative rounded-full">
-                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 border-[2px] border-current bg-white dark:bg-[#121212] rounded-full"></div>
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 border-[2px] border-current bg-white dark:bg-[#1e2128] rounded-full"></div>
                     </div>
                 </button>
-                <div id="slide-to-exit-container" class="flex-1 bg-white dark:bg-[#1c1c1e] border-[1.5px] border-gray-200 dark:border-[#2c2c2e] rounded-full h-[54px] relative overflow-hidden flex items-center select-none opacity-60 pointer-events-none transition-all duration-300">
+                <div id="slide-to-exit-container" class="flex-1 bg-white dark:bg-[#2a2e37] border-[1.5px] border-gray-200 dark:border-[#363b46] rounded-full h-[54px] relative overflow-hidden flex items-center select-none opacity-60 pointer-events-none transition-all duration-300">
                     <div id="slide-fill-bar" class="absolute left-0 top-0 h-full bg-[#ff5a00] w-0 transition-all duration-75"></div>
                     <div id="slide-text-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-300">
                         <span contenteditable="false" data-editable="true" class="text-gray-400 dark:text-[#666] font-black text-[17px] tracking-wide">Salir</span>
@@ -996,28 +993,28 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                         <div class="planet"></div>
                         <div class="planet"></div>
                     </div>
-                    <div id="slide-thumb" class="absolute left-[3px] top-[3px] bottom-[3px] w-[46px] bg-gray-100 dark:bg-[#2c2c2e] rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing z-20 transition-all duration-75 shadow-[0_2px_5px_rgba(0,0,0,0.1)]">
+                    <div id="slide-thumb" class="absolute left-[3px] top-[3px] bottom-[3px] w-[46px] bg-gray-100 dark:bg-[#363b46] rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing z-20 transition-all duration-75 shadow-[0_2px_5px_rgba(0,0,0,0.1)]">
                         <svg id="slide-thumb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="translate-x-[1px] transition-colors duration-300"><path d="m13 17 5-5-5-5M6 17l5-5-5-5"/></svg>
                     </div>
                 </div>
             </div>
             
-            <div id="stage1-details-panel" class="absolute inset-0 bg-[#f5f6f8] dark:bg-black z-[100] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
-                <div class="flex items-center px-4 py-4 shrink-0 bg-[#f5f6f8] dark:bg-black z-10 relative">
+            <div id="stage1-details-panel" class="absolute inset-0 bg-[#f5f6f8] dark:bg-[#1e2128] z-[100] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
+                <div class="flex items-center px-4 py-4 shrink-0 bg-[#f5f6f8] dark:bg-[#1e2128] z-10 relative">
                     <button id="btn-close-stage1-details" class="text-gray-900 dark:text-white active:scale-95 transition-transform relative z-20 p-1">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
                     <h2 class="absolute left-1/2 -translate-x-1/2 text-[16px] font-medium text-gray-900 dark:text-white pointer-events-none">Detalles del pedido</h2>
                 </div>
                 <div class="flex-1 overflow-y-auto px-4 pb-6 flex flex-col gap-3.5">
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 flex items-center justify-between shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-2xl p-4 flex items-center justify-between shadow-sm">
                         <h3 id="details-order-title" contenteditable="false" data-editable="true" class="text-[20px] font-black text-gray-900 dark:text-white tracking-tight">#38 Usuario7236</h3>
                         <div class="flex gap-2">
-                            <a href="tel:+573009876543" class="w-[42px] h-[42px] bg-gray-100 dark:bg-[#2c2c2e] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95"><i class="fa-solid fa-phone text-[16px]"></i></a>
-                            <button class="btn-open-chat-trigger w-[42px] h-[42px] bg-gray-100 dark:bg-[#2c2c2e] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95"><i class="fa-solid fa-comment text-[16px]"></i></button>
+                            <a href="tel:+573009876543" class="w-[42px] h-[42px] bg-gray-100 dark:bg-[#363b46] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95"><i class="fa-solid fa-phone text-[16px]"></i></a>
+                            <button class="btn-open-chat-trigger w-[42px] h-[42px] bg-gray-100 dark:bg-[#363b46] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95"><i class="fa-solid fa-comment text-[16px]"></i></button>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-2xl p-4 shadow-sm">
                         <h4 class="text-[16px] font-bold text-gray-900 dark:text-white mb-3">Detalles de la entrega</h4>
                         <div class="mb-4">
                             <div id="details-delivery-address-main" contenteditable="false" data-editable="true" class="text-[15px] font-medium text-gray-900 dark:text-white">Cl. 18 Sur, 6</div>
@@ -1028,19 +1025,19 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                         <h5 class="text-[14.5px] font-bold text-gray-900 dark:text-white mb-1.5">Notas sobre la dirección</h5>
                         <div id="details-delivery-notes" contenteditable="false" data-editable="true" class="text-[14px] text-gray-500 dark:text-[#a0a0a0]">Llamar al llegar</div>
                     </div>
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-2xl p-4 shadow-sm">
                         <h4 class="text-[16px] font-bold text-gray-900 dark:text-white mb-3">Detalles de la recolección</h4>
                         <div class="flex justify-between items-start mb-4 gap-3">
                             <div class="flex-1">
                                 <div id="details-restaurant-name" contenteditable="false" data-editable="true" class="text-[15px] font-medium text-gray-900 dark:text-white leading-tight">Little Caesars Pizza (Restrepo)</div>
                                 <div id="details-restaurant-address" contenteditable="false" data-editable="true" class="text-[13.5px] text-gray-500 dark:text-[#a0a0a0] mt-1.5">Carrera 27 #1G-51 Bogotá</div>
                             </div>
-                            <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-gray-100 dark:bg-[#2c2c2e] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95 shrink-0"><i class="fa-solid fa-phone text-[16px]"></i></a>
+                            <a href="tel:+573001112233" class="w-[42px] h-[42px] bg-gray-100 dark:bg-[#363b46] rounded-xl flex items-center justify-center text-gray-900 dark:text-white transition active:scale-95 shrink-0"><i class="fa-solid fa-phone text-[16px]"></i></a>
                         </div>
                         <h5 class="text-[14.5px] font-bold text-gray-900 dark:text-white mb-1.5">Comentarios del usuario</h5>
                         <div id="details-restaurant-notes" contenteditable="false" data-editable="true" class="text-[14px] text-gray-500 dark:text-[#a0a0a0]">Si algunos artículos están agotados, el usuario podría querer comprar los que sí están disponibles</div>
                     </div>
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-2xl p-4 shadow-sm mb-2">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-2xl p-4 shadow-sm mb-2">
                         <div class="flex items-center gap-2 mb-3">
                             <h4 class="text-[16px] font-bold text-gray-900 dark:text-white">Ingresos estimados</h4>
                             <i class="fa-regular fa-circle-question text-[14px] text-gray-500 dark:text-[#a0a0a0]"></i>
@@ -1060,8 +1057,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             <!-- ========================================== -->
             <!-- PANEL DESLIZABLE CENTRO DE AYUDA           -->
             <!-- ========================================== -->
-            <div id="help-center-panel" class="absolute inset-0 bg-[#f4f4f5] dark:bg-black z-[120] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
-                <div class="flex items-center justify-between px-4 py-4 shrink-0 bg-[#f4f4f5] dark:bg-black z-10 relative">
+            <div id="help-center-panel" class="absolute inset-0 bg-[#f4f4f5] dark:bg-[#1e2128] z-[120] transform translate-y-full transition-transform duration-300 flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between px-4 py-4 shrink-0 bg-[#f4f4f5] dark:bg-[#1e2128] z-10 relative">
                     <button id="btn-close-help-center" class="text-gray-900 dark:text-white active:scale-95 transition-transform p-1">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </button>
@@ -1070,7 +1067,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                 </div>
 
                 <div class="flex-1 overflow-y-auto px-4 pb-6 flex flex-col gap-4">
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-[24px] p-5 shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-[24px] p-5 shadow-sm">
                         <h3 class="text-[18px] font-black text-gray-900 dark:text-white mb-5 tracking-tight">Centro de ayuda</h3>
                         <div class="flex flex-col mb-6">
                             <div class="flex items-center justify-between cursor-pointer group">
@@ -1080,7 +1077,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                                 </div>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                             </div>
-                            <div class="mt-3.5 ml-9 bg-[#f5f6f8] dark:bg-[#2c2c2e] rounded-xl px-3 py-2.5 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
+                            <div class="mt-3.5 ml-9 bg-[#f5f6f8] dark:bg-[#363b46] rounded-xl px-3 py-2.5 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
                                 <span contenteditable="false" data-editable="true" class="text-[13px] text-gray-500 dark:text-[#a0a0a0]">Reglas de reporte actualizadas</span>
                                 <div class="flex items-center gap-2">
                                     <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
@@ -1122,7 +1119,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-[#1c1c1e] rounded-[24px] p-5 shadow-sm">
+                    <div class="bg-white dark:bg-[#2a2e37] rounded-[24px] p-5 shadow-sm">
                         <h3 class="text-[18px] font-black text-gray-900 dark:text-white mb-5 tracking-tight">Aún necesito ayuda</h3>
                         <div class="flex items-center justify-between cursor-pointer group mb-6">
                             <span contenteditable="false" data-editable="true" class="text-[15px] font-medium text-gray-900 dark:text-white">Obstáculos en la ruta</span>
@@ -1147,7 +1144,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- INTERFAZ COMPARTIDA (ETAPAS 2 y 3)         -->
     <!-- ========================================== -->
 
-    <div id="shared-top-badge" class="absolute top-12 left-1/2 -translate-x-1/2 z-[1000] bg-white dark:bg-[#1c1c1e] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.5)] font-black text-lg tracking-wide text-gray-900 dark:text-white opacity-0 transition-opacity duration-500 pointer-events-none border border-gray-100 dark:border-[#2c2c2e] flex items-center justify-center gap-2">
+    <div id="shared-top-badge" class="absolute top-12 left-1/2 -translate-x-1/2 z-[1000] bg-white dark:bg-[#2a2e37] px-4 py-2 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_15px_rgba(0,0,0,0.5)] font-black text-lg tracking-wide text-gray-900 dark:text-white opacity-0 transition-opacity duration-500 pointer-events-none border border-gray-100 dark:border-[#363b46] flex items-center justify-center gap-2">
         <div class="bg-[#16a34a]/10 dark:bg-[#4ade80]/20 text-[#16a34a] dark:text-[#4ade80] w-6 h-6 rounded-full flex items-center justify-center text-[13px]">
             <i class="fa-solid fa-dollar-sign"></i>
         </div>
@@ -1156,10 +1153,10 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 
     <div id="shared-fabs" class="absolute right-4 top-[55%] -translate-y-1/2 z-[1000] flex flex-col gap-3 opacity-0 pointer-events-none translate-x-8 transition-all duration-500 ease-out">
         <!-- BOTÓN CHAT FLOTANTE -->
-        <button class="btn-open-chat-trigger w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
+        <button class="btn-open-chat-trigger w-[46px] h-[46px] bg-white dark:bg-[#2a2e37] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#363b46]">
             <i class="fa-solid fa-message text-[18px]"></i>
         </button>
-        <button id="btn-toggle-stage" class="w-[46px] h-[46px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#2c2c2e]">
+        <button id="btn-toggle-stage" class="w-[46px] h-[46px] bg-white dark:bg-[#2a2e37] rounded-2xl shadow-lg flex items-center justify-center text-black dark:text-white transition active:scale-95 border border-gray-100 dark:border-[#363b46]">
             <i id="icon-toggle-stage" class="fa-solid fa-list-ul text-[18px]"></i>
         </button>
         <!-- BOTÓN NAVEGACIÓN GOOGLE MAPS -->
@@ -1171,20 +1168,25 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <!-- ICONOS LATERALES IZQUIERDOS (solo en etapas con mapa) -->
     <div id="shared-left-icons" class="absolute left-0 top-[42%] -translate-y-1/2 z-[1000] flex flex-col items-start gap-4 opacity-0 pointer-events-none -translate-x-8 transition-all duration-500 ease-out">
         <!-- Icono altavoz / anuncios -->
-        <button id="btn-left-announce" aria-label="Anuncios" class="ml-1 w-[58px] h-[58px] rounded-full bg-[#d9d9dc] shadow-[0_4px_14px_rgba(0,0,0,0.3)] flex items-center justify-center overflow-hidden transition active:scale-95">
-            <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
-                <rect width="58" height="58" fill="#d9d9dc"/>
-                <path d="M7 40 C10 31 16 28 22 31 L27 40 C21 48 12 50 7 44 Z" fill="#d9a07f"/>
-                <path d="M22 17 L40 8 L47 26 L29 34 Z" fill="#e2520f"/>
-                <path d="M16 22 L25 17 L32 33 L23 37 Z" fill="#f4f4f5"/>
-                <path d="M41 9 C45 7 50 9 51 14 L48 27 L45 25 L47 14 C47 12 44 11 42 12 Z" fill="#c9440a"/>
-                <path d="M24 38 L29 35 L31 41 L26 43 Z" fill="#b5370a"/>
-                <path d="M14 20 L18 15" stroke="#f2b134" stroke-width="2.2" stroke-linecap="round"/>
-                <path d="M47 38 L47 46 M43 42 L51 42" stroke="#f08a4b" stroke-width="2.2" stroke-linecap="round"/>
-            </svg>
+        <button id="btn-left-announce" aria-label="Anuncios" class="ml-1 w-[58px] h-[58px] rounded-full bg-[#c8c6c4] shadow-[0_4px_14px_rgba(0,0,0,0.3)] flex items-center justify-center overflow-hidden transition active:scale-95">
+                <svg width="58" height="58" viewBox="50 50 460 460" xmlns="http://www.w3.org/2000/svg">
+                  <defs><clipPath id="megaClip"><circle cx="280" cy="280" r="230"/></clipPath></defs>
+                  <circle cx="474" cy="162" r="30" fill="#3a1612"/>
+                  <g clip-path="url(#megaClip)">
+                    <rect x="50" y="50" width="460" height="460" fill="#c8c6c4"/>
+                    <path d="M220 205 L338 72 Q372 40 404 78 L498 262 Q510 286 486 292 L440 298 L258 330 Z" fill="#cc4a0a"/>
+                    <path d="M207 212 L224 204 L260 330 L244 336 Z" fill="#e6e4e2"/>
+                    <path d="M192 228 C140 230 104 272 114 318 C124 352 170 362 214 366 L256 336 L242 236 Z" fill="#c9a58c"/>
+                    <path d="M268 372 L312 470 Q318 498 290 500 L262 492 Z" fill="#c9a58c"/>
+                    <path d="M138 452 C148 410 184 376 232 364 L268 370 C296 382 302 414 286 444 C266 484 200 504 152 482 Z" fill="#8a5038"/>
+                    <path d="M236 392 C254 384 270 392 268 406 M222 418 C244 410 262 418 260 432 M206 446 C226 440 244 446 244 460" stroke="#6f3d2a" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <path d="M182 186 L226 154" stroke="#d9b030" stroke-width="16" stroke-linecap="round"/>
+                    <path d="M376 352 L378 378 M380 414 L382 440 M336 398 L362 396 M396 396 L424 394" stroke="#d9784a" stroke-width="11" stroke-linecap="round"/>
+                  </g>
+                </svg>
         </button>
         <!-- Icono escudo de seguridad -->
-        <button id="btn-left-safety" aria-label="Seguridad" class="ml-1 w-[58px] h-[58px] rounded-[20px] bg-[#1b1b1d] shadow-[0_4px_14px_rgba(0,0,0,0.35)] flex items-center justify-center transition active:scale-95">
+        <button id="btn-left-safety" aria-label="Seguridad" class="ml-1 w-[58px] h-[58px] rounded-[20px] bg-white dark:bg-[#1b1b1d] shadow-[0_4px_14px_rgba(0,0,0,0.35)] flex items-center justify-center transition active:scale-95">
             <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17 2 L30 7 L30 16 C30 24 24.5 29.5 17 32 C9.5 29.5 4 24 4 16 L4 7 Z" fill="#3b63f5"/>
                 <path d="M17 10 V22 M11 16 H23" stroke="#16162a" stroke-width="3.2" stroke-linecap="round"/>
@@ -1198,8 +1200,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     <div id="stage-2" class="w-full h-screen hidden stage-transition relative overflow-hidden">
         <div id="map-stage2" class="real-map-container"></div>
         
-        <div id="stage2-bottom-sheet" class="bottom-sheet bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white">
-            <div class="sheet-handle bg-gray-300 dark:bg-[#38383a]"></div>
+        <div id="stage2-bottom-sheet" class="bottom-sheet bg-white dark:bg-[#2a2e37] text-gray-900 dark:text-white">
+            <div class="sheet-handle bg-gray-300 dark:bg-[#454b58]"></div>
 
             <div class="animation-slot">
                 <div class="success-check-badge">
@@ -1219,14 +1221,14 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             <button id="btn-start-delivery" class="btn-action w-full">Iniciar entrega</button>
         </div>
 
-        <div id="stage2-nav-sheet" class="absolute bottom-0 left-0 w-full bg-white dark:bg-[#1c1c1e] rounded-t-[24px] shadow-[0_-6px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_-6px_25px_rgba(0,0,0,0.6)] px-5 pb-8 pt-3 z-[500] translate-y-full transition-transform duration-500 ease-out flex flex-col">
+        <div id="stage2-nav-sheet" class="absolute bottom-0 left-0 w-full bg-white dark:bg-[#2a2e37] rounded-t-[24px] shadow-[0_-6px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_-6px_25px_rgba(0,0,0,0.6)] px-5 pb-8 pt-3 z-[500] translate-y-full transition-transform duration-500 ease-out flex flex-col">
             <div id="stage2-expand-handle" class="stage2-expand-handle"></div>
 
             <div class="shrink-0">
                 <h2 id="stage2-delivery-address-main" class="text-[28px] leading-tight font-black text-gray-900 dark:text-white mb-2 tracking-tight" contenteditable="false" data-editable="true">Cl. 18 Sur, 6</h2>
                 <p id="stage2-delivery-address-full" class="text-[16px] text-gray-700 dark:text-[#d0d0d0] leading-snug mb-5 font-medium" contenteditable="false" data-editable="true">Cl. 18 Sur, 6, Cl. 18 Sur #6, Bogotá,<br>Antonio Nariño</p>
 
-                <div class="bg-[#f5f6f8] dark:bg-[#2c2c2e] rounded-[22px] px-5 py-4 flex items-center justify-center mb-6">
+                <div class="bg-[#f5f6f8] dark:bg-[#363b46] rounded-[22px] px-5 py-4 flex items-center justify-center mb-6">
                     <span class="text-[14px] font-bold text-gray-800 dark:text-gray-200 text-center" contenteditable="false" data-editable="true">
                         Recomendamos llegar antes de la(s) <span class="text-[#ea580c] font-black ml-1">17:09</span>
                     </span>
@@ -1267,7 +1269,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     </div>
                 </div>
 
-                <div class="stage2-help-card bg-[#f0f0f4] dark:bg-[#2c2c2e] rounded-[22px] px-6 py-5 flex items-center justify-between mb-4">
+                <div class="stage2-help-card bg-[#f0f0f4] dark:bg-[#363b46] rounded-[22px] px-6 py-5 flex items-center justify-between mb-4">
                     <div class="flex items-center gap-4">
                         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gray-900 dark:text-white shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
                         <span contenteditable="false" data-editable="true" class="text-[19px] font-bold text-gray-900 dark:text-white">Centro de ayuda</span>
@@ -1289,7 +1291,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             </button>
         </div>
         
-        <div id="stage3-nav-sheet" class="absolute bottom-0 left-0 w-full bg-white dark:bg-[#1c1c1e] rounded-t-[32px] shadow-[0_-6px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_-6px_25px_rgba(0,0,0,0.6)] px-5 pb-8 pt-3 z-[500] flex flex-col">
+        <div id="stage3-nav-sheet" class="absolute bottom-0 left-0 w-full bg-white dark:bg-[#2a2e37] rounded-t-[32px] shadow-[0_-6px_25px_rgba(0,0,0,0.15)] dark:shadow-[0_-6px_25px_rgba(0,0,0,0.6)] px-5 pb-8 pt-3 z-[500] flex flex-col">
             <div id="stage3-expand-handle" class="stage3-expand-handle"></div>
 
             <div id="stage3-summary-content">
@@ -1297,7 +1299,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     <h2 class="text-[22px] text-gray-900 dark:text-white font-black tracking-tight mb-1" contenteditable="false" data-editable="true">Estadísticas de entrega</h2>
                     <p class="text-gray-500 dark:text-[#a0a0a0] text-[15px] font-medium" contenteditable="false" data-editable="true"><span id="stage3-completed-count" class="font-bold">7</span> pedidos completados</p>
                 </div>
-                <div class="w-full bg-[#f5f6f8] dark:bg-[#2c2c2e] rounded-2xl p-4 mb-4 grid grid-cols-2 divide-x divide-gray-300 dark:divide-[#38383a]">
+                <div class="w-full bg-[#f5f6f8] dark:bg-[#363b46] rounded-2xl p-4 mb-4 grid grid-cols-2 divide-x divide-gray-300 dark:divide-[#454b58]">
                     <div class="flex flex-col items-center justify-center pr-2">
                         <span id="stage3-orders-count-summary" class="text-gray-900 dark:text-white font-black text-4xl mb-1" contenteditable="false" data-editable="true">3</span>
                         <span class="text-gray-500 dark:text-[#a0a0a0] text-[12px] font-bold uppercase tracking-wider" contenteditable="false" data-editable="true">Pedido(s) en curso</span>
@@ -1326,7 +1328,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     </p>
                 </div>
 
-                <div class="bg-white dark:bg-[#1c1c1e] rounded-[20px] p-5 shadow-sm mb-2 relative z-10 border border-gray-100 dark:border-[#2c2c2e]">
+                <div class="bg-white dark:bg-[#2a2e37] rounded-[20px] p-5 shadow-sm mb-2 relative z-10 border border-gray-100 dark:border-[#363b46]">
                     <div class="flex items-start gap-3.5 mb-4 mt-1">
                         <div class="w-[30px] h-[30px] rounded-full bg-[#ff5a00] text-white flex items-center justify-center shrink-0 mt-1 shadow-md text-[13px]">
                             <i class="fa-solid fa-store"></i>
@@ -1337,7 +1339,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                             <div class="text-[14.5px] text-gray-800 dark:text-[#d0d0d0] mt-3.5 font-medium" contenteditable="false" data-editable="true">Llegar antes de la(s) 20:31</div>
                         </div>
                     </div>
-                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#2c2c2e] my-3.5"></div>
+                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#363b46] my-3.5"></div>
                     <div class="flex items-center justify-between cursor-pointer group">
                         <span class="text-[14.5px] text-gray-500 group-hover:text-gray-700 dark:text-[#a0a0a0] font-medium transition-colors" contenteditable="false" data-editable="true">Detalles del pedido</span>
                         <i class="fa-solid fa-chevron-down text-gray-400 text-[14px]"></i>
@@ -1348,12 +1350,12 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     <i class="fa-solid fa-arrow-down mr-2 text-[12px]"></i> 1 km
                 </div>
 
-                <div class="bg-white dark:bg-[#1c1c1e] rounded-[20px] p-5 shadow-sm mb-2 relative z-10 border border-gray-100 dark:border-[#2c2c2e]">
+                <div class="bg-white dark:bg-[#2a2e37] rounded-[20px] p-5 shadow-sm mb-2 relative z-10 border border-gray-100 dark:border-[#363b46]">
                     <div class="mb-4 inline-flex items-center gap-1.5 bg-[#e0f7ea] dark:bg-[#064e3b] text-[#059669] dark:text-[#34d399] px-3 py-1.5 rounded-full text-[13px] font-bold">
                         <i class="fa-solid fa-circle-user text-[15px]"></i> <span contenteditable="false" data-editable="true">Entregar 1 pedidos</span>
                     </div>
                     <div class="text-[19px] font-black text-gray-900 dark:text-white mb-4 tracking-tight" contenteditable="false" data-editable="true">Cl. **** Sur, ****_****</div>
-                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#2c2c2e] my-3.5"></div>
+                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#363b46] my-3.5"></div>
                     <div class="flex items-center justify-between cursor-pointer group">
                         <span class="text-[14.5px] text-gray-500 group-hover:text-gray-700 dark:text-[#a0a0a0] font-medium transition-colors" contenteditable="false" data-editable="true">Detalles del pedido</span>
                         <i class="fa-solid fa-chevron-down text-gray-400 text-[14px]"></i>
@@ -1364,12 +1366,12 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                     <i class="fa-solid fa-arrow-down mr-2 text-[12px]"></i> 1 km
                 </div>
 
-                <div class="bg-white dark:bg-[#1c1c1e] rounded-[20px] p-5 shadow-sm mb-4 relative z-10 border border-gray-100 dark:border-[#2c2c2e]">
+                <div class="bg-white dark:bg-[#2a2e37] rounded-[20px] p-5 shadow-sm mb-4 relative z-10 border border-gray-100 dark:border-[#363b46]">
                     <div class="mb-4 inline-flex items-center gap-1.5 bg-[#e0f7ea] dark:bg-[#064e3b] text-[#059669] dark:text-[#34d399] px-3 py-1.5 rounded-full text-[13px] font-bold">
                         <i class="fa-solid fa-circle-user text-[15px]"></i> <span contenteditable="false" data-editable="true">Entregar 1 pedidos</span>
                     </div>
                     <div class="text-[19px] font-black text-gray-900 dark:text-white mb-4 tracking-tight" contenteditable="false" data-editable="true">Cl **** Sur, ****</div>
-                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#2c2c2e] my-3.5"></div>
+                    <div class="h-[1px] w-full bg-gray-100 dark:bg-[#363b46] my-3.5"></div>
                     <div class="flex items-center justify-between cursor-pointer group">
                         <span class="text-[14.5px] text-gray-500 group-hover:text-gray-700 dark:text-[#a0a0a0] font-medium transition-colors" contenteditable="false" data-editable="true">Detalles del pedido</span>
                         <i class="fa-solid fa-chevron-down text-gray-400 text-[14px]"></i>
@@ -1474,7 +1476,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             setTimeout(() => {
                 const replyDiv = document.createElement('div');
                 replyDiv.className = 'flex justify-start';
-                replyDiv.innerHTML = `<div class="bg-white dark:bg-[#1c1c1e] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">Entendido, quedo atento a tu llegada. ¡Muchas gracias!</div>`;
+                replyDiv.innerHTML = `<div class="bg-white dark:bg-[#2a2e37] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">Entendido, quedo atento a tu llegada. ¡Muchas gracias!</div>`;
                 chatMessagesContainer.appendChild(replyDiv);
                 chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
             }, 1000);
@@ -1616,22 +1618,39 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
         let markerStartStage2, markerEndStage2, markerStartStage3, markerEndStage3;
 
         let isDarkMode = false;
-        setTimeout(() => {
-            const dmc = document.getElementById('dark-mode-container');
-            if (dmc) dmc.classList.add('opacity-0', 'pointer-events-none');
-        }, 8000);
 
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            document.documentElement.classList.toggle('dark', isDarkMode);
-            const darkModeIcon = document.getElementById('dark-mode-icon');
-            if (isDarkMode) {
-                darkModeIcon.className = 'fa-solid fa-sun text-sm text-yellow-400';
-            } else {
-                darkModeIcon.className = 'fa-solid fa-moon text-sm text-gray-800';
-            }
+        function applyDarkMode(on) {
+            isDarkMode = on;
+            document.documentElement.classList.toggle('dark', on);
+            const ic = document.getElementById('dark-mode-icon');
+            if (ic) ic.className = on ? 'fa-solid fa-sun text-[12px] text-yellow-400' : 'fa-solid fa-moon text-[12px] text-white';
         }
-        document.getElementById('btn-dark-mode-toggle').addEventListener('click', toggleDarkMode);
+        function toggleDarkMode() {
+            applyDarkMode(!isDarkMode);
+            try { localStorage.setItem('didi_dark_mode', isDarkMode ? '1' : '0'); } catch (e) {}
+        }
+        (function initDarkMode() {
+            let saved = null;
+            try { saved = localStorage.getItem('didi_dark_mode'); } catch (e) {}
+            const sys = !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+            applyDarkMode(saved === null ? sys : saved === '1');
+        })();
+        let dmIconTimer;
+        function showDarkIcon() {
+            const ic = document.getElementById('dark-mode-icon'), ch = document.getElementById('dm-chevron');
+            if (!ic || !ch) return;
+            ic.style.display = 'inline-block'; ch.style.display = 'none';
+            clearTimeout(dmIconTimer);
+            dmIconTimer = setTimeout(() => { ic.style.display = 'none'; ch.style.display = ''; }, 8000);
+        }
+        showDarkIcon();
+        window.addEventListener('load', showDarkIcon);
+        document.getElementById('btn-dark-mode-toggle').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (typeof isEditMode !== 'undefined' && isEditMode && e.target.closest('[contenteditable="true"]')) return;
+            toggleDarkMode();
+            showDarkIcon();
+        });
 
         let baseLat = 4.6100;
         let baseLng = -74.0900;
@@ -1787,10 +1806,10 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
             const thumbIcon = document.getElementById('slide-thumb-icon');
             const slideFillBar = document.getElementById('slide-fill-bar');
             
-            sliderContainer.classList.remove('opacity-60', 'pointer-events-none', 'bg-white', 'dark:bg-[#1c1c1e]', 'border-[1.5px]', 'border-gray-200', 'dark:border-[#2c2c2e]');
+            sliderContainer.classList.remove('opacity-60', 'pointer-events-none', 'bg-white', 'dark:bg-[#2a2e37]', 'border-[1.5px]', 'border-gray-200', 'dark:border-[#363b46]');
             sliderContainer.classList.add('bg-[#ff5a00]');
             
-            slideThumb.classList.remove('bg-gray-100', 'dark:bg-[#2c2c2e]');
+            slideThumb.classList.remove('bg-gray-100', 'dark:bg-[#363b46]');
             slideThumb.classList.add('bg-white');
             
             thumbIcon.setAttribute('stroke', '#ff5a00');
@@ -2239,7 +2258,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 
         GUIDE_STEPS.forEach(() => {
             const d = document.createElement('span');
-            d.className = 'h-1.5 flex-1 rounded-full bg-gray-200 dark:bg-[#3a3a3c] transition-colors';
+            d.className = 'h-1.5 flex-1 rounded-full bg-gray-200 dark:bg-[#454b58] transition-colors';
             gDots.appendChild(d);
         });
 
@@ -2537,7 +2556,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 
             list.forEach(s => {
                 const card = document.createElement('div');
-                card.className = 'bg-white dark:bg-[#1c1c1e] rounded-2xl p-3.5 shadow-sm border border-gray-100 dark:border-[#2c2c2e] flex items-center gap-3';
+                card.className = 'bg-white dark:bg-[#2a2e37] rounded-2xl p-3.5 shadow-sm border border-gray-100 dark:border-[#363b46] flex items-center gap-3';
 
                 const logo = document.createElement('div');
                 logo.className = 'w-14 h-14 rounded-full bg-cover bg-center border border-gray-200 dark:border-[#333] shrink-0 bg-white';
@@ -2568,7 +2587,7 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
                 const isLocalOnly = String(s.id).indexOf('local_') === 0;
                 if (isLocalOnly || isAdminUser || (s.owner && s.owner === getUid())) {
                     const del = document.createElement('button');
-                    del.className = 'bg-gray-100 dark:bg-[#2c2c2e] text-red-500 font-bold text-[12px] px-3.5 py-1.5 rounded-xl active:scale-95 transition';
+                    del.className = 'bg-gray-100 dark:bg-[#363b46] text-red-500 font-bold text-[12px] px-3.5 py-1.5 rounded-xl active:scale-95 transition';
                     del.textContent = 'Borrar';
                     del.addEventListener('click', async () => {
                         if (!confirm('¿Borrar la tienda "' + s.name + '" para todos los usuarios?')) return;
