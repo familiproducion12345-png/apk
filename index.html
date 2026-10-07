@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DiDi Food Rider - Registro & Login</title>
+<title>Didi Online</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap');
 :root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#161921;--glass-bg:rgba(36,40,51,.8);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
 
@@ -216,6 +217,96 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     box-shadow: 0 8px 20px rgba(74, 222, 128, 0.3);
 }
 .btn-bloqueo.desbloquear:hover { box-shadow: 0 12px 25px rgba(74, 222, 128, 0.5); transform: scale(1.02); }
+
+/* ==========================================================
+   TEMA KAWAII ANIME  (igual que la página de descarga)
+   Solo afecta la pantalla de inicio de sesión.
+   El panel admin, la barra superior y la app interna no cambian.
+   ========================================================== */
+:root{--k-pink:#ff4fa3;--k-pink2:#f72585;--k-purple:#8e2de2;--k-lav:#c4b5fd;--k-cyan:#5eead4;--k-sky:#9db8f7}
+body{background:#1c1737}
+
+/* Fondo: aurora magenta arriba, brillo turquesa abajo */
+.environment{background:
+  radial-gradient(ellipse 65% 42% at 14% 8%,rgba(160,32,120,.8),transparent 70%),
+  radial-gradient(ellipse 80% 38% at 50% 108%,rgba(18,160,180,.8),transparent 72%),
+  linear-gradient(180deg,#1d1638 0%,#1e1c40 48%,#123a55 100%)}
+.horizon-sun{top:-14%;left:26%;width:min(95vmax,900px);height:min(80vmax,760px);background:radial-gradient(circle,rgba(236,72,153,.38) 0%,transparent 62%);filter:blur(30px);opacity:1}
+.road-grid{background-image:linear-gradient(rgba(94,234,212,.38) 2px,transparent 2px),linear-gradient(90deg,rgba(120,200,255,.30) 2px,transparent 2px);box-shadow:inset 0 120px 120px #17294b}
+
+/* Partículas brillantes (las crea el JS) */
+.spark{position:absolute;bottom:-24px;border-radius:50%;opacity:0;animation:sparkRise linear forwards;will-change:transform,opacity}
+.spark.star{border-radius:0;line-height:1}
+@keyframes sparkRise{0%{transform:translate3d(0,0,0) scale(.6);opacity:0}12%{opacity:.95}85%{opacity:.8}100%{transform:translate3d(var(--dx,20px),-118vh,0) scale(1);opacity:0}}
+
+/* Animalitos flotantes */
+.kawaii-pets{position:absolute;inset:0}
+.kawaii-pets span{position:absolute;font-size:clamp(34px,9vw,58px);line-height:1;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));animation:petFloat 6s ease-in-out infinite alternate}
+@keyframes petFloat{0%{transform:translateY(0) rotate(-6deg)}100%{transform:translateY(-18px) rotate(7deg)}}
+
+/* Vehículo con colores kawaii */
+.vehicle-wrapper{bottom:5%;filter:drop-shadow(0 26px 18px rgba(8,6,30,.55)) drop-shadow(0 0 16px rgba(255,79,163,.55))}
+@media(max-width:600px){.vehicle-wrapper{width:200px;height:200px;margin-left:-100px}}
+.vehicle-svg{stroke:#ff7ac6}
+.wheel{stroke:#5eead4}
+.light-trail{background:linear-gradient(90deg,transparent,#ff4fa3)}
+
+/* Tarjeta de cristal */
+.glass-panel{background:linear-gradient(160deg,rgba(58,52,108,.78),rgba(34,32,74,.74));backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);border:3px solid rgba(255,255,255,.17);border-radius:46px;padding:34px 34px 28px;box-shadow:0 30px 80px rgba(10,6,40,.55),0 0 60px rgba(255,79,163,.12),inset 0 2px 0 rgba(255,255,255,.14);scrollbar-width:none}
+.glass-panel::-webkit-scrollbar{display:none}
+.scene,.scene *{font-family:'Nunito',sans-serif}
+.scene .header h1,.scene .tab,.scene .auth-btn,.scene .v-option{font-family:'Fredoka','Nunito',sans-serif}
+
+/* Título */
+.header{margin-bottom:18px}
+.header h1{font-size:clamp(34px,10vw,46px);font-weight:700;letter-spacing:.5px;line-height:1.1;text-shadow:none}
+.header h1 .k-title{background:linear-gradient(90deg,#ff9ec4 0%,#e9a8e6 55%,#b9b9f3 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(255,120,190,.45))}
+.header h1 .k-spark{background:none;-webkit-text-fill-color:currentColor;color:#7de3ff;font-size:.8em}
+.header p{font-size:15px;font-weight:700;color:#f3eeff;margin-top:8px;line-height:1.35}
+
+/* Pestañas */
+.scene .tabs{background:rgba(20,16,50,.45);border:2px solid rgba(255,255,255,.1);border-radius:999px;padding:5px}
+.scene .tab{border-radius:999px;color:#b8b3e0;font-size:14px;font-weight:600;padding:11px 8px}
+.scene .tab:hover{color:#fff}
+.scene .tab.active{background:linear-gradient(135deg,var(--k-pink2),var(--k-purple));color:#fff;box-shadow:0 3px 0 #b0125a,0 8px 16px rgba(247,37,133,.35)}
+
+/* Selector de vehículo */
+.scene .v-option{background:rgba(20,16,50,.45);border:2px solid rgba(255,255,255,.12);border-radius:20px;color:#c9c4ee;font-weight:600}
+.scene .v-option:hover{border-color:var(--k-pink);color:#fff}
+.scene .v-option.selected{border-color:var(--k-pink);background:rgba(255,79,163,.18);color:#ffd1e8;box-shadow:0 0 18px rgba(255,79,163,.35)}
+
+/* Campos (la etiqueta flota DENTRO del campo) */
+.scene .input-group{margin-bottom:14px}
+.scene .input-group input{padding:24px 20px 8px;background:rgba(18,14,46,.5);border:2px solid rgba(255,255,255,.14);border-radius:22px;color:#fff;font-size:15px;font-weight:700}
+.scene .input-group input:focus,.scene .input-group input:not(:placeholder-shown){border-color:var(--k-pink);background:rgba(255,79,163,.1);box-shadow:0 0 0 4px rgba(255,79,163,.12),0 0 18px rgba(255,79,163,.22)}
+.scene .input-group label{left:21px;color:#aaa5d8;font-size:15px;font-weight:600}
+.scene .input-group input:focus~label,.scene .input-group input:not(:placeholder-shown)~label{top:9px;left:21px;transform:none;font-size:11px;color:var(--k-pink);background:none;padding:0;font-weight:800;letter-spacing:.3px}
+.scene .code-input{padding:24px 20px 8px;letter-spacing:8px}
+.scene input:-webkit-autofill{-webkit-text-fill-color:#fff;caret-color:#fff;transition:background-color 99999s ease-in-out 0s}
+
+/* Botones 3D rosa → morado */
+.scene .auth-btn{border-radius:999px;padding:16px;font-size:16px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,#f72585 0%,#b02fd1 55%,#8e2de2 100%);box-shadow:0 7px 0 #a0105a,0 16px 30px rgba(247,37,133,.4);margin-bottom:18px}
+.scene .auth-btn:hover{transform:translateY(-2px);box-shadow:0 9px 0 #a0105a,0 20px 36px rgba(247,37,133,.5)}
+.scene .auth-btn:active{transform:translateY(5px);box-shadow:0 2px 0 #a0105a,0 6px 14px rgba(247,37,133,.35)}
+.scene .auth-btn:disabled{opacity:.55;transform:none;box-shadow:0 5px 0 #a0105a}
+.scene .auth-btn.ghost{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.16);box-shadow:none;font-weight:600;letter-spacing:1px;font-size:14px;color:#e6e1ff;margin-bottom:12px}
+.scene .auth-btn.ghost:hover{border-color:var(--k-pink);background:rgba(255,255,255,.12);transform:translateY(-1px);box-shadow:none}
+.scene .auth-btn.ghost:active{transform:none}
+
+/* Avisos y estado */
+.scene .verify-info{background:rgba(255,255,255,.08);border:2px solid rgba(255,122,190,.45);border-radius:22px;padding:14px;font-size:14px;font-weight:600;color:#f3eeff}
+.scene .verify-info strong{color:#ffa6d2}
+.scene .status-text{font-size:13px;font-weight:700;color:#cfcaf5;margin-top:6px}
+.scene .status-text.ok{color:#7dffd9}
+.scene .status-text.err{color:#ff8fb0}
+
+/* Etiquetas inferiores (APK · Premium · Seguro) */
+.k-chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.k-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:rgba(80,92,150,.38);border:2px solid rgba(255,255,255,.14);color:var(--k-sky);font-size:14px;font-weight:700}
+.k-chip svg{width:18px;height:18px;fill:currentColor;flex:none}
+
+@media(max-width:480px){.glass-panel{padding:28px 20px 24px;border-radius:38px}}
+@media (prefers-reduced-motion:reduce){.road-grid,.kawaii-pets span,.vehicle-wrapper,.wheel,.light-trail{animation:none!important}.spark{display:none}}
 </style>
 </head>
 <body>
@@ -224,6 +315,15 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
   <div class="horizon-sun" id="sun"></div>
   <div class="speed-lines" id="speedLines"></div>
   <div class="road-container"><div class="road-grid"></div></div>
+  <div class="kawaii-pets" aria-hidden="true">
+    <span style="left:7%;top:28%;animation-delay:-1s">🐰</span>
+    <span style="right:6.5%;top:31%;animation-delay:-3s;animation-duration:7s">🐭</span>
+    <span style="right:7%;top:50%;animation-delay:-2s;animation-duration:5.5s">🦊</span>
+    <span style="left:8.5%;top:71%;animation-delay:-4s;animation-duration:6.5s">🐱</span>
+    <span style="left:16%;top:7%;animation-delay:-5s;animation-duration:7.5s">🐼</span>
+    <span style="right:15%;top:9%;animation-delay:-2.5s;animation-duration:6s">🦄</span>
+    <span style="right:11%;top:77%;animation-delay:-1.5s;animation-duration:7s">🐻</span>
+  </div>
   <div class="vehicle-wrapper" id="vehicleWrapper">
     <div class="light-trail"></div>
     <svg id="vehicleSvg" class="vehicle-svg" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -234,8 +334,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
   <div class="glass-panel" id="panel">
 
     <div class="header">
-      <h1>DiDi Food <span>Rider Pro</span></h1>
-      <p>Registro & Acceso Verificado</p>
+      <h1><span class="k-title">Didi Online</span> <span class="k-spark">✨</span></h1>
+      <p>¡Únete a la aventura Anime! Acceso verificado 💖</p>
     </div>
 
     <!-- VISTA 1: Login / Registro -->
@@ -300,6 +400,12 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
     </div>
 
     <p class="status-text" id="statusText">Inicia sesión o regístrate para usar la aplicación</p>
+
+    <div class="k-chips" aria-hidden="true">
+      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M3 17a9 9 0 0118 0z"/><circle cx="8.6" cy="13" r="1" fill="#2a2552"/><circle cx="15.4" cy="13" r="1" fill="#2a2552"/><path d="M6.6 6.4L8.4 9M17.4 6.4L15.6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>APK</span>
+      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Premium</span>
+      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z"/></svg>Seguro</span>
+    </div>
 
   </div>
 </div>
@@ -2700,18 +2806,18 @@ tabRegister.addEventListener('click', () => switchMode('register'));
 
 /* ---------- Vehículos ---------- */
 const VEHICLES = {
-  moto: `<path d="M 60 120 L 90 90 L 150 90 L 180 120 Z" fill="rgba(20,20,20,.8)" stroke-width="2"/>
+  moto: `<path d="M 60 120 L 90 90 L 150 90 L 180 120 Z" fill="rgba(40,28,92,.85)" stroke-width="2"/>
     <path d="M 120 90 L 140 60 L 170 80"/>
-    <path d="M 140 60 L 150 40 L 165 40" stroke="#F55246" stroke-width="4"/>
-    <path d="M 100 90 C 80 70, 130 50, 140 60" fill="#FF7A00" stroke="none"/>
-    <path d="M 90 140 L 40 130 L 30 135" stroke="#F55246" stroke-width="4"/>
+    <path d="M 140 60 L 150 40 L 165 40" stroke="#5eead4" stroke-width="4"/>
+    <path d="M 100 90 C 80 70, 130 50, 140 60" fill="#ff7ac6" stroke="none"/>
+    <path d="M 90 140 L 40 130 L 30 135" stroke="#5eead4" stroke-width="4"/>
     <line x1="195" y1="175" x2="160" y2="70" stroke-width="5"/>
     <line x1="55" y1="175" x2="90" y2="90" stroke-width="5"/>
-    <circle cx="55" cy="175" r="30" fill="#09090b" stroke="#333" stroke-width="8"/>
+    <circle cx="55" cy="175" r="30" fill="#1b1745" stroke="#4a3f95" stroke-width="8"/>
     <circle class="wheel" cx="55" cy="175" r="22" stroke-width="4" fill="none"/>
-    <circle cx="195" cy="175" r="30" fill="#09090b" stroke="#333" stroke-width="8"/>
+    <circle cx="195" cy="175" r="30" fill="#1b1745" stroke="#4a3f95" stroke-width="8"/>
     <circle class="wheel" cx="195" cy="175" r="22" stroke-width="4" fill="none"/>
-    <polygon points="175,75 190,85 170,95" fill="#FF7A00" stroke="none"/>`,
+    <polygon points="175,75 190,85 170,95" fill="#ff7ac6" stroke="none"/>`,
   bike: `<circle cx="55" cy="150" r="35" stroke-width="4"/>
     <circle class="wheel" cx="55" cy="150" r="28" stroke-width="2"/>
     <circle cx="195" cy="150" r="35" stroke-width="4"/>
@@ -2719,10 +2825,10 @@ const VEHICLES = {
     <path d="M 55 150 L 110 90 L 160 150" stroke-width="4"/>
     <path d="M 110 90 L 130 60 L 150 60" stroke-width="4"/>
     <path d="M 195 150 L 150 90" stroke-width="4"/>`,
-  car: `<path d="M 40 130 Q 60 100 110 100 L 160 100 Q 200 100 220 130 Z" fill="rgba(255,122,0,.2)" stroke-width="4"/>
+  car: `<path d="M 40 130 Q 60 100 110 100 L 160 100 Q 200 100 220 130 Z" fill="rgba(255,122,198,.2)" stroke-width="4"/>
     <rect x="70" y="70" width="100" height="40" rx="15" stroke-width="4"/>
-    <circle cx="75" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>
-    <circle cx="175" cy="150" r="22" fill="#09090b" stroke="#F55246" stroke-width="6"/>`
+    <circle cx="75" cy="150" r="22" fill="#1b1745" stroke="#5eead4" stroke-width="6"/>
+    <circle cx="175" cy="150" r="22" fill="#1b1745" stroke="#5eead4" stroke-width="6"/>`
 };
 const VEHICLE_LABEL = { moto: 'Moto 🏍️', bike: 'Bicicleta 🚲', car: 'Auto 🚗' };
 function updateVehicleSVG(type) { vehicleSvg.innerHTML = VEHICLES[type] || VEHICLES.moto; }
@@ -3076,14 +3182,34 @@ window.addEventListener('mousemove', e => {
    3. LÍNEAS DE VELOCIDAD
    ========================================== */
 const linesContainer = $('speedLines');
-const lineTimer = setInterval(() => {
-  const l = document.createElement('div');
-  l.className = 'line';
-  l.style.left = Math.random() * 100 + 'vw';
-  l.style.animationDuration = (Math.random() * .4 + .3) + 's';
-  linesContainer.appendChild(l);
-  setTimeout(() => l.remove(), 1000);
-}, 120);
+const SPARK_COLORS = ['#ffb3d9','#c4b5fd','#7de3ff','#ffffff','#ff8fc7','#a5f3fc'];
+function spawnSpark(initial) {
+  const s = document.createElement('div');
+  const isStar = Math.random() < .22;
+  const size = isStar ? (10 + Math.random() * 12) : (3 + Math.random() * 7);
+  const color = SPARK_COLORS[(Math.random() * SPARK_COLORS.length) | 0];
+  const dur = 8 + Math.random() * 8;
+  const delay = initial ? -(Math.random() * dur * .9) : 0;
+  s.className = 'spark' + (isStar ? ' star' : '');
+  s.style.left = (Math.random() * 100) + '%';
+  s.style.setProperty('--dx', ((Math.random() * 80) - 40) + 'px');
+  s.style.animationDuration = dur + 's';
+  if (delay) s.style.animationDelay = delay + 's';
+  if (isStar) {
+    s.textContent = '✦';
+    s.style.fontSize = size + 'px';
+    s.style.color = color;
+    s.style.textShadow = '0 0 8px ' + color;
+  } else {
+    s.style.width = s.style.height = size + 'px';
+    s.style.background = color;
+    s.style.boxShadow = '0 0 ' + Math.round(size * 2) + 'px ' + color;
+  }
+  linesContainer.appendChild(s);
+  setTimeout(() => s.remove(), (dur + delay) * 1000 + 300);
+}
+for (let i = 0; i < 12; i++) spawnSpark(true);
+const lineTimer = setInterval(() => { if (!document.hidden) spawnSpark(false); }, 600);
 </script>
 </body>
 </html>
