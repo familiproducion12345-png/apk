@@ -2812,77 +2812,76 @@ body{background:#1c1737}
     <style>
         .balance-card {
             position: relative;
-            width: 176px;
+            width: 128px;
             background: #fff;
             color: #000;
             border-radius: 999px;
-            padding: 11px 20px;
+            padding: 7px 14px;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 6px 22px rgba(0,0,0,0.16);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
             border: 1px solid rgba(0,0,0,0.04);
-            transition: width .4s cubic-bezier(.2,.8,.2,1), border-radius .4s ease, padding .4s ease;
+            transition: width .35s cubic-bezier(.2,.8,.2,1), border-radius .35s ease, padding .35s ease;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
         .balance-card.open {
-            width: min(92vw, 400px);
-            border-radius: 32px;
-            padding: 26px 22px 20px;
+            width: min(74vw, 270px);
+            border-radius: 22px;
+            padding: 14px 16px 12px;
         }
         .balance-amount {
             font-family: 'Outfit', sans-serif;
-            font-weight: 900;
-            font-size: 28px;
-            line-height: 1.1;
-            letter-spacing: -0.5px;
-            transition: font-size .4s ease;
+            font-weight: 800;
+            font-size: 20px;
+            line-height: 1.15;
+            letter-spacing: -0.3px;
+            transition: font-size .35s ease;
         }
-        .balance-card.open .balance-amount { font-size: 46px; }
+        .balance-card.open .balance-amount { font-size: 30px; }
         .bal-mask { display: none; }
         .balance-card.hide-amount .bal-val { display: none; }
-        .balance-card.hide-amount .bal-mask { display: inline; letter-spacing: 2px; }
+        .balance-card.hide-amount .bal-mask { display: inline; letter-spacing: 1px; }
 
         .balance-eye {
-            position: absolute; top: 22px; right: 22px;
-            font-size: 24px; color: #000; background: none; border: 0; padding: 4px;
+            position: absolute; top: 12px; right: 14px;
+            font-size: 16px; color: #000; background: none; border: 0; padding: 3px;
             opacity: 0; pointer-events: none; transition: opacity .3s ease;
         }
         .balance-card.open .balance-eye { opacity: 1; pointer-events: auto; }
 
         .balance-extra {
             display: grid; grid-template-rows: 0fr;
-            transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1);
+            transition: grid-template-rows .35s cubic-bezier(.2,.8,.2,1);
         }
         .balance-card.open .balance-extra { grid-template-rows: 1fr; }
         .balance-extra-inner { overflow: hidden; min-height: 0; opacity: 0; transition: opacity .3s ease; }
-        .balance-card.open .balance-extra-inner { opacity: 1; transition-delay: .12s; }
+        .balance-card.open .balance-extra-inner { opacity: 1; transition-delay: .1s; }
 
         .balance-label {
-            font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 300;
-            letter-spacing: .3px; margin-top: 2px;
+            font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 400;
+            letter-spacing: .3px; margin-top: 0;
         }
-        .balance-stats { display: flex; justify-content: space-around; margin-top: 34px; }
-        .balance-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-        .balance-stat-num { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; }
-        .balance-stat-lbl { font-size: 20px; font-weight: 300; color: #9ca3af; }
+        .balance-stats { display: flex; justify-content: space-around; margin-top: 14px; }
+        .balance-stat { display: flex; flex-direction: column; align-items: center; gap: 0; }
+        .balance-stat-num { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 800; line-height: 1.2; }
+        .balance-stat-lbl { font-size: 12px; font-weight: 300; color: #9ca3af; }
 
         .balance-details-list {
             display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease;
         }
-        .balance-details-list > .balance-row:first-child { margin-top: 0; }
         .balance-card.show-details .balance-details-list { grid-template-rows: 1fr; }
         .balance-row {
-            display: flex; justify-content: space-between; font-size: 16px; padding: 0;
+            display: flex; justify-content: space-between; font-size: 13px; padding: 0;
             overflow: hidden; min-height: 0; height: 0; opacity: 0; transition: all .3s ease;
         }
-        .balance-card.show-details .balance-row { height: 28px; opacity: 1; }
-        .balance-card.show-details .balance-row:first-child { margin-top: 18px; }
+        .balance-card.show-details .balance-row { height: 22px; opacity: 1; }
+        .balance-card.show-details .balance-row:first-child { margin-top: 10px; }
         .balance-row span { color: #6b7280; }
 
         .balance-details-btn {
-            margin-top: 26px; background: none; border: 0; color: inherit;
-            font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 400; padding: 6px 14px;
+            margin-top: 10px; background: none; border: 0; color: inherit;
+            font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400; padding: 4px 10px;
         }
 
         /* Modo oscuro */
