@@ -2077,8 +2077,8 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                     speakNotification("Recibiste un nuevo pedido, mantente en una zona segura para ver los detalles.");
                     
                     if(sharedTopBadge) sharedTopBadge.classList.remove('opacity-0', 'pointer-events-none');
-                    if(sharedFabs) sharedFabs.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-8');
-                    if(sharedLeftIcons) sharedLeftIcons.classList.remove('opacity-0', 'pointer-events-none', '-translate-x-8');
+                    // Los iconos flotantes (derecha) quedan ocultos hasta pulsar "Iniciar entrega"
+                    // Los iconos flotantes (izquierda) quedan ocultos hasta pulsar "Iniciar entrega"
 
                     setTimeout(() => {
                         slideThumb.style.transform = `translateX(0px)`;
@@ -2123,6 +2123,9 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         }
 
         btnStartDelivery.addEventListener('click', () => {
+            // Ahora sí: mostrar los iconos flotantes de la derecha y de la izquierda
+            if (sharedFabs) sharedFabs.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-8');
+            if (sharedLeftIcons) sharedLeftIcons.classList.remove('opacity-0', 'pointer-events-none', '-translate-x-8');
             if (stage2BottomSheet) stage2BottomSheet.classList.add('slide-down-animation');
             if (stage2NavSheet) stage2NavSheet.classList.remove('translate-y-full');
             if (mapStage2) {
