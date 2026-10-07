@@ -308,6 +308,31 @@ body{background:#1c1737}
 @media(max-width:480px){.glass-panel{padding:28px 20px 24px;border-radius:38px}}
 @media (prefers-reduced-motion:reduce){.road-grid,.kawaii-pets span,.vehicle-wrapper,.wheel,.light-trail{animation:none!important}.spark{display:none}}
 </style>
+<style>
+/* ===== MODO DEMO ===== */
+.demo-btn{width:100%;padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:2px dashed var(--primary);color:var(--primary);font-size:14px;font-weight:900;cursor:pointer;transition:all .3s;outline:none;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.demo-btn:hover{background:rgba(255,122,0,.15);transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,122,0,.3)}
+.demo-hint{font-size:11px;color:#a1a1aa;margin-top:8px;text-align:center}
+#demoWatermark,#demoBanner,#demoBar,#demoPill,.demo-side{display:none}
+body.demo-on #demoWatermark{display:block;position:fixed;inset:0;z-index:150;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='150'%3E%3Ctext x='115' y='75' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='21' fill='%23FF7A00' fill-opacity='.24' transform='rotate(-24 115 75)'%3EMODO DEMO%3C/text%3E%3C/svg%3E")}
+body.demo-on #demoBanner{display:block;position:fixed;top:0;left:0;right:0;z-index:190;pointer-events:none;text-align:center;background:linear-gradient(90deg,#F55246,#FF7A00,#F55246);color:#fff;font:900 11px Outfit,sans-serif;letter-spacing:2px;padding:3px 0;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+body.demo-on #demoBar{display:flex;position:fixed;top:19px;left:50%;transform:translateX(-50%);z-index:200;gap:4px;font:700 11px Outfit,sans-serif;white-space:nowrap}
+#demoBar span{background:rgba(38,42,53,.94);color:#FF7A00;border-radius:0 0 12px 12px;padding:3px 12px;border:1px solid rgba(255,122,0,.4);border-top:0}
+#demoBar button{background:rgba(245,82,70,.92);color:#fff;border:0;border-radius:0 0 12px 12px;padding:3px 12px;font:inherit;cursor:pointer}
+body.demo-on #demoPill{display:block;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:190;pointer-events:none;background:rgba(245,82,70,.95);color:#fff;font:900 12px Outfit,sans-serif;letter-spacing:1px;padding:7px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.45);white-space:nowrap;animation:demoPulse 1.6s ease-in-out infinite alternate}
+body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer-events:none;background:rgba(255,122,0,.92);color:#fff;font:900 11px Outfit,sans-serif;letter-spacing:3px;padding:4px 14px;border-radius:0 0 10px 10px;white-space:nowrap}
+.demo-side.l{left:0;transform-origin:left top;transform:rotate(90deg) translateX(-50%) translateY(-100%)}
+.demo-side.r{right:0;transform-origin:right top;transform:rotate(-90deg) translateX(50%) translateY(-100%)}
+@keyframes demoPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.06)}}
+#demoLock{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#demoLock.show{display:flex}
+.demo-lock-card{width:min(380px,100%);background:#262a35;border:1px solid var(--primary);border-radius:26px;padding:26px 22px;text-align:center;color:#fff;font-family:Outfit,sans-serif;box-shadow:0 30px 70px rgba(0,0,0,.8)}
+.demo-lock-card .dl-ico{font-size:44px;margin-bottom:6px}
+.demo-lock-card h3{font-size:22px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.demo-lock-card p{font-size:14px;line-height:1.5;color:#d4d4d8;margin-bottom:18px}
+.demo-lock-card p b{color:var(--primary)}
+.demo-lock-card .auth-btn{display:block;text-decoration:none;text-align:center}
+</style>
 </head>
 <body>
 
@@ -367,6 +392,8 @@ body{background:#1c1737}
 
         <button type="submit" class="auth-btn" id="authBtn">Ingresar al Sistema</button>
       </form>
+      <button type="button" class="demo-btn" id="demoBtn">🎭 Modo Demo</button>
+      <p class="demo-hint">Explora la aplicación sin cuenta · datos de prueba</p>
     </div>
 
     <!-- VISTA 2: Verificación por código -->
@@ -407,6 +434,22 @@ body{background:#1c1737}
       <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z"/></svg>Seguro</span>
     </div>
 
+  </div>
+</div>
+
+<!-- ====== ETIQUETAS MODO DEMO ====== -->
+<div id="demoWatermark" aria-hidden="true"></div>
+<div id="demoBanner">🎭 Modo Demo · Modo Demo · Modo Demo · Modo Demo</div>
+<div id="demoBar"><span>🎭 MODO DEMO</span><button id="demoExit" type="button">SALIR DEMO ✕</button></div>
+<div class="demo-side l">MODO DEMO</div><div class="demo-side r">MODO DEMO</div>
+<div id="demoPill">🎭 MODO DEMO · Datos de prueba</div>
+<div id="demoLock" role="dialog" aria-modal="true">
+  <div class="demo-lock-card">
+    <div class="dl-ico">🔒</div>
+    <h3>🎭 Estás en Modo Demo</h3>
+    <p>La <b>Etapa 2</b> no está disponible en el modo demo.<br><b>Agrega créditos</b> para utilizar la aplicación completa.</p>
+    <a id="demoLockWa" class="auth-btn" target="_blank" rel="noopener">💬 Pedir créditos por WhatsApp</a>
+    <button type="button" class="auth-btn ghost" id="demoLockClose">Seguir explorando la demo</button>
   </div>
 </div>
 
@@ -1025,7 +1068,7 @@ body{background:#1c1737}
                                 <span contenteditable="false" data-editable="true" class="font-medium">Transferencia (plataforma a tienda)</span>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                             </div>
-                            <button id="btn-order-action" class="w-full bg-[#ff5a00] text-white font-bold py-[14px] rounded-xl text-[16px] transition active:scale-[0.98] flex justify-center items-center">
+                            <button id="btn-order-action" class="w-full bg-[#ff5a00] text-white font-bold h-[42px] rounded-[15px] text-[16px] transition active:scale-[0.98] flex justify-center items-center">
                                 <span contenteditable="false" data-editable="true" id="btn-text-node">Tengo el pedido</span>
                             </button>
                         </div>
@@ -1057,7 +1100,7 @@ body{background:#1c1737}
                     <!-- BOTÓN CENTRO DE AYUDA -->
                     <div id="btn-open-help-center-stage1" class="bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-transform">
                         <div class="flex items-center gap-3">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gray-900 dark:text-white"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-900 dark:text-white shrink-0"><path d="M19.6 11.4 14.2 3.1a2 2 0 0 0-3.5 0L2.9 17a2.1 2.1 0 0 0 1.8 3.2h9.9"/><path d="M21.4 14.2l-3.5 6.5"/><path d="M12.4 9.4v3.4"/><path d="M12.4 16.8h.01"/></svg>
                             <span contenteditable="false" data-editable="true" class="text-[15px] font-bold text-gray-900 dark:text-white">Centro de ayuda</span>
                         </div>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="m9 18 6-6-6-6"/></svg>
@@ -1090,17 +1133,17 @@ body{background:#1c1737}
                         <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 border-[2px] border-current bg-white dark:bg-[#1e2128] rounded-full"></div>
                     </div>
                 </button>
-                <div id="slide-to-exit-container" class="flex-1 bg-white dark:bg-[#2a2e37] border-[1.5px] border-gray-200 dark:border-[#363b46] rounded-full h-[54px] relative overflow-hidden flex items-center select-none opacity-60 pointer-events-none transition-all duration-300">
+                <div id="slide-to-exit-container" class="flex-1 bg-white dark:bg-[#2a2e37] border-[1.5px] border-gray-200 dark:border-[#363b46] rounded-[18px] h-[54px] relative overflow-hidden flex items-center select-none opacity-60 pointer-events-none transition-all duration-300">
                     <div id="slide-fill-bar" class="absolute left-0 top-0 h-full bg-[#ff5a00] w-0 transition-all duration-75"></div>
-                    <div id="slide-text-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-300">
-                        <span contenteditable="false" data-editable="true" class="text-gray-400 dark:text-[#666] font-black text-[17px] tracking-wide">Salir</span>
+                    <div id="slide-text-container" class="absolute inset-0 pl-5 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-300">
+                        <span contenteditable="false" data-editable="true" class="text-gray-400 dark:text-[#666] font-bold text-[22px] leading-none">Salir</span>
                     </div>
                     <div id="loading-planets" class="didi-loader opacity-0 transition-opacity duration-200">
                         <div class="planet"></div>
                         <div class="planet"></div>
                     </div>
-                    <div id="slide-thumb" class="absolute left-[3px] top-[3px] bottom-[3px] w-[46px] bg-gray-100 dark:bg-[#363b46] rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing z-20 transition-all duration-75 shadow-[0_2px_5px_rgba(0,0,0,0.1)]">
-                        <svg id="slide-thumb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="translate-x-[1px] transition-colors duration-300"><path d="m13 17 5-5-5-5M6 17l5-5-5-5"/></svg>
+                    <div id="slide-thumb" class="absolute left-[3px] top-[3px] bottom-[3px] w-[46px] bg-gray-100 dark:bg-[#363b46] rounded-[15px] flex items-center justify-center cursor-grab active:cursor-grabbing z-20 transition-all duration-75 shadow-[0_2px_5px_rgba(0,0,0,0.1)]">
+                        <svg id="slide-thumb-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="transition-colors duration-300"><path d="M6 6.8l5 5.2-5 5.2M12 6.8l5 5.2-5 5.2"/></svg>
                     </div>
                 </div>
             </div>
@@ -1941,8 +1984,10 @@ body{background:#1c1737}
             
             slideThumb.classList.remove('bg-gray-100', 'dark:bg-[#363b46]');
             slideThumb.classList.add('bg-white');
+            slideThumb.style.background = 'transparent';
+            slideThumb.style.boxShadow = 'none';
             
-            thumbIcon.setAttribute('stroke', '#ff5a00');
+            thumbIcon.setAttribute('stroke', '#ffffff');
             slideText.classList.remove('text-gray-400', 'dark:text-[#666]');
             slideText.classList.add('text-white');
             
@@ -1987,6 +2032,8 @@ body{background:#1c1737}
             let moveX = (e.type.includes('mouse') ? e.pageX : e.changedTouches[0].pageX) - startX;
 
             if (moveX > maxDrag * 0.8) {
+                // MODO DEMO: no se permite entrar a la Etapa 2
+                try { if (window.parent && window.parent.isDemoMode) { slideThumb.style.transform = 'translateX(0px)'; window.parent.showDemoLock(); return; } } catch (err) {}
                 isSliderLoading = true; 
                 sliderContainer.style.pointerEvents = 'none';
                 slideThumb.style.transform = `translateX(${maxDrag}px)`;
@@ -3273,6 +3320,42 @@ async function onLoginSuccess(user) {
     }
   }, 30000);
 }
+
+/* ---------- MODO DEMO ---------- */
+let demoMode = false;
+function startDemo() {
+  const src = $('appSource').value;
+  if (!/<!doctype|<html/i.test(src)) {
+    return setStatus('Falta el código de la app en el archivo.', 'err');
+  }
+  demoMode = true;
+  window.isDemoMode = true;     // el iframe consulta esta bandera
+  appOpen = true;               // evita cualquier lógica de sesión/créditos
+  window.appDb = null;          // la demo NO toca Supabase
+  window.appUser = null;        // sin usuario real
+  try { localStorage.removeItem('didi_demo_stores_cache'); } catch (e) {}
+  // La demo guarda sus tiendas en una copia local aparte (no mezcla con datos reales)
+  const demoSrc = src.split('didi_stores_cache_v3_shared').join('didi_demo_stores_cache');
+
+  clearInterval(lineTimer);
+  document.querySelector('.environment').style.display = 'none';
+  document.querySelector('.scene').style.display = 'none';
+  $('globalWaBtn').style.display = 'none';
+  document.title = 'Didi Online — MODO DEMO';
+  document.body.classList.add('demo-on');
+
+  const frame = $('appFrame');
+  frame.srcdoc = demoSrc;
+  frame.style.display = 'block';
+}
+function showDemoLock() {
+  $('demoLockWa').href = waUrl('👋 ¡Hola! Estoy probando el *Modo Demo* de Didi Online 🎭\n\n💳 Quiero créditos para usar la aplicación completa ⚡\n\n¿Me ayudas, por favor? 🙏✨');
+  $('demoLock').classList.add('show');
+}
+window.showDemoLock = showDemoLock;
+$('demoLockClose').addEventListener('click', () => $('demoLock').classList.remove('show'));
+$('demoBtn').addEventListener('click', startDemo);
+$('demoExit').addEventListener('click', () => location.reload());
 
 async function logout() {
   if (db) await db.auth.signOut();
