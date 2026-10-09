@@ -1125,7 +1125,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                                 </span>
                                 <span contenteditable="false" data-editable="true" class="font-medium tracking-wide">Código de verificación</span>
                             </div>
-                            <button id="btn-verification-action" class="w-full bg-[#ff5a00] text-white font-bold py-[14px] rounded-xl text-[16px] transition active:scale-[0.98] flex justify-center items-center">
+                            <button id="btn-verification-action" class="w-full bg-[#ff5a00] text-white font-bold h-[42px] rounded-[15px] text-[16px] transition active:scale-[0.98] flex justify-center items-center">
                                 <span contenteditable="false" data-editable="true">Ingresar código de verificación</span>
                             </button>
                         </div>
@@ -1598,6 +1598,12 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
     <!-- SCRIPT GENERAL Y CONFIGURACIÓN             -->
     <!-- ========================================== -->
     <script>
+        // PERMISOS: solo el administrador puede editar tiendas, logo, imagen, etc.
+        // La bandera la define la página padre al iniciar sesión (en modo demo es false).
+        const IS_ADMIN = (function () { try { return !!(window.parent && window.parent.appIsAdmin); } catch (e) { return false; } })();
+        // Campos que un usuario normal SÍ puede editar: número del pedido y nombre del usuario
+        const USER_EDITABLE_IDS = ['stage1-order-title', 'details-order-title'];
+
         let isEditMode = false;
         let speechEngineUnlocked = false;
         let isVerificationMode = false;
@@ -2255,14 +2261,18 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             document.body.classList.toggle('edit-mode', isEditMode);
             
             document.querySelectorAll('[data-editable="true"]').forEach(el => {
-                el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
+                // Usuario normal: solo se pueden editar el número y el nombre del pedido
+                const allowed = IS_ADMIN || USER_EDITABLE_IDS.indexOf(el.id) !== -1;
+                el.setAttribute('contenteditable', (isEditMode && allowed) ? 'true' : 'false');
             });
 
             if (isEditMode) {
                 editIcon.className = 'fa-solid fa-chevron-left text-black dark:text-white text-[16px]';
                 btnEditSwitch.classList.add('opacity-80', 'bg-orange-100');
-                cameraIndicator.classList.remove('opacity-0');
-                cameraIndicator.classList.add('opacity-100');
+                if (IS_ADMIN) {
+                    cameraIndicator.classList.remove('opacity-0');
+                    cameraIndicator.classList.add('opacity-100');
+                }
                 editButtonsContainer.classList.remove('opacity-0', 'pointer-events-none');
             } else {
                 editIcon.className = 'fa-solid fa-chevron-down text-black dark:text-white text-[16px]';
@@ -2358,7 +2368,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 
         headerImageContainer.addEventListener('click', (e) => {
             if (e.target.closest('button')) return;
-            if (isEditMode) {
+            if (isEditMode && IS_ADMIN) {
                 imageFileInput.click();
             }
         });
@@ -2463,7 +2473,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         // =====================================================
         // 1) GUÍA DE USO OBLIGATORIA (cada vez que se inicia sesión)
         // =====================================================
-        const GUIDE_STEPS = [
+        const GUIDE_STEPS_ADMIN = [
             {
                 title: '1. Cambia el nombre de la tienda',
                 text: 'Toca el nombre resaltado y escribe el nombre de la tienda donde vas a recoger el pedido. Ya activamos el modo edición por ti.',
@@ -2495,6 +2505,22 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 inset: true
             }
         ];
+
+        // Guía para usuarios normales: elegir la tienda y escribir número y nombre del pedido
+        const GUIDE_STEPS_USER = [
+            {
+                title: '1. Elige la tienda',
+                text: 'Toca el botón resaltado "Tiendas" y pulsa "Usar" en la tienda donde vas a recoger el pedido.',
+                target: 'btn-open-stores'
+            },
+            {
+                title: '2. Número del pedido y nombre del usuario',
+                text: 'Toca el título resaltado (por ejemplo #38 Usuario7236) y escribe el número del pedido y el nombre del cliente. Ya activamos el modo edición por ti.',
+                target: 'stage1-order-title',
+                scroll: 'center'
+            }
+        ];
+        const GUIDE_STEPS = IS_ADMIN ? GUIDE_STEPS_ADMIN : GUIDE_STEPS_USER;
 
         let gIdx = 0;
         const gOverlay = document.getElementById('guide-overlay');
@@ -2641,7 +2667,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 // Migración única: tiendas guardadas antes solo en este dispositivo
                 let legacy = [];
                 try { legacy = JSON.parse(localStorage.getItem(legacyKey()) || '[]') || []; } catch (e) {}
-                if (legacy.length) {
+                if (IS_ADMIN && legacy.length) {
                     const known = new Set(list.map(s => nameKey(s.name)));
                     let allOk = true;
                     for (const s of legacy) {
@@ -2691,6 +2717,8 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         }
 
         async function saveCurrentStore(silent) {
+            // Solo el administrador puede registrar o actualizar tiendas
+            if (!IS_ADMIN) return false;
             const name = txt('stage1-restaurant-name');
             if (!name) { if (!silent) appToast('Escribe primero el nombre de la tienda'); return false; }
             const address = txt('stage1-restaurant-address');
@@ -2742,6 +2770,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 
         // Llamada desde el deslizador "Salir" (registro automático)
         window.autoSaveStore = function () {
+            if (!IS_ADMIN) return;
             const name = txt('stage1-restaurant-name');
             if (!name || name === DEFAULT_STORE_NAME) return;
             saveCurrentStore(true);
@@ -2795,7 +2824,9 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             if (!list.length) {
                 const empty = document.createElement('div');
                 empty.className = 'text-center text-gray-500 dark:text-[#a0a0a0] text-[14px] py-10 px-4 leading-snug';
-                empty.textContent = 'Aún no hay tiendas registradas. Edita los datos de una tienda y pulsa "Guardar la tienda actual"; quedará visible para todos.';
+                empty.textContent = IS_ADMIN
+                    ? 'Aún no hay tiendas registradas. Edita los datos de una tienda y pulsa "Guardar la tienda actual"; quedará visible para todos.'
+                    : 'Aún no hay tiendas disponibles. El administrador las irá agregando.';
                 sList.appendChild(empty);
                 return;
             }
@@ -2829,9 +2860,9 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 use.addEventListener('click', () => { applyStore(s); closeStores(); });
                 actions.appendChild(use);
 
-                // Solo quien la registró (o un admin) puede borrarla
+                // Solo el administrador puede borrar tiendas
                 const isLocalOnly = String(s.id).indexOf('local_') === 0;
-                if (isLocalOnly || isAdminUser || (s.owner && s.owner === getUid())) {
+                if (IS_ADMIN) {
                     const del = document.createElement('button');
                     del.className = 'bg-gray-100 dark:bg-[#363b46] text-red-500 font-bold text-[12px] px-3.5 py-1.5 rounded-xl active:scale-95 transition';
                     del.textContent = 'Borrar';
@@ -2859,8 +2890,19 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         document.getElementById('btn-save-store-modal').addEventListener('click', () => saveCurrentStore(false));
         document.getElementById('btn-save-store').addEventListener('click', (e) => { e.stopPropagation(); saveCurrentStore(false); });
 
-        // Oculta el botón "Tiendas" a los 30 segundos
+        // Usuarios normales: sin "Guardar tienda" ni "Subir Logo (Etapa 2)"
+        if (!IS_ADMIN) {
+            ['btn-save-store-modal', 'btn-save-store', 'btn-change-logo'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el) return;
+                el.style.display = 'none';
+                if (id === 'btn-save-store-modal' && el.parentElement) el.parentElement.style.display = 'none';
+            });
+        }
+
+        // Oculta el botón "Tiendas" a los 30 segundos (solo a usuarios normales; el admin lo conserva)
         setTimeout(function () {
+            if (IS_ADMIN) return;
             var b = document.getElementById('btn-open-stores');
             if (!b) return;
             b.style.transition = 'opacity .5s';
@@ -3367,6 +3409,8 @@ async function onLoginSuccess(user) {
 
   // El usuario debe estar disponible ANTES de cargar la app (las tiendas se guardan por usuario)
   window.appUser = user;
+  // Solo el administrador puede subir/editar/borrar tiendas, subir logo e imagen de cabecera
+  window.appIsAdmin = !!prof.is_admin;
 
   const frame = $('appFrame');
   frame.srcdoc = src;
@@ -3403,6 +3447,7 @@ function startDemo() {
   appOpen = true;               // evita cualquier lógica de sesión/créditos
   window.appDb = null;          // la demo NO toca Supabase
   window.appUser = null;        // sin usuario real
+  window.appIsAdmin = false;    // la demo se comporta como un usuario normal
   try { localStorage.removeItem('didi_demo_stores_cache'); } catch (e) {}
   // La demo guarda sus tiendas en una copia local aparte (no mezcla con datos reales)
   const demoSrc = src.split('didi_stores_cache_v3_shared').join('didi_demo_stores_cache');
