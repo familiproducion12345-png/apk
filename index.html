@@ -333,6 +333,29 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 .demo-lock-card p b{color:var(--primary)}
 .demo-lock-card .auth-btn{display:block;text-decoration:none;text-align:center}
 </style>
+<style>
+/* ===== HISTORIAL DE USO (panel admin) ===== */
+.adm-hist-btn{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(255,122,0,.55);background:linear-gradient(135deg,rgba(255,122,0,.28),rgba(245,82,70,.22));color:#fff;font:900 14px Outfit,sans-serif;letter-spacing:.5px;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s}
+.adm-hist-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,122,0,.35)}
+#usagePanel{display:none;position:fixed;inset:0;z-index:320;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:rgba(18,20,28,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.usg-card{background:linear-gradient(145deg,rgba(52,57,70,.7),rgba(36,40,51,.85));border:1px solid rgba(255,122,0,.25);border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 12px 28px rgba(0,0,0,.45)}
+.usg-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.usg-user{min-width:0}
+.usg-email{font-size:14px;font-weight:800;word-break:break-all}
+.usg-name{font-size:12px;color:#a1a1aa;margin-top:1px}
+.usg-date{font-size:11px;color:#FFB347;font-weight:800;text-align:right;white-space:nowrap}
+.usg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.usg-box{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:9px 11px;min-width:0}
+.usg-box.full{grid-column:1/-1}
+.usg-box span{display:block;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px}
+.usg-box b{display:block;font-size:14px;font-weight:800;word-break:break-word}
+.usg-more{margin-top:10px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;border-radius:10px;padding:8px;font:800 12px Outfit,sans-serif;cursor:pointer}
+.usg-det{display:none;margin-top:8px;font-size:12.5px;line-height:1.55;color:#d4d4d8}
+.usg-det.show{display:block}
+.usg-det div{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+.usg-det div span{color:#a1a1aa;flex:none}
+.usg-det div b{text-align:right;word-break:break-word;font-weight:700}
+</style>
 </head>
 <body>
 
@@ -468,12 +491,29 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
       <div><div class="adm-title">👑 Panel Premium</div><div class="adm-sub">Gestión de usuarios y créditos</div></div>
       <div><button class="adm-ico" id="admRefresh">↻</button><button class="adm-ico close" id="admClose">✕</button></div>
     </div>
+    <button class="adm-hist-btn" id="admHistBtn" type="button">📜 Historial de uso</button>
     <div class="adm-stats" id="admStats"></div>
     <input id="admSearch" class="adm-search" placeholder="🔎 Buscar por correo...">
     <div class="adm-chips" id="admChips">
       <button class="chip on" data-f="all">Todos</button><button class="chip" data-f="ok">Con créditos</button><button class="chip" data-f="zero">Sin créditos</button><button class="chip" data-f="blk">Bloqueados</button>
     </div>
     <div id="adminList"></div>
+  </div>
+</div>
+
+<!-- ====== PANEL HISTORIAL DE USO (solo admin) ====== -->
+<div id="usagePanel">
+  <div class="adm-wrap">
+    <div class="adm-head">
+      <div><div class="adm-title">📜 Historial de uso</div><div class="adm-sub">Quién usó la app y qué datos editó (al entrar a la Etapa 2)</div></div>
+      <div><button class="adm-ico" id="usgRefresh" type="button">↻</button><button class="adm-ico close" id="usgClose" type="button">✕</button></div>
+    </div>
+    <div class="adm-stats" id="usgStats"></div>
+    <input id="usgSearch" class="adm-search" placeholder="🔎 Buscar por correo, nombre, tienda o pedido...">
+    <div class="adm-chips" id="usgChips">
+      <button class="chip on" data-f="all" type="button">Todos</button><button class="chip" data-f="today" type="button">Hoy</button><button class="chip" data-f="week" type="button">7 días</button>
+    </div>
+    <div id="usageList"></div>
   </div>
 </div>
 
@@ -2067,6 +2107,32 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                     // Guarda automáticamente la tienda registrada por el usuario
                     try { if (typeof autoSaveStore === 'function') autoSaveStore(); } catch (err) {}
 
+                    // HISTORIAL DE USO: se registra solo cuando el usuario desliza "Salir" y entra a la Etapa 2
+                    try {
+                        const gv = function (id) { const el = document.getElementById(id); return el ? el.innerText.trim() : ''; };
+                        if (window.parent && typeof window.parent.logAppUsage === 'function') {
+                            window.parent.logAppUsage({
+                                store_name: gv('stage1-restaurant-name'),
+                                store_address: gv('stage1-restaurant-address'),
+                                order_title: gv('stage1-order-title'),
+                                details: {
+                                    delivery_address: gv('details-delivery-address-main'),
+                                    delivery_address_full: gv('details-delivery-address-full'),
+                                    building: gv('details-delivery-building'),
+                                    apartment: gv('details-delivery-apt'),
+                                    delivery_notes: gv('details-delivery-notes'),
+                                    pickup_address: gv('details-restaurant-address'),
+                                    customer_notes: gv('details-restaurant-notes'),
+                                    customer_place: gv('stage2-customer-place'),
+                                    cash_amount: gv('stage2-cash-amount'),
+                                    income_total: gv('details-income-total'),
+                                    income_bonus: gv('details-income-bonus'),
+                                    balance: gv('balance-amount-value')
+                                }
+                            });
+                        }
+                    } catch (err) {}
+
                     setStage2SheetExpanded(false);
                     stage2NavSheet.style.transition = '';
                     stage1.classList.add('hidden');
@@ -3312,6 +3378,7 @@ async function onLoginSuccess(user) {
 
   appOpen = true;
   lastCredits = prof.credits;
+  flushUsageQueue(); // reenvía registros de historial que hayan quedado pendientes
   setInterval(async () => {
     const p = await getProfile(user);
     if (!p) return;
@@ -3356,6 +3423,68 @@ function showDemoLock() {
   $('demoLock').classList.add('show');
 }
 window.showDemoLock = showDemoLock;
+
+/* ---------- HISTORIAL DE USO (se llama desde la app al entrar a la Etapa 2) ---------- */
+const USAGE_QUEUE_KEY = 'didi_usage_pending_v1';
+function parseOrderTitle(t) {
+  const s = String(t || '').trim();
+  const m = s.match(/^#?\s*(\d+)\s*(.*)$/);
+  return m ? { number: m[1], name: m[2].trim() } : { number: '', name: s };
+}
+function readUsageQueue() {
+  try { return JSON.parse(localStorage.getItem(USAGE_QUEUE_KEY) || '[]') || []; } catch (e) { return []; }
+}
+function writeUsageQueue(q) {
+  try { localStorage.setItem(USAGE_QUEUE_KEY, JSON.stringify(q.slice(-50))); } catch (e) {}
+}
+async function sendUsage(rec) {
+  try {
+    const { error } = await db.rpc('log_app_usage', {
+      p_user_name: rec.user_name,
+      p_store_name: rec.store_name,
+      p_store_address: rec.store_address,
+      p_order_title: rec.order_title,
+      p_order_number: rec.order_number,
+      p_customer_name: rec.customer_name,
+      p_details: rec.details || {},
+      p_used_at: rec.used_at
+    });
+    if (error) { console.warn('Historial: no se pudo guardar.', error.message); return false; }
+    return true;
+  } catch (e) { console.warn('Historial: error', e); return false; }
+}
+async function flushUsageQueue() {
+  if (!db || !window.appUser) return;
+  const q = readUsageQueue();
+  if (!q.length) return;
+  const left = [];
+  for (const rec of q) { if (!(await sendUsage(rec))) left.push(rec); }
+  writeUsageQueue(left);
+}
+window.logAppUsage = async function (info) {
+  // En modo demo o sin sesión real NO se registra nada
+  if (demoMode || window.isDemoMode || !db || !window.appUser) return;
+  try {
+    info = info || {};
+    const u = window.appUser;
+    const meta = u.user_metadata || {};
+    const userName = meta.full_name || meta.name || ((u.email || '').split('@')[0]);
+    const ord = parseOrderTitle(info.order_title);
+    const rec = {
+      user_name: userName,
+      store_name: info.store_name || '',
+      store_address: info.store_address || '',
+      order_title: info.order_title || '',
+      order_number: ord.number,
+      customer_name: ord.name,
+      details: info.details || {},
+      used_at: new Date().toISOString()
+    };
+    const ok = await sendUsage(rec);
+    if (!ok) { const q = readUsageQueue(); q.push(rec); writeUsageQueue(q); }
+    else flushUsageQueue();
+  } catch (e) { console.warn('Historial: error', e); }
+};
 $('demoLockClose').addEventListener('click', () => $('demoLock').classList.remove('show'));
 $('demoBtn').addEventListener('click', startDemo);
 $('demoExit').addEventListener('click', () => location.reload());
@@ -3426,6 +3555,90 @@ function renderAdmin() {
 }
 
 $('adminBtn').addEventListener('click', () => { $('adminPanel').style.display = 'block'; loadAdmin(); });$('admClose').addEventListener('click', () => $('adminPanel').style.display = 'none');$('admRefresh').addEventListener('click', loadAdmin);
+
+/* ---------- Historial de uso (panel admin) ---------- */
+let usageRows = [], usgFilter = 'all';
+const BOGOTA_TZ = 'America/Bogota';
+function fmtUsageDate(iso) {
+  try {
+    return new Date(iso).toLocaleString('es-CO', { timeZone: BOGOTA_TZ, day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+  } catch (e) { return String(iso || ''); }
+}
+function dayKey(d) { return new Date(d).toLocaleDateString('en-CA', { timeZone: BOGOTA_TZ }); }
+
+async function loadUsage() {
+  $('usageList').innerHTML = '<p style="padding:14px;color:#a1a1aa;font-size:13px;text-align:center">Cargando historial...</p>';
+  const { data, error } = await db.rpc('admin_list_usage', { p_limit: 1000 });
+  if (error) {
+    $('usageList').innerHTML = '<p style="padding:14px;color:#F55246;font-size:13px;line-height:1.5">Error: ' + esc(error.message) +
+      '<br><span style="color:#a1a1aa">Si es la primera vez, ejecuta el archivo <b>supabase_historial_uso.sql</b> en el SQL Editor de Supabase.</span></p>';
+    return;
+  }
+  usageRows = data || [];
+  renderUsage();
+}
+
+function renderUsage() {
+  const todayKey = dayKey(Date.now());
+  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+  const todayCount = usageRows.filter(r => dayKey(r.created_at) === todayKey).length;
+  const users = new Set(usageRows.map(r => r.user_id || r.email)).size;
+  const stores = new Set(usageRows.map(r => (r.store_name || '').trim().toLowerCase()).filter(Boolean)).size;
+
+  $('usgStats').innerHTML = [['📲', usageRows.length, 'Usos totales'], ['👥', users, 'Usuarios distintos'], ['🏪', stores, 'Tiendas distintas'], ['📅', todayCount, 'Usos hoy']]
+    .map(x => '<div class="adm-stat"><b>' + x[0] + ' ' + x[1] + '</b><span>' + x[2] + '</span></div>').join('');
+
+  const q = $('usgSearch').value.trim().toLowerCase();
+  const rows = usageRows.filter(r => {
+    if (usgFilter === 'today' && dayKey(r.created_at) !== todayKey) return false;
+    if (usgFilter === 'week' && new Date(r.created_at).getTime() < weekAgo) return false;
+    if (!q) return true;
+    return [r.email, r.user_name, r.store_name, r.store_address, r.order_title, r.order_number, r.customer_name]
+      .some(v => String(v || '').toLowerCase().includes(q));
+  });
+
+  const LABELS = [
+    ['pickup_address', 'Dirección de la tienda'], ['delivery_address', 'Dirección de entrega'], ['delivery_address_full', 'Dirección completa'],
+    ['building', 'Edificio'], ['apartment', 'Departamento'], ['delivery_notes', 'Notas de entrega'], ['customer_notes', 'Comentarios del usuario'],
+    ['customer_place', 'Lugar del cliente'], ['cash_amount', 'Efectivo a recibir'], ['income_total', 'Total del pedido'], ['income_bonus', 'Premio de impulso'], ['balance', 'Balance mostrado']
+  ];
+
+  $('usageList').innerHTML = rows.length ? rows.map((r, i) => {
+    const d = (r.details && typeof r.details === 'object') ? r.details : {};
+    const det = LABELS.filter(l => d[l[0]]).map(l => '<div><span>' + esc(l[1]) + '</span><b>' + esc(d[l[0]]) + '</b></div>').join('');
+    return '<div class="usg-card">' +
+      '<div class="usg-top">' +
+        '<div class="usg-user"><div class="usg-email">📧 ' + esc(r.email || 'sin correo') + '</div><div class="usg-name">👤 ' + esc(r.user_name || '—') + '</div></div>' +
+        '<div class="usg-date">' + esc(fmtUsageDate(r.created_at)) + '</div>' +
+      '</div>' +
+      '<div class="usg-grid">' +
+        '<div class="usg-box full"><span>🏪 Tienda</span><b>' + esc(r.store_name || '—') + '</b></div>' +
+        '<div class="usg-box"><span>🔢 N.º de pedido</span><b>' + esc(r.order_number || '—') + '</b></div>' +
+        '<div class="usg-box"><span>🙋 Nombre del usuario</span><b>' + esc(r.customer_name || '—') + '</b></div>' +
+        '<div class="usg-box full"><span>📍 Dirección tienda</span><b>' + esc(r.store_address || '—') + '</b></div>' +
+      '</div>' +
+      (det ? '<button class="usg-more" type="button" data-i="' + i + '">Ver todo lo que editó ▾</button><div class="usg-det" id="usgdet_' + i + '">' + det + '</div>' : '') +
+    '</div>';
+  }).join('') : '<p style="padding:14px;color:#a1a1aa;font-size:13px;text-align:center">Sin registros todavía</p>';
+}
+
+$('admHistBtn').addEventListener('click', () => { $('usagePanel').style.display = 'block'; loadUsage(); });
+$('usgClose').addEventListener('click', () => $('usagePanel').style.display = 'none');
+$('usgRefresh').addEventListener('click', loadUsage);
+$('usgSearch').addEventListener('input', renderUsage);
+$('usgChips').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  usgFilter = c.dataset.f;
+  document.querySelectorAll('#usgChips .chip').forEach(x => x.classList.toggle('on', x === c));
+  renderUsage();
+});
+$('usageList').addEventListener('click', e => {
+  const b = e.target.closest('.usg-more'); if (!b) return;
+  const det = $('usgdet_' + b.dataset.i);
+  if (!det) return;
+  const on = det.classList.toggle('show');
+  b.textContent = on ? 'Ocultar ▴' : 'Ver todo lo que editó ▾';
+});
 $('admSearch').addEventListener('input', renderAdmin);$('admChips').addEventListener('click', e => {
   const c = e.target.closest('.chip'); if (!c) return;
   admFilter = c.dataset.f;
