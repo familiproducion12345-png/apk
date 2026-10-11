@@ -1184,17 +1184,20 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                             </button>
                         </div>
                         <div id="verification-order-flow" class="hidden">
-                            <div class="flex items-center gap-3 text-[15.5px] text-gray-800 dark:text-[#e0e0e0] mb-5 mt-1">
-                                <span class="shrink-0 flex items-center justify-center text-gray-800 dark:text-[#e0e0e0]">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="5" width="20" height="14" rx="4"></rect>
-                                        <circle cx="8" cy="12" r="2.5"></circle>
-                                        <path d="M10.5 12h5.5"></path>
-                                        <path d="M13.5 12v3"></path>
-                                        <path d="M16 12v3"></path>
+                            <div class="flex items-center gap-2.5 text-[14px] text-gray-800 dark:text-[#e0e0e0] mb-3.5">
+                                <span class="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-gray-900 dark:border-[#e0e0e0] flex items-center justify-center shrink-0 text-gray-900 dark:text-[#e0e0e0]">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="7.5" cy="12" r="3.4"></circle>
+                                        <path d="M11 12h9.5"></path>
+                                        <path d="M17.5 12V9.5"></path>
                                     </svg>
                                 </span>
-                                <span contenteditable="false" data-editable="true" class="font-medium tracking-wide">Código de verificación</span>
+                                <span contenteditable="false" data-editable="true" class="font-medium">Código de verificación</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 text-[14px] text-gray-800 dark:text-[#e0e0e0] mb-5">
+                                <span class="w-[18px] h-[18px] rounded-[4px] border-[1.5px] border-gray-900 dark:border-[#e0e0e0] flex items-center justify-center text-[11px] font-bold shrink-0" contenteditable="false" data-editable="true">$</span>
+                                <span contenteditable="false" data-editable="true" class="font-medium">Transferencia (plataforma a tienda)</span>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                             </div>
                             <button id="btn-verification-action" class="w-full bg-[#ff5a00] text-white font-bold h-[42px] rounded-[15px] text-[16px] transition active:scale-[0.98] flex justify-center items-center">
                                 <span contenteditable="false" data-editable="true">Ingresar código de verificación</span>
@@ -2120,7 +2123,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             liveClockInterval = setInterval(tick, 1000);
         }
 
-        btnOrderAction.addEventListener('click', () => {
+        function confirmOrderPickup() {
             if (!speechEngineUnlocked && 'speechSynthesis' in window) {
                 const silentUtterance = new SpeechSynthesisUtterance('');
                 silentUtterance.volume = 0;
@@ -2155,7 +2158,9 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             slideText.classList.add('text-white');
             
             if (slideFillBar) slideFillBar.style.display = 'none';
-        });
+        }
+
+        btnOrderAction.addEventListener('click', confirmOrderPickup);
 
         const sliderContainer = document.getElementById('slide-to-exit-container');
         const slideThumb = document.getElementById('slide-thumb');
@@ -2479,6 +2484,8 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                     normalOrderFlow.classList.remove('hidden');
                     isVerificationMode = false;
                     btnToggleVerification.innerHTML = `<i class="fa-solid fa-shield-halved text-[#ff5a00]"></i> Código Verificación`;
+                    // Código correcto: queda directamente confirmado en verde ("Tengo el pedido") y se activa el deslizador
+                    confirmOrderPickup();
                 }, 400);
             }
         }
