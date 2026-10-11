@@ -1031,56 +1031,116 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
     </div>
 
     <!-- ========================================================= -->
-    <!-- CHAT FALSO UNIFICADO                                      -->
+    <!-- CHAT FALSO UNIFICADO (diseño pantalla completa)           -->
     <!-- ========================================================= -->
-    <div id="chat-modal-overlay" class="fixed inset-0 bg-black/50 z-[2500] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
-        <div id="chat-modal-content" class="bg-[#f5f6f8] dark:bg-[#1e2128] w-full sm:max-w-md sm:mx-auto h-[85vh] rounded-t-[28px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
+    <style>
+        .cht, .cht * { font-family: Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif; }
+        .cht { background: #f3f4f6; color: #222; }
+        .cht-head { position: relative; flex-shrink: 0; height: 44px; box-sizing: content-box; padding-top: env(safe-area-inset-top, 0px); display: flex; align-items: center; background: #ffffff; box-shadow: 0 1px 0 #ececef; z-index: 3; }
+        .cht-back { position: relative; z-index: 2; width: 48px; height: 44px; display: flex; align-items: center; justify-content: center; background: none; border: 0; color: #222; cursor: pointer; }
+        .cht-back:active { opacity: .55; }
+        .cht-title { position: absolute; left: 0; right: 0; bottom: 0; height: 44px; line-height: 44px; padding: 0 56px; text-align: center; font-size: 17px; font-weight: 700; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; pointer-events: none; }
+        .cht-wrap { position: relative; flex: 1 1 auto; min-height: 0; display: flex; }
+        .cht-body { flex: 1 1 auto; overflow-y: auto; padding: 12px 0 30px; -webkit-overflow-scrolling: touch; }
+        .cht-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; pointer-events: none; background: linear-gradient(to bottom, rgba(243,244,246,0), #f3f4f6); }
+        .cht-time { text-align: center; font-size: 13px; line-height: 16px; color: #9a9ba1; margin: 0 0 20px; }
+        .cht-row { display: flex; align-items: flex-start; margin-bottom: 18px; }
+        .cht-row.cht-own { justify-content: flex-end; padding-right: 10px; }
+        .cht-row.cht-other { justify-content: flex-start; padding-left: 10px; }
+        .cht-col { display: flex; flex-direction: column; max-width: 66%; min-width: 0; }
+        .cht-own .cht-col { align-items: flex-end; margin-right: 11px; }
+        .cht-other .cht-col { align-items: flex-start; margin-left: 11px; }
+        .cht-bub { font-size: 16px; line-height: 21px; padding: 7px 11px; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
+        .cht-own .cht-bub { background: #747587; color: #ffffff; border-radius: 10px 0 10px 10px; }
+        .cht-other .cht-bub { background: #ffffff; color: #222; border-radius: 0 9px 9px 9px; box-shadow: 0 1px 3px rgba(0,0,0,.05); padding: 9px 12px; }
+        .cht-img { display: block; width: 190px; max-width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px 0 10px 10px; background: #dcdde3; }
+        .cht-status { margin-top: 6px; font-size: 14px; line-height: 17px; color: #8e8f94; }
+        .cht-av { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 1px solid #e2e3e8; box-sizing: border-box; background: #ffffff; }
+        .cht-av svg, .cht-av img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .cht-av-c { background: linear-gradient(180deg, #ffd9b8, #ffbc8a); }
+        .cht-av-d { background: linear-gradient(180deg, #e6e9f1, #c4cadc); cursor: pointer; }
+        .cht-panel { position: relative; flex-shrink: 0; background: #fdfdff; border-radius: 16px 16px 0 0; box-shadow: 0 -1px 6px rgba(0,0,0,.05); padding: 15px 14px calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 14px; z-index: 3; }
+        .cht-ic { position: relative; flex: 0 0 24px; width: 24px; height: 24px; padding: 0; border: 0; background: none; color: #66676c; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .cht-ic::before { content: ''; position: absolute; top: -9px; right: -7px; bottom: -9px; left: -7px; }
+        .cht-ic svg { width: 24px; height: 24px; display: block; }
+        .cht-ic:active { opacity: .55; }
+        .cht-pill { flex: 1 1 auto; min-width: 0; min-height: 49px; box-sizing: border-box; border: 1px solid #dedfe4; border-radius: 20px; background: #fdfdff; display: flex; align-items: center; padding: 5px 10px; }
+        .cht-input { flex: 1 1 auto; min-width: 0; max-height: 95px; overflow-y: auto; outline: none !important; font-size: 17px; line-height: 19px; color: #222; white-space: pre-wrap; word-break: break-word; user-select: text !important; -webkit-user-select: text !important; }
+        .cht-input:empty::before { content: attr(data-ph); color: #c5c6cb; pointer-events: none; }
+        body.edit-mode .cht-input.cht-input { outline: none !important; background: none !important; }
+        .cht-send { display: none; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; border: 0; background: #747587; color: #fff; padding: 0; cursor: pointer; align-items: center; justify-content: center; }
+        .cht-send:active { opacity: .7; }
+        .cht-quick { position: absolute; left: 14px; right: 14px; bottom: 8px; background: #ffffff; border-radius: 14px; box-shadow: 0 4px 18px rgba(0,0,0,.14); padding: 6px; display: none; flex-direction: column; z-index: 4; }
+        .cht-quick button { text-align: left; background: none; border: 0; padding: 11px 12px; font-size: 15px; line-height: 20px; color: #222; border-radius: 10px; cursor: pointer; }
+        .cht-quick button:active { background: #f1f2f5; }
+        html.dark .cht { background: #1e2128; color: #fff; }
+        html.dark .cht-head { background: #2a2e37; box-shadow: 0 1px 0 #363b46; }
+        html.dark .cht-back, html.dark .cht-title { color: #ffffff; }
+        html.dark .cht-fade { background: linear-gradient(to bottom, rgba(30,33,40,0), #1e2128); }
+        html.dark .cht-time { color: #8a8d95; }
+        html.dark .cht-status { color: #8a8d95; }
+        html.dark .cht-own .cht-bub { background: #5c5e74; }
+        html.dark .cht-other .cht-bub { background: #2a2e37; color: #ffffff; box-shadow: none; }
+        html.dark .cht-av { border-color: #363b46; }
+        html.dark .cht-panel { background: #262a32; box-shadow: 0 -1px 6px rgba(0,0,0,.3); }
+        html.dark .cht-pill { background: #262a32; border-color: #3a3f4b; }
+        html.dark .cht-input { color: #ffffff; }
+        html.dark .cht-input:empty::before { color: #6f737d; }
+        html.dark .cht-ic { color: #c9cad0; }
+        html.dark .cht-quick { background: #2a2e37; }
+        html.dark .cht-quick button { color: #ffffff; }
+        html.dark .cht-quick button:active { background: #363b46; }
+    </style>
+    <div id="chat-modal-overlay" class="fixed inset-0 bg-black/50 z-[2500] hidden flex-col justify-end sm:justify-center opacity-0 transition-opacity duration-300">
+        <div id="chat-modal-content" class="cht w-full sm:max-w-md sm:mx-auto h-full sm:h-[92vh] sm:rounded-[30px] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300 overflow-hidden">
             <!-- Header Chat -->
-            <div class="bg-white dark:bg-[#2a2e37] px-4 py-3.5 flex items-center justify-between border-b border-gray-200 dark:border-[#363b46] shrink-0">
-                <div class="flex items-center gap-3">
-                    <button id="btn-close-chat" class="text-gray-800 dark:text-white p-1 active:scale-95">
-                        <i class="fa-solid fa-arrow-left text-[18px]"></i>
-                    </button>
-                    <div class="w-10 h-10 rounded-full bg-[#ff5a00]/10 text-[#ff5a00] flex items-center justify-center font-black text-lg">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-[16px] text-gray-900 dark:text-white leading-tight" id="chat-contact-title">Soporte / Usuario</h3>
-                        <span class="text-[12px] text-emerald-600 font-medium flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> En línea
-                        </span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                    <a id="chat-call-direct" href="tel:+573001234567" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#363b46] flex items-center justify-center active:scale-95">
-                        <i class="fa-solid fa-phone text-sm"></i>
-                    </a>
-                </div>
+            <div class="cht-head">
+                <button id="btn-close-chat" type="button" class="cht-back" aria-label="Volver">
+                    <svg width="14" height="22" viewBox="0 0 14 22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5 3 11l8.500 8.500"/></svg>
+                </button>
+                <h3 id="chat-contact-title" class="cht-title">Usuario7236</h3>
+                <a id="chat-call-direct" href="tel:+573001234567" style="display:none" aria-hidden="true" tabindex="-1"></a>
             </div>
 
             <!-- Cuerpo de Mensajes -->
-            <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-                <div class="flex justify-start">
-                    <div class="bg-white dark:bg-[#2a2e37] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">
-                        ¡Hola! ¿Tienes alguna novedad con el pedido o la entrega?
-                    </div>
-                </div>
-                <div class="flex justify-end">
-                    <div class="bg-[#ff5a00] text-white px-4 py-2.5 rounded-2xl rounded-tr-sm max-w-[80%] text-[14.5px] shadow-sm">
-                        Hola, voy en camino hacia la dirección indicada.
-                    </div>
+            <div class="cht-wrap">
+                <div id="chat-messages-container" class="cht-body"></div>
+                <div class="cht-fade"></div>
+                <div id="chat-quick-panel" class="cht-quick">
+                    <button type="button" data-q="Buenas tardes, estoy en la dirección indicada, gracias.">Buenas tardes, estoy en la dirección indicada, gracias.</button>
+                    <button type="button" data-q="Ya estoy afuera esperando su pedido.">Ya estoy afuera esperando su pedido.</button>
+                    <button type="button" data-q="¿Puede bajar a recibir?">¿Puede bajar a recibir?</button>
+                    <button type="button" data-q="Voy en camino, llego en unos minutos.">Voy en camino, llego en unos minutos.</button>
+                    <button type="button" data-q="No lo veo, ¿me puede dar más indicaciones?">No lo veo, ¿me puede dar más indicaciones?</button>
                 </div>
             </div>
 
-            <!-- Input de Enviar Mensaje -->
-            <div class="bg-white dark:bg-[#2a2e37] p-3 border-t border-gray-200 dark:border-[#363b46] flex items-center gap-2 shrink-0">
-                <input type="text" id="chat-input-message" placeholder="Escribe un mensaje..." class="flex-1 bg-[#f5f6f8] dark:bg-[#363b46] text-gray-900 dark:text-white px-4 py-3 rounded-full text-[14.5px] outline-none border border-transparent focus:border-[#ff5a00]">
-                <button id="btn-send-message" class="w-11 h-11 bg-[#ff5a00] text-white rounded-full flex items-center justify-center active:scale-95 shrink-0 shadow-md">
-                    <i class="fa-solid fa-paper-plane text-sm"></i>
+            <!-- Barra de Enviar Mensaje -->
+            <div class="cht-panel">
+                <button id="chat-btn-mic" type="button" class="cht-ic" aria-label="Mensaje de voz">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22.500" stroke="currentColor" stroke-width="2.6"/><rect x="20.500" y="12" width="7" height="15" rx="3.500" fill="currentColor"/><path d="M16.500 23.500a7.500 7.500 0 0 0 15 0" stroke="currentColor" stroke-width="2.600" stroke-linecap="round"/><path d="M24 31v4" stroke="currentColor" stroke-width="2.600" stroke-linecap="round"/></svg>
+                </button>
+                <div class="cht-pill">
+                    <div id="chat-input-message" class="cht-input" contenteditable="true" role="textbox" aria-label="Mensaje" data-ph="Ingresa tu mensaje aquí" spellcheck="false"></div>
+                </div>
+                <button id="chat-btn-quick" type="button" class="cht-ic" aria-label="Mensajes rápidos">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22.500" stroke="currentColor" stroke-width="2.600"/><path d="M15.500 13h17a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H26l-6.500 5.500V30h-4a3 3 0 0 1-3-3V16a3 3 0 0 1 3-3z" fill="currentColor"/><path d="M19 19.500h10M19 24.500h6" stroke="#ffffff" stroke-width="2.200" stroke-linecap="round"/></svg>
+                </button>
+                <button id="chat-btn-camera" type="button" class="cht-ic" aria-label="Cámara">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22.500" stroke="currentColor" stroke-width="2.600"/><path d="M12.500 18.500a3 3 0 0 1 3-3h3l1.800-3h9.400l1.800 3h3a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3h-19a3 3 0 0 1-3-3z" fill="currentColor"/><circle cx="24" cy="25" r="5" stroke="#ffffff" stroke-width="2.600"/></svg>
+                </button>
+                <button id="chat-btn-plus" type="button" class="cht-ic" aria-label="Adjuntar imagen">
+                    <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22.500" stroke="currentColor" stroke-width="2.600"/><path d="M24 13.500v21M13.500 24h21" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                </button>
+                <button id="btn-send-message" type="button" class="cht-send" aria-label="Enviar">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.800" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.500 11.500 12 5l6.500 6.500"/></svg>
                 </button>
             </div>
         </div>
     </div>
+    <input type="file" id="chat-image-gallery" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index:-100;">
+    <input type="file" id="chat-image-camera" accept="image/*" capture="environment" class="w-0 h-0 absolute opacity-0" style="z-index:-100;">
+    <input type="file" id="chat-avatar-input" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index:-100;">
 
     <input type="file" id="image-file-input" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index: -100;">
     <input type="file" id="logo-file-input" accept="image/*" class="w-0 h-0 absolute opacity-0" style="z-index: -100;">
@@ -1763,7 +1823,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         }
 
         // ===============================================
-        // CHAT FALSO INTERACTIVO
+        // CHAT FALSO INTERACTIVO (diseño pantalla completa)
         // ===============================================
         const chatModalOverlay = document.getElementById('chat-modal-overlay');
         const chatModalContent = document.getElementById('chat-modal-content');
@@ -1771,17 +1831,135 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         const chatMessagesContainer = document.getElementById('chat-messages-container');
         const chatInputMessage = document.getElementById('chat-input-message');
         const btnSendMessage = document.getElementById('btn-send-message');
+        const chatBtnMic = document.getElementById('chat-btn-mic');
+        const chatBtnQuick = document.getElementById('chat-btn-quick');
+        const chatBtnCamera = document.getElementById('chat-btn-camera');
+        const chatBtnPlus = document.getElementById('chat-btn-plus');
+        const chatQuickPanel = document.getElementById('chat-quick-panel');
+        const chatImageGallery = document.getElementById('chat-image-gallery');
+        const chatImageCamera = document.getElementById('chat-image-camera');
+        const chatAvatarInput = document.getElementById('chat-avatar-input');
+        const chatContactTitle = document.getElementById('chat-contact-title');
+
+        const CHT_AVATAR_KEY = 'didi_chat_driver_avatar_v1';
+        const CHT_SILHOUETTE = '<svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#fdf8f4" d="M20 7.500c-3.600 0-6 2.700-6 6.600 0 3 1.200 5.400 3 6.600-1 .9-2.600 1.400-4.600 2.200C9 24.100 7.400 26.300 7 30l1.500 4h23L33 30c-.4-3.700-2-5.900-5.400-7.100-2-.8-3.600-1.300-4.600-2.200 1.800-1.200 3-3.600 3-6.600 0-3.900-2.400-6.600-6-6.600z"/></svg>';
+        let chtDriverPhoto = '';
+        try { chtDriverPhoto = localStorage.getItem(CHT_AVATAR_KEY) || ''; } catch (e) {}
+        let chtLastTime = 0;
+
+        function chtFormatTime(d) {
+            let h = d.getHours(), m = d.getMinutes();
+            const ap = h >= 12 ? 'pm' : 'am';
+            h = h % 12 || 12;
+            return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+        }
+
+        function chtDriverAvatarInner() {
+            return chtDriverPhoto ? '<img src="' + chtDriverPhoto + '" alt="">' : CHT_SILHOUETTE;
+        }
+
+        function chtScrollBottom() {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
+
+        function chtAddTime(date) {
+            const t = document.createElement('div');
+            t.className = 'cht-time';
+            t.textContent = chtFormatTime(date);
+            chatMessagesContainer.appendChild(t);
+        }
+
+        // side: 'own' (repartidor, derecha) | 'other' (cliente, izquierda)
+        function chtAddMessage(side, content, opts) {
+            opts = opts || {};
+            const when = opts.time || new Date();
+            if (!chtLastTime || (when.getTime() - chtLastTime) >= 5 * 60 * 1000) chtAddTime(when);
+            chtLastTime = when.getTime();
+
+            const row = document.createElement('div');
+            row.className = 'cht-row ' + (side === 'own' ? 'cht-own' : 'cht-other');
+            const col = document.createElement('div');
+            col.className = 'cht-col';
+
+            if (opts.image) {
+                const img = document.createElement('img');
+                img.className = 'cht-img';
+                img.alt = '';
+                img.src = opts.image;
+                img.addEventListener('load', chtScrollBottom);
+                col.appendChild(img);
+            } else {
+                const bub = document.createElement('div');
+                bub.className = 'cht-bub';
+                bub.textContent = content;
+                col.appendChild(bub);
+            }
+
+            if (side === 'own') {
+                const st = document.createElement('div');
+                st.className = 'cht-status';
+                st.textContent = opts.read ? 'Leído' : 'No leído';
+                col.appendChild(st);
+            }
+
+            const av = document.createElement('div');
+            if (side === 'own') {
+                av.className = 'cht-av cht-av-d';
+                av.title = 'Cambiar foto';
+                av.innerHTML = chtDriverAvatarInner();
+                av.addEventListener('click', () => chatAvatarInput.click());
+                row.appendChild(col);
+                row.appendChild(av);
+            } else {
+                av.className = 'cht-av cht-av-c';
+                av.innerHTML = CHT_SILHOUETTE;
+                row.appendChild(av);
+                row.appendChild(col);
+            }
+            chatMessagesContainer.appendChild(row);
+            chtScrollBottom();
+            return row;
+        }
+
+        function chtMarkAllRead() {
+            chatMessagesContainer.querySelectorAll('.cht-status').forEach(s => { s.textContent = 'Leído'; });
+        }
+
+        function chtAutoReply(text) {
+            setTimeout(() => {
+                chtMarkAllRead();
+                chtAddMessage('other', text);
+            }, 1000);
+        }
+
+        // Mensajes iniciales de la conversación
+        (function chtInit() {
+            const now = Date.now();
+            chtAddMessage('other', '¡Hola! ¿Tienes alguna novedad con el pedido o la entrega?', { time: new Date(now - 8 * 60000) });
+            chtAddMessage('own', 'Hola, voy en camino hacia la dirección indicada.', { time: new Date(now - 3 * 60000) });
+        })();
+
+        function chtSyncTitle() {
+            const src = document.getElementById('stage1-order-title');
+            if (!src || !chatContactTitle) return;
+            const name = (src.textContent || '').replace(/^\s*#\s*\d+\s*/, '').trim();
+            if (name) chatContactTitle.textContent = name;
+        }
+
+        function chtCloseQuick() { chatQuickPanel.style.display = 'none'; }
 
         function openChatModal() {
+            chtSyncTitle();
             chatModalOverlay.classList.remove('hidden');
             chatModalOverlay.style.display = 'flex';
             void chatModalOverlay.offsetWidth;
             chatModalOverlay.classList.remove('opacity-0');
             chatModalContent.classList.remove('translate-y-full');
-            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            chtScrollBottom();
         }
 
         function closeChatModal() {
+            chtCloseQuick();
             chatModalOverlay.classList.add('opacity-0');
             chatModalContent.classList.add('translate-y-full');
             setTimeout(() => {
@@ -1799,34 +1977,92 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 
         if (btnCloseChat) btnCloseChat.addEventListener('click', closeChatModal);
 
-        function sendUserMessage() {
-            const text = chatInputMessage.value.trim();
+        // Mostrar el botón enviar cuando hay texto (reemplaza al "+")
+        function chtUpdateSendState() {
+            if (chatInputMessage.textContent.trim() === '') chatInputMessage.innerHTML = '';
+            const has = chatInputMessage.textContent.trim() !== '';
+            btnSendMessage.style.display = has ? 'flex' : 'none';
+            chatBtnPlus.style.display = has ? 'none' : 'flex';
+        }
+
+        function sendUserMessage(forced) {
+            const raw = (typeof forced === 'string') ? forced : chatInputMessage.innerText;
+            const text = (raw || '').trim();
             if (!text) return;
-
-            // Añadir mensaje del repartidor
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'flex justify-end';
-            userMsgDiv.innerHTML = `<div class="bg-[#ff5a00] text-white px-4 py-2.5 rounded-2xl rounded-tr-sm max-w-[80%] text-[14.5px] shadow-sm">${text}</div>`;
-            chatMessagesContainer.appendChild(userMsgDiv);
-            chatInputMessage.value = '';
-            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-
-            // Respuesta automática simulada
-            setTimeout(() => {
-                const replyDiv = document.createElement('div');
-                replyDiv.className = 'flex justify-start';
-                replyDiv.innerHTML = `<div class="bg-white dark:bg-[#2a2e37] text-gray-900 dark:text-white px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[80%] text-[14.5px] shadow-sm">Entendido, quedo atento a tu llegada. ¡Muchas gracias!</div>`;
-                chatMessagesContainer.appendChild(replyDiv);
-                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-            }, 1000);
+            chtAddMessage('own', text);
+            chatInputMessage.innerHTML = '';
+            chtUpdateSendState();
+            chtCloseQuick();
+            chtAutoReply('Entendido, quedo atento a tu llegada. ¡Muchas gracias!');
         }
 
-        if (btnSendMessage) btnSendMessage.addEventListener('click', sendUserMessage);
+        function chtSendImage(file) {
+            if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+            chtCloseQuick();
+            chtAddMessage('own', '', { image: URL.createObjectURL(file) });
+            chtAutoReply('¡Listo, ya lo vi! Gracias.');
+        }
+
+        if (btnSendMessage) btnSendMessage.addEventListener('click', () => sendUserMessage());
         if (chatInputMessage) {
+            chatInputMessage.addEventListener('input', chtUpdateSendState);
             chatInputMessage.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') sendUserMessage();
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendUserMessage(); }
             });
+            chatInputMessage.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const t = (e.clipboardData || window.clipboardData).getData('text');
+                document.execCommand('insertText', false, t);
+            });
+            chatInputMessage.addEventListener('focus', chtCloseQuick);
         }
+
+        // Mensajes rápidos
+        if (chatBtnQuick) chatBtnQuick.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatQuickPanel.style.display = (chatQuickPanel.style.display === 'flex') ? 'none' : 'flex';
+        });
+        chatQuickPanel.querySelectorAll('button[data-q]').forEach(b => {
+            b.addEventListener('click', () => sendUserMessage(b.getAttribute('data-q')));
+        });
+        chatMessagesContainer.addEventListener('click', chtCloseQuick);
+
+        // Cámara y adjuntar imagen
+        if (chatBtnCamera) chatBtnCamera.addEventListener('click', () => { chtCloseQuick(); chatImageCamera.click(); });
+        if (chatBtnPlus) chatBtnPlus.addEventListener('click', () => { chtCloseQuick(); chatImageGallery.click(); });
+        [chatImageGallery, chatImageCamera].forEach(inp => {
+            inp.addEventListener('change', () => {
+                if (inp.files && inp.files[0]) chtSendImage(inp.files[0]);
+                inp.value = '';
+            });
+        });
+
+        // Micrófono (solo visual, igual que el diseño original)
+        if (chatBtnMic) chatBtnMic.addEventListener('click', () => { chtCloseQuick(); });
+
+        // Foto de perfil del repartidor (toca tu avatar en el chat)
+        chatAvatarInput.addEventListener('change', () => {
+            const file = chatAvatarInput.files && chatAvatarInput.files[0];
+            chatAvatarInput.value = '';
+            if (!file || file.type.indexOf('image/') !== 0) return;
+            const fr = new FileReader();
+            fr.onload = () => {
+                const im = new Image();
+                im.onload = () => {
+                    const S = 120;
+                    const cv = document.createElement('canvas');
+                    cv.width = S; cv.height = S;
+                    const cx = cv.getContext('2d');
+                    const side = Math.min(im.width, im.height);
+                    cx.drawImage(im, (im.width - side) / 2, (im.height - side) / 2, side, side, 0, 0, S, S);
+                    chtDriverPhoto = cv.toDataURL('image/jpeg', 0.85);
+                    try { localStorage.setItem(CHT_AVATAR_KEY, chtDriverPhoto); } catch (e) {}
+                    chatMessagesContainer.querySelectorAll('.cht-av-d').forEach(a => { a.innerHTML = chtDriverAvatarInner(); });
+                };
+                im.src = fr.result;
+            };
+            fr.readAsDataURL(file);
+        });
 
         // ===============================================
         // PANEL DESLIZABLE ETAPA 2
