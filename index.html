@@ -900,6 +900,52 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         #guide-card { animation: guideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes guideIn { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
+    <style>
+        /* ===== OPINIÓN SOBRE LA TIENDA (Etapa 1) · medidas tomadas de la app original ===== */
+        .fb-card { background: #f5f5f7; border-radius: 20px; padding: 17px 16px 35px; }
+        html.dark .fb-card { background: #2a2e37; }
+        .fb-q { font-size: 13.3px; line-height: 18px; font-weight: 400; color: #555558; }
+        html.dark .fb-q { color: #a0a0a0; }
+        .fb-row { position: relative; display: flex; align-items: center; height: 33px; margin: 28px -16px 0; }
+        .fb-btn { display: flex; align-items: center; justify-content: center; gap: 12.4px; height: 33px; background: none; border: 0; padding: 0; cursor: pointer; color: #000; font-size: 14.5px; font-weight: 700; line-height: 1; -webkit-tap-highlight-color: transparent; font-family: inherit; }
+        html.dark .fb-btn { color: #fff; }
+        .fb-btn:active { opacity: .6; }
+        .fb-left { flex: 0 0 46.76%; }
+        .fb-right { flex: 1 1 auto; margin-right: 21px; }
+        .fb-ico { width: 32.7px; height: 32.7px; flex: none; color: #b9b9bb; }
+        html.dark .fb-ico { color: #6a707c; }
+        .fb-ico-down { transform: translateY(1.7px); }
+        .fb-div { position: absolute; left: 46.76%; top: 6.8px; width: 1px; height: 19.5px; background: #dedee0; }
+        html.dark .fb-div { background: #454b58; }
+
+        /* ===== PANTALLA DE MOTIVOS (No / Sí) ===== */
+        #fb-overlay { position: fixed; inset: 0; z-index: 2100; display: none; background: rgba(0,0,0,.6); opacity: 0; transition: opacity .25s ease; }
+        #fb-overlay.show { display: block; }
+        #fb-overlay.open { opacity: 1; }
+        .fb-sheet { position: absolute; left: 0; right: 0; bottom: 0; top: 39px; background: #fff; color: #000; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .3s cubic-bezier(.16,1,.3,1); }
+        #fb-overlay.open .fb-sheet { transform: none; }
+        html.dark .fb-sheet { background: #1e2128; color: #fff; }
+        .fb-head { position: relative; flex: none; height: 53px; }
+        .fb-x { position: absolute; left: 12px; top: 7px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: none; border: 0; padding: 0; cursor: pointer; color: inherit; -webkit-tap-highlight-color: transparent; }
+        .fb-title { position: absolute; left: 0; right: 0; top: 0; height: 53px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; pointer-events: none; }
+        .fb-scroll { flex: 1 1 auto; overflow-y: auto; padding: 14px 23px 12px; -webkit-overflow-scrolling: touch; }
+        .fb-sub { display: none; font-size: 15px; line-height: 20px; color: #666669; margin: 0 1px 37px; }
+        html.dark .fb-sub { color: #a0a0a0; }
+        .fb-sub.on { display: block; }
+        .fb-chip { display: block; width: fit-content; max-width: 100%; text-align: left; margin: 0 0 12px; padding: 11px 12px; border: 1px solid #e0e0e0; border-radius: 3px; background: #fff; color: #000; font-family: inherit; font-size: 11px; line-height: 13.5px; font-weight: 400; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        html.dark .fb-chip { background: #2a2e37; border-color: #454b58; color: #fff; }
+        .fb-chip.sel { border-color: #ff5a00; background: #fff4ed; color: #ea580c; }
+        html.dark .fb-chip.sel { background: rgba(255,90,0,.16); color: #ff8a4a; }
+        .fb-ta { position: relative; }
+        .fb-ta textarea { display: block; width: 100%; height: 74px; resize: none; border: 0; outline: 0; background: #f5f5f7; border-radius: 4px; padding: 13px 16px 22px; font-family: inherit; font-size: 14.5px; line-height: 20px; color: #111; }
+        html.dark .fb-ta textarea { background: #2a2e37; color: #fff; }
+        .fb-ta textarea::placeholder { color: #77777b; opacity: 1; }
+        #fb-count { position: absolute; right: 16px; top: 31px; font-size: 11px; line-height: 14px; color: #848486; pointer-events: none; }
+        .fb-foot { flex: none; padding: 8px 23px 19px; }
+        .fb-send { width: 100%; height: 52.5px; border: 0; border-radius: 15px; color: #fff; font-family: inherit; font-size: 17px; font-weight: 700; padding-top: 2px; cursor: pointer; background: linear-gradient(90deg, #ff600f, #ff7e3d); transition: background .2s; }
+        .fb-send:disabled { background: #fed8c5; cursor: default; }
+        .fb-send:not(:disabled):active { transform: scale(.985); }
+    </style>
 </head>
 <body class="bg-gray-100 dark:bg-[#1e2128] text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
 
@@ -1171,16 +1217,17 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="m9 18 6-6-6-6"/></svg>
                     </div>
 
-                    <div class="bg-[#f5f6f8] dark:bg-[#2a2e37] rounded-2xl p-4">
-                        <p contenteditable="false" data-editable="true" class="text-[13px] text-gray-500 dark:text-[#a0a0a0] font-medium mb-3">¿Te gustó el servicio de la tienda?</p>
-                        <div class="flex items-center justify-evenly pt-1 pb-1">
-                            <button class="flex items-center gap-2 text-gray-800 dark:text-white font-bold text-[14px]">
-                                <i class="fa-regular fa-thumbs-down text-[18px]"></i>
+                    <!-- OPINIÓN SOBRE LA TIENDA: al tocar No o Sí se abre la pantalla de motivos -->
+                    <div class="fb-card">
+                        <p contenteditable="false" data-editable="true" class="fb-q">¿Te gustó el servicio de la tienda?</p>
+                        <div class="fb-row">
+                            <button id="fb-open-no" type="button" class="fb-btn fb-left" aria-label="No me gustó">
+                                <svg class="fb-ico fb-ico-down" viewBox="100 84 348 348" fill="none" stroke="currentColor" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M437 226 L437 118 Q437 96 415 96 L172 96 Q155 96 150 112 L113 244 Q108 270 132 276 L238 288 Q260 292 254 308 L232 342 Q222 362 236 382 L262 416 Q272 428 284 414 L304 360 Q320 306 348 294 Q356 290 366 290 L408 290"/><path d="M375 118 L375 190"/></svg>
                                 <span contenteditable="false" data-editable="true">No</span>
                             </button>
-                            <div class="h-6 w-[1px] bg-gray-300 dark:bg-[#454b58]"></div>
-                            <button class="flex items-center gap-2 text-gray-800 dark:text-white font-bold text-[14px]">
-                                <i class="fa-regular fa-thumbs-up text-[18px]"></i>
+                            <div class="fb-div"></div>
+                            <button id="fb-open-si" type="button" class="fb-btn fb-right" aria-label="Sí me gustó">
+                                <svg class="fb-ico" viewBox="104 108 348 348" fill="none" stroke="currentColor" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M290 440 L140 440 Q120 440 120 420 L120 270 Q120 246 144 246 L196 246 Q222 244 238 214 Q254 184 258 150 Q262 122 284 120 Q306 120 318 146 Q336 182 322 218 Q316 240 340 246 L418 246 Q448 248 442 280 L414 396 Q408 430 380 438 L346 440"/><path d="M180 268 L180 350"/></svg>
                                 <span contenteditable="false" data-editable="true">Sí</span>
                             </button>
                         </div>
@@ -3166,6 +3213,123 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             if (!card.classList.contains('open')) return;
             if (card.contains(e.target)) return;
             setOpen(false);
+        });
+    })();
+    </script>
+
+
+    <!-- ====== PANTALLA DE MOTIVOS DE LA OPINIÓN (No / Sí) ====== -->
+    <div id="fb-overlay" aria-hidden="true">
+        <div class="fb-sheet" role="dialog" aria-modal="true" aria-labelledby="fb-title">
+            <div class="fb-head">
+                <button id="fb-close" type="button" class="fb-x" aria-label="Cerrar">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 3 L21 21 M21 3 L3 21"/></svg>
+                </button>
+                <div id="fb-title" class="fb-title">No</div>
+            </div>
+            <div class="fb-scroll">
+                <div id="fb-sub" class="fb-sub">Elige al menos un motivo</div>
+                <div id="fb-chips"></div>
+                <div class="fb-ta" id="fb-ta"><span id="fb-count">0/140</span></div>
+            </div>
+            <div class="fb-foot"><button id="fb-send" type="button" class="fb-send" disabled>Enviar</button></div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        var OPTS = {
+            no: {
+                title: 'No', required: true, sub: true,
+                placeholder: 'Dinos lo que no te gustó de la tienda',
+                items: [
+                    'Entregas lentas, esperas largas',
+                    'Personal poco amable',
+                    'Dirección incorrecta o tienda difícil de encontrar',
+                    'La tienda no actualizó el estado cuando el pedido estaba listo',
+                    'El pedido no estaba bien empaquetado',
+                    'La tienda dio prioridad a pedidos de otras plataformas de entregas',
+                    'La tienda debe mejorar sus estándares de higiene',
+                    'La dirección de la tienda fue difícil de encontrar'
+                ]
+            },
+            si: {
+                title: 'Sí', required: false, sub: false,
+                placeholder: 'Dinos lo que te gustó de la tienda',
+                items: [
+                    'Entregas rápidas, esperas cortas o nulas',
+                    'Artículos bien empaquetados',
+                    'Personal amable y respetuoso',
+                    'La tienda es fácil de encontrar/tiene estacionamiento adecuado',
+                    'La tienda actualizó el estado cuando el pedido estaba listo',
+                    'Priorizó a DiDi sobre otras plataformas de entregas'
+                ]
+            }
+        };
+        var $ = function (id) { return document.getElementById(id); };
+        var overlay = $('fb-overlay'), chipsBox = $('fb-chips'), sendBtn = $('fb-send'), countEl = $('fb-count');
+        if (!overlay || !chipsBox || !sendBtn) return;
+
+        // El cuadro de texto se crea por código (no se puede escribir su etiqueta dentro del archivo)
+        var ta = document.createElement('textarea');
+        ta.maxLength = 140;
+        ta.setAttribute('aria-label', 'Comentario');
+        $('fb-ta').insertBefore(ta, countEl);
+
+        var current = 'no', closeTimer = null;
+
+        function refresh() {
+            var n = chipsBox.querySelectorAll('.fb-chip.sel').length;
+            sendBtn.disabled = OPTS[current].required && n === 0;
+        }
+
+        function openFb(kind) {
+            // En modo edición (admin) los botones solo sirven para editar sus textos
+            if (document.body.classList.contains('edit-mode')) return;
+            clearTimeout(closeTimer);
+            current = kind;
+            var d = OPTS[kind];
+            $('fb-title').textContent = d.title;
+            $('fb-sub').classList.toggle('on', d.sub);
+            ta.placeholder = d.placeholder;
+            ta.value = '';
+            countEl.textContent = '0/140';
+            chipsBox.innerHTML = '';
+            d.items.forEach(function (t) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'fb-chip';
+                b.textContent = t;
+                b.addEventListener('click', function () { b.classList.toggle('sel'); refresh(); });
+                chipsBox.appendChild(b);
+            });
+            overlay.querySelector('.fb-scroll').scrollTop = 0;
+            refresh();
+            overlay.classList.add('show');
+            overlay.setAttribute('aria-hidden', 'false');
+            void overlay.offsetWidth;
+            overlay.classList.add('open');
+        }
+
+        function closeFb() {
+            overlay.classList.remove('open');
+            overlay.setAttribute('aria-hidden', 'true');
+            try { ta.blur(); } catch (e) {}
+            clearTimeout(closeTimer);
+            closeTimer = setTimeout(function () { overlay.classList.remove('show'); }, 320);
+        }
+
+        $('fb-open-no').addEventListener('click', function () { openFb('no'); });
+        $('fb-open-si').addEventListener('click', function () { openFb('si'); });
+        $('fb-close').addEventListener('click', closeFb);
+        ta.addEventListener('input', function () { countEl.textContent = ta.value.length + '/140'; });
+        sendBtn.addEventListener('click', function () {
+            if (sendBtn.disabled) return;
+            closeFb();
+            if (typeof appToast === 'function') appToast('¡Gracias por tu opinión!');
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.classList.contains('open')) closeFb();
         });
     })();
     </script>
