@@ -541,9 +541,16 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
     <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Leaflet JS & CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Google Maps JavaScript API (mapa oficial) -->
+    <script>
+        window.gmapsLoaded = false;
+        window.gmapsWanted = false;
+        window.__gmapsReady = function () {
+            window.gmapsLoaded = true;
+            if (window.gmapsWanted && typeof initRealMaps === 'function') initRealMaps();
+        };
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZYPHFqv1cBrWMDHYh9jhWDR5JHJdi9aI&callback=__gmapsReady&loading=async&v=weekly&language=es&region=CO"></script>
     
     <!-- Fonts Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -630,13 +637,8 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             transition: background-color 0.3s ease;
         }
 
-        /* MODO OSCURO MAPA CORREGIDO */
+        /* MODO OSCURO MAPA: se aplica con estilos nativos de Google Maps (ver gmDarkStyle) */
         html.dark .real-map-container { background-color: #2a2e37; }
-        html.dark .real-map-container .leaflet-tile-pane {
-            filter: invert(100%) hue-rotate(180deg) brightness(105%) contrast(82%) saturate(.85) !important;
-        }
-
-        .leaflet-control-attribution { display: none !important; }
 
         /* Bottom Sheet Etapa 2 Adaptable */
         .bottom-sheet {
@@ -2192,11 +2194,79 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         let stage2BgRoute, stage2MainRoute, stage3BgRoute, stage3MainRoute;
         let markerStartStage2, markerEndStage2, markerStartStage3, markerEndStage3;
 
+        /* ===== Google Maps: helpers ===== */
+        const gmDarkStyle = [
+            { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+            { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+            { elementType: 'labels.text.fill', stylers: [{ color: '#9aa4b5' }] },
+            { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }] },
+            { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#8b95a7' }] },
+            { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#263c3f' }] },
+            { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#6b9a76' }] },
+            { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#38414e' }] },
+            { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#212a37' }] },
+            { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#9ca5b3' }] },
+            { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#746855' }] },
+            { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#1f2835' }] },
+            { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#f3d19c' }] },
+            { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2f3948' }] },
+            { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }] },
+            { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17263c' }] },
+            { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#515c6d' }] },
+            { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#17263c' }] }
+        ];
+        function gmLL(p) { return { lat: p[0], lng: p[1] }; }
+        function gmPath(coords) { return coords.map(gmLL); }
+        function updateMapsTheme() {
+            if (!window.google || !google.maps) return;
+            [mapStage2, mapStage3].forEach(m => { if (m) m.setOptions({ styles: isDarkMode ? gmDarkStyle : [] }); });
+        }
+        function gmResize(map) {
+            if (map && window.google && google.maps) google.maps.event.trigger(map, 'resize');
+        }
+        // Recalcula el tamaño del mapa (útil si estaba oculto) y encuadra la ruta con márgenes
+        function gmRefit(map, route, pad) {
+            if (!map || !route || !window.google || !google.maps) return;
+            gmResize(map);
+            const b = new google.maps.LatLngBounds();
+            route.getPath().forEach(p => b.extend(p));
+            map.fitBounds(b, pad);
+        }
+        // Marcador HTML personalizado (mismos iconos SVG/HTML de antes) sobre el mapa de Google
+        let GmHtmlMarker = null;
+        function gmGetMarkerClass() {
+            if (GmHtmlMarker) return GmHtmlMarker;
+            GmHtmlMarker = class extends google.maps.OverlayView {
+                constructor(latlng, html, w, h, ax, ay, cls) {
+                    super();
+                    this.pos = new google.maps.LatLng(latlng[0], latlng[1]);
+                    this.ax = ax; this.ay = ay;
+                    this.div = document.createElement('div');
+                    this.div.className = cls || '';
+                    this.div.style.cssText = 'position:absolute;width:' + w + 'px;height:' + h + 'px;pointer-events:none;';
+                    this.div.innerHTML = html;
+                }
+                onAdd() { this.getPanes().overlayMouseTarget.appendChild(this.div); }
+                draw() {
+                    const pr = this.getProjection();
+                    if (!pr) return;
+                    const p = pr.fromLatLngToDivPixel(this.pos);
+                    if (!p) return;
+                    this.div.style.left = (p.x - this.ax) + 'px';
+                    this.div.style.top = (p.y - this.ay) + 'px';
+                }
+                onRemove() { if (this.div.parentNode) this.div.parentNode.removeChild(this.div); }
+                setLatLng(latlng) { this.pos = new google.maps.LatLng(latlng[0], latlng[1]); this.draw(); }
+            };
+            return GmHtmlMarker;
+        }
+
         let isDarkMode = false;
 
         function applyDarkMode(on) {
             isDarkMode = on;
             document.documentElement.classList.toggle('dark', on);
+            updateMapsTheme();
             const ic = document.getElementById('dark-mode-icon');
             if (ic) ic.className = on ? 'fa-solid fa-sun text-[12px] text-yellow-400' : 'fa-solid fa-moon text-[12px] text-white';
         }
@@ -2235,10 +2305,11 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
         let realRouteCoords = [startLocation, endLocation];
 
         function updateMapRoutes() {
-            if (stage2BgRoute) stage2BgRoute.setLatLngs(realRouteCoords);
-            if (stage2MainRoute) stage2MainRoute.setLatLngs(realRouteCoords);
-            if (stage3BgRoute) stage3BgRoute.setLatLngs(realRouteCoords);
-            if (stage3MainRoute) stage3MainRoute.setLatLngs(realRouteCoords);
+            const gp = gmPath(realRouteCoords);
+            if (stage2BgRoute) stage2BgRoute.setPath(gp);
+            if (stage2MainRoute) stage2MainRoute.setPath(gp);
+            if (stage3BgRoute) stage3BgRoute.setPath(gp);
+            if (stage3MainRoute) stage3MainRoute.setPath(gp);
             
             if (markerStartStage2) markerStartStage2.setLatLng(startLocation);
             if (markerEndStage2) markerEndStage2.setLatLng(endLocation);
@@ -2318,27 +2389,37 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             </div>`;
 
         function initRealMaps() {
-            if(mapStage2) return;
-            const tileServerUrl = 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
-            
-            const navMarkerIcon = L.divIcon({ className: 'custom-didi-pin bg-transparent border-0', html: iconDidiPointerHTML, iconSize: [38, 50], iconAnchor: [19, 25] });
-            const destMarkerIcon = L.divIcon({ className: 'custom-dest-pin', html: iconGreenUserHTML, iconSize: [44, 65], iconAnchor: [22, 60] });
+            if (mapStage2) return;
+            window.gmapsWanted = true;
+            if (!window.gmapsLoaded || !window.google || !google.maps) return; // __gmapsReady la vuelve a llamar al cargar
 
-            mapStage2 = L.map('map-stage2', { center: bogotaCenter, zoom: 14, zoomControl: false });
-            L.tileLayer(tileServerUrl, { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] }).addTo(mapStage2);
-            stage2BgRoute = L.polyline(realRouteCoords, { color: '#2d4cc5', weight: 9, opacity: 1, lineJoin: 'round', lineCap: 'round' }).addTo(mapStage2);
-            stage2MainRoute = L.polyline(realRouteCoords, { color: '#506ff1', weight: 6, opacity: 1, lineJoin: 'round', lineCap: 'round' }).addTo(mapStage2);
-            
-            markerStartStage2 = L.marker(startLocation, { icon: navMarkerIcon }).addTo(mapStage2);
-            markerEndStage2 = L.marker(endLocation, { icon: destMarkerIcon }).addTo(mapStage2);
+            const Marker = gmGetMarkerClass();
+            const baseOpts = {
+                center: gmLL(bogotaCenter), zoom: 14, maxZoom: 20,
+                disableDefaultUI: true, zoomControl: false, clickableIcons: false,
+                gestureHandling: 'greedy', keyboardShortcuts: false,
+                styles: isDarkMode ? gmDarkStyle : []
+            };
+            const routeBg = { strokeColor: '#2d4cc5', strokeWeight: 9, strokeOpacity: 1, clickable: false, zIndex: 1 };
+            const routeMain = { strokeColor: '#506ff1', strokeWeight: 6, strokeOpacity: 1, clickable: false, zIndex: 2 };
+            const path = gmPath(realRouteCoords);
+            const mkNav = () => new Marker(startLocation, iconDidiPointerHTML, 38, 50, 19, 25, 'custom-didi-pin bg-transparent border-0');
+            const mkDest = () => new Marker(endLocation, iconGreenUserHTML, 44, 65, 22, 60, 'custom-dest-pin');
 
-            mapStage3 = L.map('map-stage3', { center: bogotaCenter, zoom: 14, zoomControl: false });
-            L.tileLayer(tileServerUrl, { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] }).addTo(mapStage3);
-            stage3BgRoute = L.polyline(realRouteCoords, { color: '#2d4cc5', weight: 9, opacity: 1, lineJoin: 'round', lineCap: 'round' }).addTo(mapStage3);
-            stage3MainRoute = L.polyline(realRouteCoords, { color: '#506ff1', weight: 6, opacity: 1, lineJoin: 'round', lineCap: 'round' }).addTo(mapStage3);
-            
-            markerStartStage3 = L.marker(startLocation, { icon: navMarkerIcon }).addTo(mapStage3);
-            markerEndStage3 = L.marker(endLocation, { icon: destMarkerIcon }).addTo(mapStage3);
+            mapStage2 = new google.maps.Map(document.getElementById('map-stage2'), baseOpts);
+            stage2BgRoute = new google.maps.Polyline({ ...routeBg, path, map: mapStage2 });
+            stage2MainRoute = new google.maps.Polyline({ ...routeMain, path, map: mapStage2 });
+            markerStartStage2 = mkNav(); markerStartStage2.setMap(mapStage2);
+            markerEndStage2 = mkDest(); markerEndStage2.setMap(mapStage2);
+
+            mapStage3 = new google.maps.Map(document.getElementById('map-stage3'), baseOpts);
+            stage3BgRoute = new google.maps.Polyline({ ...routeBg, path, map: mapStage3 });
+            stage3MainRoute = new google.maps.Polyline({ ...routeMain, path, map: mapStage3 });
+            markerStartStage3 = mkNav(); markerStartStage3.setMap(mapStage3);
+            markerEndStage3 = mkDest(); markerEndStage3.setMap(mapStage3);
+
+            // Si la API terminó de cargar con la etapa 2 ya visible, encuadra la ruta
+            setTimeout(() => gmRefit(mapStage2, stage2MainRoute, { top: 50, left: 50, right: 50, bottom: 320 }), 300);
         }
 
         function startLiveClock() {
@@ -2523,8 +2604,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                     
                     setTimeout(() => {
                         try {
-                            mapStage2.invalidateSize();
-                            if(stage2MainRoute) mapStage2.fitBounds(stage2MainRoute.getBounds(), { paddingTopLeft: [50, 50], paddingBottomRight: [50, 320] });
+                            gmRefit(mapStage2, stage2MainRoute, { top: 50, left: 50, right: 50, bottom: 320 });
                         } catch(err){}
                     }, 400);
                 }, 1500); 
@@ -2545,8 +2625,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 
                 setTimeout(() => {
                     try {
-                        mapStage2.invalidateSize();
-                        if(stage2MainRoute) mapStage2.fitBounds(stage2MainRoute.getBounds(), { paddingTopLeft: [50, 50], paddingBottomRight: [50, 320] });
+                        gmRefit(mapStage2, stage2MainRoute, { top: 50, left: 50, right: 50, bottom: 320 });
                     } catch(err){}
                 }, 400);
             });
@@ -2561,8 +2640,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             if (mapStage2) {
                 setTimeout(() => {
                     try {
-                        mapStage2.invalidateSize();
-                        if(stage2MainRoute) mapStage2.fitBounds(stage2MainRoute.getBounds(), { paddingTopLeft: [80, 80], paddingBottomRight: [80, 220], animate: true, duration: 1.0 });
+                        gmRefit(mapStage2, stage2MainRoute, { top: 80, left: 80, right: 80, bottom: 220 });
                     } catch(err){}
                 }, 300);
             }
@@ -2586,8 +2664,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 isStage3Active = true;
                 setTimeout(() => {
                     try {
-                        mapStage3.invalidateSize();
-                        if(stage3MainRoute) mapStage3.fitBounds(stage3MainRoute.getBounds(), { paddingTopLeft: [50, 50], paddingBottomRight: [50, 320] });
+                        gmRefit(mapStage3, stage3MainRoute, { top: 50, left: 50, right: 50, bottom: 320 });
                     } catch(e){}
                 }, 400);
             } else {
@@ -2596,7 +2673,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 setToggleIcon('list');
                 isStage3Active = false;
                 setTimeout(() => {
-                    mapStage2.invalidateSize();
+                    gmResize(mapStage2);
                 }, 400);
             }
         });
@@ -2607,7 +2684,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             setToggleIcon('list');
             isStage3Active = false;
             setTimeout(() => {
-                mapStage2.invalidateSize();
+                gmResize(mapStage2);
             }, 400);
         });
 
