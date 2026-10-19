@@ -333,6 +333,8 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 @keyframes demoPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.06)}}
 #demoLock{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #demoLock.show{display:flex}
+#noCreditLock{display:none;position:fixed;inset:0;z-index:650;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#noCreditLock.show{display:flex}
 .demo-lock-card{width:min(380px,100%);background:#262a35;border:1px solid var(--primary);border-radius:26px;padding:26px 22px;text-align:center;color:#fff;font-family:Outfit,sans-serif;box-shadow:0 30px 70px rgba(0,0,0,.8)}
 .demo-lock-card .dl-ico{font-size:44px;margin-bottom:6px}
 .demo-lock-card h3{font-size:22px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -485,6 +487,17 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
     <p>La <b>Etapa 2</b> no está disponible en el modo demo.<br><b>Agrega créditos</b> para utilizar la aplicación completa.</p>
     <a id="demoLockWa" class="auth-btn" target="_blank" rel="noopener">💬 Pedir créditos por WhatsApp</a>
     <button type="button" class="auth-btn ghost" id="demoLockClose">Seguir explorando la demo</button>
+  </div>
+</div>
+
+<!-- Aviso: sin créditos para continuar con el pedido -->
+<div id="noCreditLock" role="dialog" aria-modal="true">
+  <div class="demo-lock-card">
+    <div class="dl-ico" id="noCreditIco">💳</div>
+    <h3 id="noCreditTitle">Sin créditos</h3>
+    <p id="noCreditMsg">Necesitas <b>al menos 1 crédito</b> para continuar con tu pedido.<br>Recarga para usar la aplicación completa.</p>
+    <a id="noCreditWa" class="auth-btn" target="_blank" rel="noopener">💬 Pedir recarga por WhatsApp</a>
+    <button type="button" class="auth-btn ghost" id="noCreditClose">Cerrar</button>
   </div>
 </div>
 
@@ -2470,7 +2483,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             liveClockInterval = setInterval(tick, 1000);
         }
 
-        function confirmOrderPickup() {
+        function confirmOrderPickupCore() {
             if (!speechEngineUnlocked && 'speechSynthesis' in window) {
                 const silentUtterance = new SpeechSynthesisUtterance('');
                 silentUtterance.volume = 0;
@@ -2507,6 +2520,32 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             if (slideFillBar) slideFillBar.style.display = 'none';
         }
 
+        // CRÉDITOS: para avanzar con "Tengo el pedido" hace falta crédito (lo valida la página principal)
+        function creditGate(kind) {
+            try {
+                if (window.parent && typeof window.parent.requireCredits === 'function') {
+                    return Promise.resolve(window.parent.requireCredits(kind));
+                }
+            } catch (err) {}
+            return Promise.resolve(true);
+        }
+        let pickupChecking = false, pickupPaid = false;
+        function confirmOrderPickup() {
+            if (pickupChecking) return;
+            if (pickupPaid) { confirmOrderPickupCore(); return; }
+            // desbloquea la voz mientras todavía hay un toque del usuario
+            if (!speechEngineUnlocked && 'speechSynthesis' in window) {
+                const silentUtterance = new SpeechSynthesisUtterance('');
+                silentUtterance.volume = 0;
+                window.speechSynthesis.speak(silentUtterance);
+                speechEngineUnlocked = true;
+            }
+            pickupChecking = true;
+            creditGate('pedido').then(function (ok) {
+                pickupChecking = false;
+                if (ok) { pickupPaid = true; confirmOrderPickupCore(); }
+            }).catch(function () { pickupChecking = false; });
+        }
         btnOrderAction.addEventListener('click', confirmOrderPickup);
 
         const sliderContainer = document.getElementById('slide-to-exit-container');
@@ -2553,6 +2592,14 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                 sliderContainer.style.pointerEvents = 'none';
                 slideThumb.style.transform = `translateX(${maxDrag}px)`;
                 
+                // CRÉDITOS: deslizar "Salir" consume 1 crédito; sin crédito no se avanza
+                creditGate('salir').then(function (okCredits) {
+                if (!okCredits) {
+                    slideThumb.style.transform = 'translateX(0px)';
+                    isSliderLoading = false;
+                    sliderContainer.style.pointerEvents = 'auto';
+                    return;
+                }
                 slideTextContainer.style.opacity = '0';
                 slideThumb.style.opacity = '0';
                 loadingPlanets.classList.remove('opacity-0');
@@ -2638,6 +2685,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
                         } catch(err){}
                     }, 400);
                 }, 1500); 
+                });
             } else {
                 slideThumb.style.transform = `translateX(0px)`;
             }
@@ -3705,7 +3753,7 @@ let db = null;
 try { 
   // SOLUCIÓN DEFINITIVA DE SESIÓN:
   // Al configurar persistSession: false, el navegador elimina el inicio de sesión
-  // cada vez que la página o app se cierra. Al abrirla nuevamente pedirá Login, descontando un crédito.
+  // cada vez que la página o app se cierra. Al abrirla nuevamente pedirá Login (el login ya NO descuenta créditos).
   db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: false }
   }); 
@@ -3964,9 +4012,9 @@ function handleProfileChange(user, p) {
     else showView(blockedView);
     return;
   }
+  if (p.credits > 0) hideNoCredits();   // si le recargan créditos mientras ve el aviso, se cierra solo
   if (appOpen) return;
-  if (blockedView.classList.contains('active') && p.credits <= 0) showView(noAccessView);
-  else if (p.credits > 0 && (noAccessView.classList.contains('active') || blockedView.classList.contains('active'))) onLoginSuccess(user);
+  if (blockedView.classList.contains('active') && !p.blocked) onLoginSuccess(user);
 }
 
 function startRealtime(user) {
@@ -4009,27 +4057,8 @@ async function onLoginSuccess(user) {
     return setStatus('Sesión correcta, pero falta pegar el código de tu app en el archivo.', 'err');
   }
 
-  // Descuenta 1 crédito siempre al loguearse con éxito, sin excepciones (excepto para los admins).
-  if (!prof.is_admin) {
-    if (prof.credits <= 0) {
-      showView(noAccessView);
-      return setStatus('Sin créditos asignados: acceso bloqueado.', 'err');
-    }
-    const { data: left, error } = await db.rpc('consume_login_credit');
-    if (error) {
-      if (/bloqueado/.test(error.message)) {
-        showView(blockedView);
-        return setStatus('Cuenta bloqueada por el administrador.', 'err');
-      }
-      if (/sin_creditos/.test(error.message)) {
-        showView(noAccessView);
-        return setStatus('Sin créditos asignados: acceso bloqueado.', 'err');
-      }
-      showView(authView);
-      return setStatus('No se pudo descontar el crédito: ' + error.message, 'err');
-    }
-    prof.credits = left;
-  }
+  // NUEVO SISTEMA: entrar NO descuenta ni exige créditos. Todos pueden ver la app.
+  // El crédito se pide al pulsar "Tengo el pedido" y se consume al deslizar "Salir" (ver requireCredits).
 
   clearInterval(lineTimer);
   document.querySelector('.environment').style.display = 'none';
@@ -4057,12 +4086,7 @@ async function onLoginSuccess(user) {
   setInterval(async () => {
     const p = await getProfile(user);
     if (!p) return;
-    const prev = lastCredits;
     handleProfileChange(user, p);
-    // Si se queda sin créditos mientras está conectado, lo expulsa.
-    if (!p.is_admin && p.credits <= 0 && prev !== null && p.credits < prev) {
-      location.reload(); 
-    }
   }, 30000);
 }
 
@@ -4099,6 +4123,76 @@ function showDemoLock() {
   $('demoLock').classList.add('show');
 }
 window.showDemoLock = showDemoLock;
+
+/* ---------- CRÉDITOS POR USO ----------
+   Todos pueden entrar y ver la app. Para avanzar hace falta crédito:
+   - "Tengo el pedido": se exige tener crédito.
+   - "Salir" (deslizar): se exige tener crédito y se consume.
+   Cambia estos costos si quieres otro esquema (por ejemplo COSTO_TENGO_PEDIDO = 1 para cobrar también ahí). */
+const COSTO_TENGO_PEDIDO = 0;
+const COSTO_SALIR = 1;
+
+function showCreditNotice(ico, title, html, showWa) {
+  $('noCreditIco').textContent = ico;
+  $('noCreditTitle').textContent = title;
+  $('noCreditMsg').innerHTML = html;
+  const wa = $('noCreditWa');
+  wa.style.display = showWa ? 'block' : 'none';
+  if (showWa) {
+    const mail = (window.appUser && window.appUser.email) || '';
+    wa.href = waUrl('👋 ¡Hola! Soy *' + mail + '* 🏍️🍔\n\n😕 Me quedé sin crédito y necesito una recarga 💳⚡\n\n¿Me ayudas a activarla, por favor? 🙏✨');
+  }
+  $('noCreditLock').classList.add('show');
+}
+function showNoCredits() {
+  showCreditNotice('💳', 'Sin créditos',
+    'Necesitas <b>al menos 1 crédito</b> para continuar con tu pedido.<br>Recarga para usar la aplicación completa.', true);
+}
+function hideNoCredits() { $('noCreditLock').classList.remove('show'); }
+
+let creditBusy = false;
+// La app (iframe) la llama antes de "Tengo el pedido" (kind='pedido') y de "Salir" (kind='salir').
+// Devuelve true si puede avanzar; si no, muestra el aviso y devuelve false.
+window.requireCredits = async function (kind) {
+  if (window.isDemoMode || demoMode) return true;   // la demo ya tiene su propio bloqueo
+  if (window.appIsAdmin) return true;               // el administrador no gasta créditos
+  if (!db || !window.appUser) return true;
+  if (creditBusy) return false;
+  creditBusy = true;
+  try {
+    const cost = kind === 'salir' ? COSTO_SALIR : COSTO_TENGO_PEDIDO;
+    const need = Math.max(1, cost);
+    const p = await getProfile(window.appUser);
+    if (!p) {
+      showCreditNotice('📡', 'Sin conexión', 'No pudimos verificar tus créditos.<br>Revisa tu conexión e inténtalo de nuevo.', false);
+      return false;
+    }
+    if (p.blocked && !p.is_admin) { location.reload(); return false; }
+    if (p.credits < need) { showNoCredits(); return false; }
+    let left = p.credits;
+    for (let i = 0; i < cost; i++) {
+      const { data, error } = await db.rpc('consume_login_credit');
+      if (error) {
+        if (/bloqueado/.test(error.message)) { location.reload(); return false; }
+        if (/sin_creditos/.test(error.message)) { showNoCredits(); return false; }
+        showCreditNotice('⚠️', 'No se pudo descontar', 'No pudimos descontar el crédito: ' + error.message, false);
+        return false;
+      }
+      left = data;
+    }
+    if (cost > 0) {
+      lastCredits = left;
+      $('creditPill').textContent = '💳 ' + left;
+      showTopBar();   // muestra el saldo actualizado
+    }
+    return true;
+  } catch (e) {
+    showCreditNotice('📡', 'Sin conexión', 'No pudimos verificar tus créditos.<br>Revisa tu conexión e inténtalo de nuevo.', false);
+    return false;
+  } finally {
+    creditBusy = false;
+  }
+};
 
 /* ---------- HISTORIAL DE USO (se llama desde la app al entrar a la Etapa 2) ---------- */
 const USAGE_QUEUE_KEY = 'didi_usage_pending_v1';
@@ -4162,6 +4256,7 @@ window.logAppUsage = async function (info) {
   } catch (e) { console.warn('Historial: error', e); }
 };
 $('demoLockClose').addEventListener('click', () => $('demoLock').classList.remove('show'));
+$('noCreditClose').addEventListener('click', hideNoCredits);
 $('demoBtn').addEventListener('click', startDemo);
 $('demoExit').addEventListener('click', () => location.reload());
 
