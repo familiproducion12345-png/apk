@@ -341,6 +341,20 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 .demo-lock-card p{font-size:14px;line-height:1.5;color:#d4d4d8;margin-bottom:18px}
 .demo-lock-card p b{color:var(--primary)}
 .demo-lock-card .auth-btn{display:block;text-decoration:none;text-align:center}
+#annLock{display:none;position:fixed;inset:0;z-index:700;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#annLock.show{display:flex}
+#annLock .ann-msg{white-space:pre-wrap;word-break:break-word;text-align:left;max-height:50vh;overflow:auto}
+#annPanel{display:none;position:fixed;inset:0;z-index:330;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:rgba(18,20,28,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#annPanel textarea.adm-search{min-height:120px;resize:vertical;font-family:inherit;line-height:1.4}
+.ann-status{font-size:12.5px;font-weight:700;margin:2px 0 12px;min-height:16px;color:#a1a1aa}
+.ann-status.err{color:#ff8a80}.ann-status.ok{color:#6ee7a0}
+.ann-h{font-size:12px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.8px;margin:18px 0 8px}
+.ann-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+.ann-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.ann-del{background:rgba(245,82,70,.22);border:1px solid #F55246;color:#fff;border-radius:10px;padding:4px 9px;cursor:pointer;font-size:14px}
+.ann-body{font-size:13.5px;color:#d4d4d8;white-space:pre-wrap;word-break:break-word}
+.ann-date{font-size:11px;color:#8b8b95;margin-top:6px}
+.ann-empty{padding:14px;color:#a1a1aa;font-size:13px;text-align:center}
 </style>
 <style>
 /* ===== HISTORIAL DE USO (panel admin) ===== */
@@ -490,6 +504,16 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
   </div>
 </div>
 
+<!-- Aviso del administrador (llega a todos los usuarios) -->
+<div id="annLock" role="dialog" aria-modal="true">
+  <div class="demo-lock-card">
+    <div class="dl-ico">📣</div>
+    <h3 id="annTitle">Aviso importante</h3>
+    <p class="ann-msg" id="annMsg"></p>
+    <button type="button" class="auth-btn" id="annOk">Entendido</button>
+  </div>
+</div>
+
 <!-- Aviso: sin créditos para continuar con el pedido -->
 <div id="noCreditLock" role="dialog" aria-modal="true">
   <div class="demo-lock-card">
@@ -517,12 +541,29 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
       <div><button class="adm-ico" id="admRefresh">↻</button><button class="adm-ico close" id="admClose">✕</button></div>
     </div>
     <button class="adm-hist-btn" id="admHistBtn" type="button">📜 Historial de uso</button>
+    <button class="adm-hist-btn" id="admAnnBtn" type="button" style="margin-top:8px">📣 Enviar aviso a todos</button>
     <div class="adm-stats" id="admStats"></div>
     <input id="admSearch" class="adm-search" placeholder="🔎 Buscar por correo...">
     <div class="adm-chips" id="admChips">
       <button class="chip on" data-f="all">Todos</button><button class="chip" data-f="ok">Con créditos</button><button class="chip" data-f="zero">Sin créditos</button><button class="chip" data-f="blk">Bloqueados</button>
     </div>
     <div id="adminList"></div>
+  </div>
+</div>
+
+<!-- ====== PANEL AVISOS A TODOS (solo admin) ====== -->
+<div id="annPanel">
+  <div class="adm-wrap">
+    <div class="adm-head">
+      <div><div class="adm-title">📣 Avisos</div><div class="adm-sub">Le aparece al instante a quien tenga la app abierta, y a los demás al entrar</div></div>
+      <div><button class="adm-ico close" id="annClose" type="button">✕</button></div>
+    </div>
+    <input id="annTitleIn" class="adm-search" maxlength="60" placeholder="Título (opcional)">
+    <textarea id="annBodyIn" class="adm-search" maxlength="500" placeholder="Escribe el mensaje para todos los usuarios..."></textarea>
+    <div class="ann-status" id="annStatus"></div>
+    <button type="button" class="auth-btn" id="annSend">📣 Enviar a todos</button>
+    <div class="ann-h">Avisos enviados</div>
+    <div id="annList"></div>
   </div>
 </div>
 
@@ -4083,7 +4124,9 @@ async function onLoginSuccess(user) {
   appOpen = true;
   lastCredits = prof.credits;
   flushUsageQueue(); // reenvía registros de historial que hayan quedado pendientes
+  startAnnouncements(user); // avisos del administrador (tiempo real + al entrar)
   setInterval(async () => {
+    annCheck(); // respaldo: revisa avisos nuevos cada 30 s
     const p = await getProfile(user);
     if (!p) return;
     handleProfileChange(user, p);
@@ -4325,6 +4368,97 @@ function renderAdmin() {
 }
 
 $('adminBtn').addEventListener('click', () => { $('adminPanel').style.display = 'block'; loadAdmin(); });$('admClose').addEventListener('click', () => $('adminPanel').style.display = 'none');$('admRefresh').addEventListener('click', loadAdmin);
+
+/* ---------- AVISOS A TODOS LOS USUARIOS ---------- */
+const ANN_DAYS = 7;   // solo se muestran avisos de los últimos 7 días que el usuario aún no haya visto
+let annQueue = [], annQueued = new Set(), annShowing = null, annChan = null;
+function annSeenKey(u) { return 'didi_ann_seen_v1_' + ((u && u.id) || 'anon'); }
+function annGetSeen(u) { try { return JSON.parse(localStorage.getItem(annSeenKey(u)) || '[]') || []; } catch (e) { return []; } }
+function annMarkSeen(u, id) {
+  try {
+    const s = annGetSeen(u);
+    if (s.indexOf(id) < 0) s.push(id);
+    localStorage.setItem(annSeenKey(u), JSON.stringify(s.slice(-100)));
+  } catch (e) {}
+}
+function annShowNext() {
+  if (annShowing || !annQueue.length || window.isDemoMode) return;
+  annShowing = annQueue.shift();
+  $('annTitle').textContent = annShowing.title || 'Aviso importante';
+  $('annMsg').textContent = annShowing.body || '';
+  $('annLock').classList.add('show');
+  try { navigator.vibrate && navigator.vibrate([120, 60, 120]); } catch (e) {}
+}
+function annClose() {
+  if (annShowing && window.appUser) annMarkSeen(window.appUser, annShowing.id);
+  annShowing = null;
+  $('annLock').classList.remove('show');
+  setTimeout(annShowNext, 250);
+}
+async function annCheck() {
+  const user = window.appUser;
+  if (!db || !user || demoMode) return;
+  try {
+    // No muestra avisos anteriores a la creación de la cuenta ni más viejos de ANN_DAYS días
+    const since = new Date(Math.max(Date.now() - ANN_DAYS * 864e5, new Date(user.created_at || 0).getTime())).toISOString();
+    const { data, error } = await db.from('announcements').select('id,title,body,created_at')
+      .eq('active', true).gte('created_at', since).order('created_at', { ascending: true });
+    if (error || !data) return;
+    const seen = annGetSeen(user);
+    data.forEach(a => {
+      if (seen.indexOf(a.id) >= 0 || annQueued.has(a.id)) return;
+      annQueued.add(a.id); annQueue.push(a);
+    });
+    annShowNext();
+  } catch (e) {}
+}
+function startAnnouncements(user) {
+  annCheck();
+  if (annChan || !db) return;
+  try {
+    annChan = db.channel('avisos-' + user.id)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'announcements' }, () => annCheck())
+      .subscribe();
+  } catch (e) {}
+}
+$('annOk').addEventListener('click', annClose);
+
+// --- Panel del administrador para enviar avisos ---
+function annSetStatus(msg, type) { const s = $('annStatus'); s.textContent = msg; s.className = 'ann-status' + (type ? ' ' + type : ''); }
+async function annLoadAdminList() {
+  const box = $('annList');
+  box.innerHTML = '<p class="ann-empty">Cargando...</p>';
+  const { data, error } = await db.from('announcements').select('id,title,body,created_at').order('created_at', { ascending: false }).limit(20);
+  if (error) { box.innerHTML = '<p class="ann-empty">⚠️ ' + esc(error.message) + '<br>¿Ya ejecutaste el SQL de avisos en Supabase?</p>'; return; }
+  box.innerHTML = data.length ? data.map(a =>
+    '<div class="ann-item"><div class="ann-top"><b>' + esc(a.title || 'Aviso') + '</b><button type="button" class="ann-del" data-id="' + a.id + '" title="Borrar">🗑</button></div>' +
+    '<div class="ann-body">' + esc(a.body) + '</div><div class="ann-date">' + fmtUsageDate(a.created_at) + '</div></div>').join('')
+    : '<p class="ann-empty">Aún no has enviado avisos.</p>';
+}
+$('admAnnBtn').addEventListener('click', () => { annSetStatus(''); $('annPanel').style.display = 'block'; annLoadAdminList(); });
+$('annClose').addEventListener('click', () => $('annPanel').style.display = 'none');
+$('annSend').addEventListener('click', async () => {
+  const title = $('annTitleIn').value.trim(), body = $('annBodyIn').value.trim();
+  if (!body) return annSetStatus('Escribe el mensaje del aviso.', 'err');
+  if (!confirm('¿Enviar este aviso a TODOS los usuarios?')) return;
+  const btn = $('annSend');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  const { data, error } = await db.from('announcements').insert({ title: title, body: body }).select('id').single();
+  btn.disabled = false; btn.textContent = '📣 Enviar a todos';
+  if (error) return annSetStatus('No se pudo enviar: ' + error.message, 'err');
+  if (data && data.id && window.appUser) { annQueued.add(data.id); annMarkSeen(window.appUser, data.id); }  // el admin no se ve su propio aviso
+  $('annTitleIn').value = ''; $('annBodyIn').value = '';
+  annSetStatus('✅ Aviso enviado a todos los usuarios.', 'ok');
+  annLoadAdminList();
+});
+$('annList').addEventListener('click', async (e) => {
+  const b = e.target.closest('.ann-del'); if (!b) return;
+  if (!confirm('¿Borrar este aviso?')) return;
+  b.disabled = true;
+  const { error } = await db.from('announcements').delete().eq('id', b.dataset.id);
+  if (error) alert('Error: ' + error.message);
+  annLoadAdminList();
+});
 
 /* ---------- Historial de uso (panel admin) ---------- */
 let usageRows = [], usgFilter = 'all';
