@@ -4182,8 +4182,7 @@ window.requireCredits = async function (kind) {
     }
     if (cost > 0) {
       lastCredits = left;
-      $('creditPill').textContent = '💳 ' + left;
-      showTopBar();   // muestra el saldo actualizado
+      $('creditPill').textContent = '💳 ' + left;   // solo actualiza el número; la barra NO vuelve a mostrarse
     }
     return true;
   } catch (e) {
