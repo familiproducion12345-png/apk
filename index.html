@@ -550,7 +550,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             if (window.gmapsWanted && typeof initRealMaps === 'function') initRealMaps();
         };
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZYPHFqv1cBrWMDHYh9jhWDR5JHJdi9aI&callback=__gmapsReady&loading=async&v=weekly&language=es&region=CO"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZYPHFqv1cBrWMDHYh9jhWDR5JHJdi9aI&amp;callback=__gmapsReady&amp;loading=async&amp;v=weekly&amp;language=es&amp;region=CO"></script>
     
     <!-- Fonts Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -635,6 +635,24 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             z-index: 0;
             background-color: #f3f4f6;
             transition: background-color 0.3s ease;
+        }
+
+        /* FIX: paneles deslizables cerrados quedan realmente ocultos (evita que se asome "¿Hay algún problema?" en algunos teléfonos) */
+        #help-center-panel,
+        #stage1-details-panel {
+            transition: transform 0.3s ease, visibility 0s linear 0s;
+        }
+        #help-center-panel.translate-y-full,
+        #stage1-details-panel.translate-y-full {
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 0.3s ease, visibility 0s linear 0.3s;
+        }
+        #stage2-nav-sheet { transition: transform 0.5s ease-out, visibility 0s linear 0s; }
+        #stage2-nav-sheet.translate-y-full {
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 0.5s ease-out, visibility 0s linear 0.5s;
         }
 
         /* MODO OSCURO MAPA: se aplica con estilos nativos de Google Maps (ver gmDarkStyle) */
