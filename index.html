@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500&display=swap');
 :root{--primary:#FF7A00;--secondary:#F55246;--dark-bg:#161921;--glass-bg:rgba(36,40,51,.8);--glass-border:rgba(255,122,0,.25);--locked-color:#2a2a30}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif}
 
@@ -20,36 +20,10 @@ html, body {
 body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;color:#fff;padding:12px}
 
 /* Fondo */
-.environment{position:fixed;inset:-10%;perspective:1000px;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(circle at center top,#2a1710 0%,var(--dark-bg) 70%)}
-.horizon-sun{position:absolute;top:25%;left:50%;width:500px;height:500px;background:linear-gradient(180deg,var(--primary) 0%,transparent 70%);border-radius:50%;transform:translateX(-50%);filter:blur(40px);opacity:.6}
-.road-container{position:absolute;bottom:-20%;left:-50%;width:200%;height:80%;transform:rotateX(78deg);transform-style:preserve-3d}
-.road-grid{position:absolute;width:100%;height:200%;background-image:linear-gradient(rgba(245,82,70,.6) 2px,transparent 2px),linear-gradient(90deg,rgba(255,122,0,.4) 2px,transparent 2px);background-size:80px 80px;animation:moveRoad 1.2s linear infinite;box-shadow:inset 0 100px 100px var(--dark-bg)}
-.speed-lines{position:absolute;inset:0}
-.line{position:absolute;width:2px;height:150px;background:linear-gradient(to bottom,transparent,var(--primary),transparent);animation:speedDrop 1s linear infinite;opacity:0}
-.vehicle-wrapper{position:absolute;bottom:12%;left:50%;margin-left:-125px;width:250px;height:250px;animation:bikeBob 1.5s ease-in-out infinite alternate;filter:drop-shadow(0 30px 20px rgba(0,0,0,.8)) drop-shadow(0 0 15px rgba(255,122,0,.5))}
-.vehicle-svg{width:100%;height:100%;fill:none;stroke:var(--primary);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.wheel{stroke:var(--secondary);stroke-dasharray:20 10;animation:spinWheel .3s linear infinite;transform-origin:center}
-.light-trail{position:absolute;bottom:50px;left:-50px;width:100px;height:4px;background:linear-gradient(90deg,transparent,var(--secondary));filter:blur(2px);animation:pulseTrail .5s infinite alternate}
 
 /* Tarjeta */
-.scene{position:relative;z-index:10;perspective:1200px}
-.glass-panel{background:var(--glass-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--glass-border);border-radius:32px;padding:35px 40px;width:min(440px,94vw);max-height:96vh;overflow-y:auto;box-shadow:0 40px 80px rgba(0,0,0,.9),inset 0 2px 0 rgba(255,255,255,.1);transition:transform .1s ease-out}
-.header{text-align:center;margin-bottom:20px}
-.header h1{font-size:30px;font-weight:900;letter-spacing:-1px;text-shadow:0 0 10px rgba(255,122,0,.5)}
-.header h1 span{background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header p{font-size:13px;color:#a1a1aa;margin-top:3px}
 
-.tabs{display:flex;background:rgba(0,0,0,.4);border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid rgba(255,255,255,.05)}
-.tab{flex:1;text-align:center;padding:11px;font-size:13px;font-weight:700;color:#71717a;cursor:pointer;border-radius:8px;background:transparent;border:none;outline:none;transition:all .3s}
-.tab:hover{color:#fff}
-.tab.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 4px 15px rgba(255,122,0,.4)}
 
-.vehicle-selector{display:none;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-.vehicle-selector.show{display:grid}
-.v-option{background:rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;text-align:center;cursor:pointer;transition:all .3s;font-size:12px;color:#a1a1aa;font-weight:600}
-.v-option:hover{border-color:var(--primary);color:#fff}
-.v-option.selected{border-color:var(--primary);background:rgba(255,122,0,.15);color:var(--primary);box-shadow:0 0 15px rgba(255,122,0,.2)}
-.v-option span{display:block;font-size:20px;margin-bottom:4px}
 
 .input-group{position:relative;margin-bottom:18px;width:100%}
 .input-group input{width:100%;padding:14px 18px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff;font-size:14px;outline:none;transition:all .4s}
@@ -113,14 +87,8 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 #toast{position:fixed;top:-120px;left:50%;transform:translateX(-50%);z-index:500;width:min(360px,92vw);background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-radius:18px;padding:14px 18px;box-shadow:0 15px 40px rgba(34,197,94,.45);transition:top .5s cubic-bezier(.16,1,.3,1);display:flex;gap:12px;align-items:center;font-family:Outfit,sans-serif}
 #toast.show{top:14px}#toast .ti{font-size:28px}#toast b{display:block;font-size:15px}#toast span{font-size:12.5px;opacity:.95}
 
-@keyframes moveRoad{to{transform:translateY(80px)}}
-@keyframes bikeBob{0%{transform:translateY(0) rotateX(5deg)}100%{transform:translateY(12px) rotateX(-2deg)}}
-@keyframes spinWheel{to{stroke-dashoffset:-30}}
-@keyframes speedDrop{0%{transform:translateY(-100vh);opacity:1}100%{transform:translateY(100vh);opacity:0}}
-@keyframes pulseTrail{0%{opacity:.4;width:80px}100%{opacity:1;width:130px}}
 @keyframes systemReady{0%{box-shadow:0 10px 25px rgba(255,122,0,.4)}100%{box-shadow:0 15px 45px rgba(255,122,0,.9)}}
 @keyframes laserSweep{0%{left:-100%}50%,100%{left:200%}}
-@media(max-width:480px){.glass-panel{padding:26px 20px}}
 
 /* ==========================================
    MEJORAS PREMIUM - PANEL ADMIN Y WHATSAPP
@@ -218,129 +186,76 @@ body{background:var(--dark-bg);min-height:100vh;display:flex;justify-content:cen
 }
 .btn-bloqueo.desbloquear:hover { box-shadow: 0 12px 25px rgba(74, 222, 128, 0.5); transform: scale(1.02); }
 
-/* ==========================================================
-   TEMA KAWAII ANIME  (igual que la página de descarga)
-   Solo afecta la pantalla de inicio de sesión.
-   El panel admin, la barra superior y la app interna no cambian.
-   ========================================================== */
-:root{--k-pink:#ff4fa3;--k-pink2:#f72585;--k-purple:#8e2de2;--k-lav:#c4b5fd;--k-cyan:#5eead4;--k-sky:#9db8f7}
-body{background:#1c1737}
+/* ===== PANTALLA DE ACCESO: CIELO ESTRELLADO ===== */
+:root{--W:min(100vw,calc(100svh*736/1104));--k:calc(var(--W)/736);--y0:calc(50svh - 552*var(--k));--ink:#efe3c6;--line:rgba(214,178,110,.38)}
+body{background:#0a1514;display:block;padding:0}
+.world{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;background:#0a1514}
+.world canvas{position:absolute;inset:0;width:100%;height:100%}
+.w-sky{position:absolute;left:0;right:0;top:0;height:calc(var(--y0) + 723*var(--k));background:linear-gradient(180deg,#0a1316 0,#0b1719 45%,#0c1b1a 75%,#0b1a18 100%)}
+.w-water{position:absolute;left:0;right:0;bottom:0;top:calc(var(--y0) + 723*var(--k));background:linear-gradient(180deg,#09161a 0,#0a1816 22%,#08120f 100%)}
+.w-g{position:absolute;left:50%;transform:translate(-50%,-50%);border-radius:50%}
+.g1{top:calc(var(--y0) + 691*var(--k));width:var(--W);height:calc(150*var(--k));background:radial-gradient(closest-side,rgba(214,150,40,.42),transparent)}
+.g2{top:calc(var(--y0) + 701*var(--k));width:calc(var(--W)*1.3);height:calc(300*var(--k));background:radial-gradient(closest-side,rgba(170,110,25,.3),transparent)}
+.g3{top:calc(var(--y0) + 817*var(--k));width:calc(var(--W)*.5);height:calc(280*var(--k));background:radial-gradient(closest-side,rgba(150,95,20,.34),transparent)}
+.g4{top:calc(var(--y0) + 552*var(--k));width:calc(var(--W)*.6);height:calc(330*var(--k));background:radial-gradient(closest-side,rgba(150,100,25,.1),transparent)}
+.w-beam{position:absolute;top:0;left:50%;transform:translateX(-50%);width:max(2px,calc(3.2*var(--k)));height:calc(var(--y0) + 585*var(--k));
+background:linear-gradient(180deg,rgba(255,200,90,0) 0,rgba(255,200,90,.55) 3%,#f6b94a 28%,#f0ae3d 100%);
+box-shadow:0 0 calc(8*var(--k)) calc(2*var(--k)) rgba(240,170,50,.75),0 0 calc(25*var(--k)) calc(6*var(--k)) rgba(220,150,30,.32);animation:aPulse 4.5s ease-in-out infinite}
+.w-bglow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(118*var(--k));height:calc(var(--y0) + 618*var(--k));background:linear-gradient(90deg,transparent,rgba(230,160,40,.16),transparent);
+-webkit-mask-image:linear-gradient(180deg,transparent 20%,#000 85%,transparent);mask-image:linear-gradient(180deg,transparent 20%,#000 85%,transparent);animation:aPulse 6s ease-in-out infinite}
+.w-vig{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 55%,transparent 55%,rgba(0,0,0,.35))}
+#sky{animation:aBreathe 9s ease-in-out infinite}
+@keyframes aPulse{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes aBreathe{0%,100%{opacity:.78}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.w-beam,.w-bglow,#sky{animation:none}}
 
-/* Fondo: aurora magenta arriba, brillo turquesa abajo */
-.environment{background:
-  radial-gradient(ellipse 65% 42% at 14% 8%,rgba(160,32,120,.8),transparent 70%),
-  radial-gradient(ellipse 80% 38% at 50% 108%,rgba(18,160,180,.8),transparent 72%),
-  linear-gradient(180deg,#1d1638 0%,#1e1c40 48%,#123a55 100%)}
-.horizon-sun{top:-14%;left:26%;width:min(95vmax,900px);height:min(80vmax,760px);background:radial-gradient(circle,rgba(236,72,153,.38) 0%,transparent 62%);filter:blur(30px);opacity:1}
-.road-grid{background-image:linear-gradient(rgba(94,234,212,.38) 2px,transparent 2px),linear-gradient(90deg,rgba(120,200,255,.30) 2px,transparent 2px);box-shadow:inset 0 120px 120px #17294b}
+.scene{position:fixed;left:50%;top:50%;width:var(--W);height:calc(var(--W)*1104/736);transform:translate(-50%,-50%);container-type:inline-size;z-index:10;--p:calc(100cqw/736);color:var(--ink)}
+.scene,.scene *{font-family:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif}
+.scene .fig{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.scene .form{position:absolute;left:21.74%;width:56.4%;bottom:40.94%;z-index:2}
+.scene .view{text-align:center}
+.atabs{display:flex;justify-content:center;gap:calc(40*var(--p));margin-bottom:calc(26*var(--p))}
+.atab{background:none;border:0;border-bottom:2px solid transparent;color:rgba(239,227,198,.5);font-size:max(13px,3.3cqw);font-weight:500;padding:calc(6*var(--p)) calc(6*var(--p));cursor:pointer;transition:color .2s,border-color .2s;outline:0}
+.atab:hover{color:var(--ink)}
+.atab.active{color:var(--ink);border-bottom-color:rgba(214,170,90,.85)}
+.f{display:block;width:100%;height:calc(84*var(--p));margin:0 0 calc(22*var(--p));border:1px solid var(--line);border-radius:calc(15*var(--p));
+background:linear-gradient(90deg,rgba(32,36,31,.66),rgba(22,26,23,.5));-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+color:var(--ink);font-size:max(14px,3.4cqw);font-weight:400;padding:0 calc(28*var(--p));outline:0;transition:border-color .2s,box-shadow .2s}
+.f::placeholder{color:var(--ink);opacity:.92}
+.f:focus{border-color:rgba(240,200,120,.8);box-shadow:0 0 0 1px rgba(240,200,120,.25),0 0 calc(22*var(--p)) rgba(220,160,50,.22)}
+.f:-webkit-autofill{-webkit-text-fill-color:var(--ink);caret-color:var(--ink);transition:background-color 99999s ease-in-out 0s}
+.f.code{text-align:center;letter-spacing:.45em;font-size:max(18px,4.2cqw);padding:0}
+.scene .auth-btn{display:flex;align-items:center;justify-content:center;width:100%;height:calc(68*var(--p));padding:0;margin:calc(14*var(--p)) 0 0;border:0;border-radius:calc(9*var(--p));
+background:linear-gradient(180deg,#b78d43,#ab813a);box-shadow:inset 0 1px 0 rgba(255,225,160,.18);color:#f4e9d0;font-size:max(14px,3.75cqw);font-weight:500;text-transform:none;letter-spacing:0;text-decoration:none;cursor:pointer;transition:filter .2s}
+.scene .auth-btn:hover{filter:brightness(1.08);transform:none;box-shadow:inset 0 1px 0 rgba(255,225,160,.18)}
+.scene .auth-btn:active{filter:brightness(.95)}
+.scene .auth-btn:disabled{opacity:.55;cursor:wait;filter:none}
+.scene .auth-btn.ghost{background:rgba(18,26,24,.55);border:1px solid var(--line);box-shadow:none;color:var(--ink)}
+.scene .auth-btn.ghost:hover{border-color:rgba(240,200,120,.7);background:rgba(28,36,32,.6);filter:none}
+.scene .auth-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E)!important;box-shadow:none!important;color:#fff}
+.scene .verify-info{background:rgba(22,28,26,.6);border:1px solid var(--line);border-radius:calc(15*var(--p));padding:calc(16*var(--p)) calc(20*var(--p));margin:0 0 calc(22*var(--p));font-size:max(12px,2.9cqw);line-height:1.45;color:var(--ink)}
+.scene .verify-info strong{color:#e6b95c;display:block;margin-top:2px;word-break:break-all}
+.scene .rule{position:absolute;left:32.6%;width:35.3%;top:83.5%;height:1px;background:linear-gradient(90deg,transparent,rgba(220,180,110,.3) 30%,rgba(220,180,110,.3) 70%,transparent);z-index:2}
+.scene .g{position:absolute;left:28.8%;width:42.26%;top:86.68%;height:5.98%;border:1px solid rgba(214,178,110,.42);border-radius:calc(22*var(--p));background:rgba(18,26,24,.55);
+display:flex;align-items:center;justify-content:center;gap:calc(13*var(--p));cursor:pointer;color:var(--ink);font-size:max(13px,3.5cqw);font-weight:400;outline:0;transition:border-color .2s,background .2s;z-index:2}
+.scene .g:hover{border-color:rgba(240,200,120,.7);background:rgba(28,36,32,.6)}
+.scene .g:disabled{opacity:.6;cursor:wait}
+.scene .g svg{width:calc(28*var(--p));height:calc(28*var(--p));flex:none}
+.scene .status-text{position:absolute;left:8%;right:8%;top:94%;margin:0;text-align:center;font-size:max(11px,2.5cqw);font-weight:400;line-height:1.35;color:rgba(239,227,198,.7);z-index:2}
+.scene .status-text.ok{color:#9be8b5}.scene .status-text.err{color:#ff9d8f}
+.scene .f:focus-visible,.scene .auth-btn:focus-visible,.scene .g:focus-visible,.atab:focus-visible{outline:2px solid rgba(240,200,120,.9);outline-offset:2px}
 
-/* Partículas brillantes (las crea el JS) */
-.spark{position:absolute;bottom:-24px;border-radius:50%;opacity:0;animation:sparkRise linear forwards;will-change:transform,opacity}
-.spark.star{border-radius:0;line-height:1}
-@keyframes sparkRise{0%{transform:translate3d(0,0,0) scale(.6);opacity:0}12%{opacity:.95}85%{opacity:.8}100%{transform:translate3d(var(--dx,20px),-118vh,0) scale(1);opacity:0}}
-
-/* Animalitos flotantes */
-.kawaii-pets{position:absolute;inset:0}
-.kawaii-pets span{position:absolute;font-size:clamp(34px,9vw,58px);line-height:1;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));animation:petFloat 6s ease-in-out infinite alternate}
-@keyframes petFloat{0%{transform:translateY(0) rotate(-6deg)}100%{transform:translateY(-18px) rotate(7deg)}}
-
-/* Vehículo con colores kawaii */
-.vehicle-wrapper{bottom:5%;filter:drop-shadow(0 26px 18px rgba(8,6,30,.55)) drop-shadow(0 0 16px rgba(255,79,163,.55))}
-@media(max-width:600px){.vehicle-wrapper{width:200px;height:200px;margin-left:-100px}}
-.vehicle-svg{stroke:#ff7ac6}
-.wheel{stroke:#5eead4}
-.light-trail{background:linear-gradient(90deg,transparent,#ff4fa3)}
-
-/* Tarjeta de cristal */
-.glass-panel{background:linear-gradient(160deg,rgba(58,52,108,.78),rgba(34,32,74,.74));backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);border:3px solid rgba(255,255,255,.17);border-radius:46px;padding:34px 34px 28px;box-shadow:0 30px 80px rgba(10,6,40,.55),0 0 60px rgba(255,79,163,.12),inset 0 2px 0 rgba(255,255,255,.14);scrollbar-width:none}
-.glass-panel::-webkit-scrollbar{display:none}
-.scene,.scene *{font-family:'Nunito',sans-serif}
-.scene .header h1,.scene .tab,.scene .auth-btn,.scene .v-option{font-family:'Fredoka','Nunito',sans-serif}
-
-/* Título */
-.header{margin-bottom:18px}
-.header h1{font-size:clamp(34px,10vw,46px);font-weight:700;letter-spacing:.5px;line-height:1.1;text-shadow:none}
-.header h1 .k-title{background:linear-gradient(90deg,#ff9ec4 0%,#e9a8e6 55%,#b9b9f3 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(255,120,190,.45))}
-.header h1 .k-spark{background:none;-webkit-text-fill-color:currentColor;color:#7de3ff;font-size:.8em}
-.header p{font-size:15px;font-weight:700;color:#f3eeff;margin-top:8px;line-height:1.35}
-
-/* Pestañas */
-.scene .tabs{background:rgba(20,16,50,.45);border:2px solid rgba(255,255,255,.1);border-radius:999px;padding:5px}
-.scene .tab{border-radius:999px;color:#b8b3e0;font-size:14px;font-weight:600;padding:11px 8px}
-.scene .tab:hover{color:#fff}
-.scene .tab.active{background:linear-gradient(135deg,var(--k-pink2),var(--k-purple));color:#fff;box-shadow:0 3px 0 #b0125a,0 8px 16px rgba(247,37,133,.35)}
-
-/* Selector de vehículo */
-.scene .v-option{background:rgba(20,16,50,.45);border:2px solid rgba(255,255,255,.12);border-radius:20px;color:#c9c4ee;font-weight:600}
-.scene .v-option:hover{border-color:var(--k-pink);color:#fff}
-.scene .v-option.selected{border-color:var(--k-pink);background:rgba(255,79,163,.18);color:#ffd1e8;box-shadow:0 0 18px rgba(255,79,163,.35)}
-
-/* Campos (la etiqueta flota DENTRO del campo) */
-.scene .input-group{margin-bottom:14px}
-.scene .input-group input{padding:24px 20px 8px;background:rgba(18,14,46,.5);border:2px solid rgba(255,255,255,.14);border-radius:22px;color:#fff;font-size:15px;font-weight:700}
-.scene .input-group input:focus,.scene .input-group input:not(:placeholder-shown){border-color:var(--k-pink);background:rgba(255,79,163,.1);box-shadow:0 0 0 4px rgba(255,79,163,.12),0 0 18px rgba(255,79,163,.22)}
-.scene .input-group label{left:21px;color:#aaa5d8;font-size:15px;font-weight:600}
-.scene .input-group input:focus~label,.scene .input-group input:not(:placeholder-shown)~label{top:9px;left:21px;transform:none;font-size:11px;color:var(--k-pink);background:none;padding:0;font-weight:800;letter-spacing:.3px}
-.scene .code-input{padding:24px 20px 8px;letter-spacing:8px}
-.scene input:-webkit-autofill{-webkit-text-fill-color:#fff;caret-color:#fff;transition:background-color 99999s ease-in-out 0s}
-
-/* Botones 3D rosa → morado */
-.scene .auth-btn{border-radius:999px;padding:16px;font-size:16px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,#f72585 0%,#b02fd1 55%,#8e2de2 100%);box-shadow:0 7px 0 #a0105a,0 16px 30px rgba(247,37,133,.4);margin-bottom:18px}
-.scene .auth-btn:hover{transform:translateY(-2px);box-shadow:0 9px 0 #a0105a,0 20px 36px rgba(247,37,133,.5)}
-.scene .auth-btn:active{transform:translateY(5px);box-shadow:0 2px 0 #a0105a,0 6px 14px rgba(247,37,133,.35)}
-.scene .auth-btn:disabled{opacity:.55;transform:none;box-shadow:0 5px 0 #a0105a}
-.scene .auth-btn.ghost{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.16);box-shadow:none;font-weight:600;letter-spacing:1px;font-size:14px;color:#e6e1ff;margin-bottom:12px}
-.scene .auth-btn.ghost:hover{border-color:var(--k-pink);background:rgba(255,255,255,.12);transform:translateY(-1px);box-shadow:none}
-.scene .auth-btn.ghost:active{transform:none}
-
-/* Avisos y estado */
-.scene .verify-info{background:rgba(255,255,255,.08);border:2px solid rgba(255,122,190,.45);border-radius:22px;padding:14px;font-size:14px;font-weight:600;color:#f3eeff}
-.scene .verify-info strong{color:#ffa6d2}
-.scene .status-text{font-size:13px;font-weight:700;color:#cfcaf5;margin-top:6px}
-.scene .status-text.ok{color:#7dffd9}
-.scene .status-text.err{color:#ff8fb0}
-
-/* Etiquetas inferiores (APK · Premium · Seguro) */
-.k-chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-.k-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:rgba(80,92,150,.38);border:2px solid rgba(255,255,255,.14);color:var(--k-sky);font-size:14px;font-weight:700}
-.k-chip svg{width:18px;height:18px;fill:currentColor;flex:none}
-
-@media(max-width:480px){.glass-panel{padding:28px 20px 24px;border-radius:38px}}
-@media (prefers-reduced-motion:reduce){.road-grid,.kawaii-pets span,.vehicle-wrapper,.wheel,.light-trail{animation:none!important}.spark{display:none}}
 </style>
 <style>
-/* ===== MODO DEMO ===== */
-.demo-btn{width:100%;padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:2px dashed var(--primary);color:var(--primary);font-size:14px;font-weight:900;cursor:pointer;transition:all .3s;outline:none;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-.demo-btn:hover{background:rgba(255,122,0,.15);transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,122,0,.3)}
-.demo-hint{font-size:11px;color:#a1a1aa;margin-top:8px;text-align:center}
-.or-sep{display:flex;align-items:center;gap:10px;margin:4px 0 14px;color:#a1a1aa;font-size:12px;font-weight:700}
-.or-sep::before,.or-sep::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.14)}
-.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;border-radius:14px;background:#fff;border:1px solid #dadce0;color:#3c4043;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;outline:none;margin-bottom:12px;font-family:inherit}
-.google-btn:hover{background:#f8f9fa;box-shadow:0 4px 14px rgba(0,0,0,.25);transform:translateY(-1px)}
-.google-btn:disabled{opacity:.6;cursor:wait;transform:none}
-.google-btn svg{width:20px;height:20px;flex:none}
-.scene .google-btn{border-radius:999px;padding:14px}
-#demoWatermark,#demoBanner,#demoBar,#demoPill,.demo-side{display:none}
-body.demo-on #demoWatermark{display:block;position:fixed;inset:0;z-index:150;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='150'%3E%3Ctext x='115' y='75' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='21' fill='%23FF7A00' fill-opacity='.24' transform='rotate(-24 115 75)'%3EMODO DEMO%3C/text%3E%3C/svg%3E")}
-body.demo-on #demoBanner{display:block;position:fixed;top:0;left:0;right:0;z-index:190;pointer-events:none;text-align:center;background:linear-gradient(90deg,#F55246,#FF7A00,#F55246);color:#fff;font:900 11px Outfit,sans-serif;letter-spacing:2px;padding:3px 0;text-transform:uppercase;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-body.demo-on #demoBar{display:flex;position:fixed;top:19px;left:50%;transform:translateX(-50%);z-index:200;gap:4px;font:700 11px Outfit,sans-serif;white-space:nowrap}
-#demoBar span{background:rgba(38,42,53,.94);color:#FF7A00;border-radius:0 0 12px 12px;padding:3px 12px;border:1px solid rgba(255,122,0,.4);border-top:0}
-#demoBar button{background:rgba(245,82,70,.92);color:#fff;border:0;border-radius:0 0 12px 12px;padding:3px 12px;font:inherit;cursor:pointer}
-body.demo-on #demoPill{display:block;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:190;pointer-events:none;background:rgba(245,82,70,.95);color:#fff;font:900 12px Outfit,sans-serif;letter-spacing:1px;padding:7px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.45);white-space:nowrap;animation:demoPulse 1.6s ease-in-out infinite alternate}
-body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer-events:none;background:rgba(255,122,0,.92);color:#fff;font:900 11px Outfit,sans-serif;letter-spacing:3px;padding:4px 14px;border-radius:0 0 10px 10px;white-space:nowrap}
-.demo-side.l{left:0;transform-origin:left top;transform:rotate(90deg) translateX(-50%) translateY(-100%)}
-.demo-side.r{right:0;transform-origin:right top;transform:rotate(-90deg) translateX(50%) translateY(-100%)}
-@keyframes demoPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.06)}}
-#demoLock{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-#demoLock.show{display:flex}
+/* ===== AVISOS Y BLOQUEOS ===== */
 #noCreditLock{display:none;position:fixed;inset:0;z-index:650;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #noCreditLock.show{display:flex}
-.demo-lock-card{width:min(380px,100%);background:#262a35;border:1px solid var(--primary);border-radius:26px;padding:26px 22px;text-align:center;color:#fff;font-family:Outfit,sans-serif;box-shadow:0 30px 70px rgba(0,0,0,.8)}
-.demo-lock-card .dl-ico{font-size:44px;margin-bottom:6px}
-.demo-lock-card h3{font-size:22px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.demo-lock-card p{font-size:14px;line-height:1.5;color:#d4d4d8;margin-bottom:18px}
-.demo-lock-card p b{color:var(--primary)}
-.demo-lock-card .auth-btn{display:block;text-decoration:none;text-align:center}
+.lock-card{width:min(380px,100%);background:#262a35;border:1px solid var(--primary);border-radius:26px;padding:26px 22px;text-align:center;color:#fff;font-family:Outfit,sans-serif;box-shadow:0 30px 70px rgba(0,0,0,.8)}
+.lock-card .dl-ico{font-size:44px;margin-bottom:6px}
+.lock-card h3{font-size:22px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lock-card p{font-size:14px;line-height:1.5;color:#d4d4d8;margin-bottom:18px}
+.lock-card p b{color:var(--primary)}
+.lock-card .auth-btn{display:block;text-decoration:none;text-align:center}
 #annLock{display:none;position:fixed;inset:0;z-index:700;align-items:center;justify-content:center;padding:18px;background:rgba(10,10,15,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #annLock.show{display:flex}
 #annLock .ann-msg{white-space:pre-wrap;word-break:break-word;text-align:left;max-height:50vh;overflow:auto}
@@ -382,131 +297,88 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 </head>
 <body>
 
-<div class="environment">
-  <div class="horizon-sun" id="sun"></div>
-  <div class="speed-lines" id="speedLines"></div>
-  <div class="road-container"><div class="road-grid"></div></div>
-  <div class="kawaii-pets" aria-hidden="true">
-    <span style="left:7%;top:28%;animation-delay:-1s">🐰</span>
-    <span style="right:6.5%;top:31%;animation-delay:-3s;animation-duration:7s">🐭</span>
-    <span style="right:7%;top:50%;animation-delay:-2s;animation-duration:5.5s">🦊</span>
-    <span style="left:8.5%;top:71%;animation-delay:-4s;animation-duration:6.5s">🐱</span>
-    <span style="left:16%;top:7%;animation-delay:-5s;animation-duration:7.5s">🐼</span>
-    <span style="right:15%;top:9%;animation-delay:-2.5s;animation-duration:6s">🦄</span>
-    <span style="right:11%;top:77%;animation-delay:-1.5s;animation-duration:7s">🐻</span>
-  </div>
-  <div class="vehicle-wrapper" id="vehicleWrapper">
-    <div class="light-trail"></div>
-    <svg id="vehicleSvg" class="vehicle-svg" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg"></svg>
-  </div>
+<div class="world" id="world" aria-hidden="true">
+  <div class="w-sky"></div><div class="w-water"></div>
+  <div class="w-g g1"></div><div class="w-g g2"></div><div class="w-g g3"></div><div class="w-g g4"></div>
+  <canvas id="sky"></canvas><canvas id="fx"></canvas>
+  <div class="w-bglow"></div><div class="w-beam"></div><div class="w-vig"></div>
 </div>
 
-<div class="scene" id="scene">
-  <div class="glass-panel" id="panel">
+<main class="scene" id="scene">
+  <svg class="fig" viewBox="0 0 736 1104" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="bf" gradientUnits="userSpaceOnUse" x1="0" y1="680" x2="0" y2="890"><stop offset="0" stop-color="#050909"/><stop offset=".5" stop-color="#0a0b09"/><stop offset="1" stop-color="#4d3713"/></linearGradient>
+      <linearGradient id="rf" gradientUnits="userSpaceOnUse" x1="0" y1="780" x2="0" y2="888"><stop offset="0" stop-color="#5a4016" stop-opacity="0"/><stop offset="1" stop-color="#5a4016" stop-opacity=".55"/></linearGradient>
+      <linearGradient id="fg" gradientUnits="userSpaceOnUse" x1="0" y1="640" x2="0" y2="896"><stop offset="0" stop-color="#fff"/><stop offset=".78" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
+      <mask id="fm" maskUnits="userSpaceOnUse" x="0" y="640" width="736" height="270"><rect x="0" y="640" width="736" height="270" fill="url(#fg)"/></mask>
+      <linearGradient id="rl" x1="0" x2="1"><stop offset="0" stop-color="#d9a547" stop-opacity="0"/><stop offset=".5" stop-color="#d9a547" stop-opacity=".16"/><stop offset="1" stop-color="#d9a547" stop-opacity="0"/></linearGradient>
+      <filter id="bl"><feGaussianBlur stdDeviation="2.4"/></filter>
+      <g id="man">
+        <ellipse cx="365" cy="668" rx="16.5" ry="18"/><rect x="345" y="661" width="6" height="17" rx="3"/><rect x="379" y="661" width="6" height="17" rx="3"/>
+        <path d="M352 683 C337 689 327 699 323 716 L320 768 L322 797 L331 799 L336 766 L338 792 L338 842 L342 880 L358 880 L362 802 L368 802 L372 880 L388 880 L392 842 L394 792 L398 766 L403 797 L409 797 L411 766 L409 716 C406 699 394 689 378 683 Z"/>
+      </g>
+    </defs>
+    <g fill="none" stroke="url(#rl)" stroke-width="1"><path d="M60 745H680"/><path d="M110 768H640"/><path d="M80 797H660"/><path d="M130 828H610"/><path d="M90 862H650"/><path d="M150 905H590"/><path d="M60 955H680"/></g>
+    <use href="#man" fill="url(#rf)" transform="translate(0 1770) scale(1 -1)" filter="url(#bl)" opacity=".9"/>
+    <g mask="url(#fm)"><use href="#man" fill="url(#bf)" stroke="rgba(235,175,65,.16)" stroke-width=".8"/></g>
+  </svg>
 
-    <div class="header">
-      <h1><span class="k-title">Didi Online</span> <span class="k-spark">✨</span></h1>
-      <p>¡Únete a la aventura Anime! Acceso verificado 💖</p>
-    </div>
-
-    <!-- VISTA 1: Login / Registro -->
+  <div class="form">
+    <!-- VISTA 1: Log in / Register -->
     <div class="view active" id="authView">
-      <div class="tabs">
-        <button type="button" class="tab active" id="tabLogin">Iniciar Sesión</button>
-        <button type="button" class="tab" id="tabRegister">Registrarse</button>
+      <div class="atabs">
+        <button type="button" class="atab active" id="tabLogin">Log in</button>
+        <button type="button" class="atab" id="tabRegister">Register</button>
       </div>
-
       <form id="authForm" autocomplete="off" novalidate>
-        <div class="vehicle-selector" id="vehicleSelector">
-          <div class="v-option selected" data-vehicle="moto"><span>🏍️</span>Moto</div>
-          <div class="v-option" data-vehicle="bike"><span>🚲</span>Bicicleta</div>
-          <div class="v-option" data-vehicle="car"><span>🚗</span>Auto</div>
+        <input class="f" type="email" id="user" placeholder="Email" autocomplete="email" aria-label="Email">
+        <input class="f" type="password" id="pass" placeholder="Password" autocomplete="current-password" aria-label="Password">
+        <div id="confirmGroup" style="display:none">
+          <input class="f" type="password" id="pass2" placeholder="Confirm password" autocomplete="new-password" aria-label="Confirm password">
         </div>
-
-        <div class="input-group">
-          <input type="email" id="user" placeholder=" " autocomplete="email">
-          <label for="user">Correo Electrónico</label>
-        </div>
-        <div class="input-group">
-          <input type="password" id="pass" placeholder=" " autocomplete="new-password">
-          <label for="pass">Contraseña (Mín. 6 caracteres)</label>
-        </div>
-        <div class="input-group" id="confirmGroup" style="display:none">
-          <input type="password" id="pass2" placeholder=" " autocomplete="new-password">
-          <label for="pass2">Confirmar Contraseña</label>
-        </div>
-
-        <button type="submit" class="auth-btn" id="authBtn">Ingresar al Sistema</button>
+        <button type="submit" class="auth-btn" id="authBtn">Log in</button>
       </form>
-      <div class="or-sep">o</div>
-      <button type="button" class="google-btn" id="googleBtn">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        <span>Continuar con Google</span>
-      </button>
-      <button type="button" class="demo-btn" id="demoBtn">🎭 Modo Demo</button>
-      <p class="demo-hint">Explora la aplicación sin cuenta · datos de prueba</p>
     </div>
 
     <!-- VISTA 2: Verificación por código -->
     <div class="view" id="verifyView">
-      <div class="verify-info">
-        📧 Enviamos un código de verificación a:
-        <strong id="verifyEmail"></strong>
-      </div>
-      <div class="input-group">
-        <input type="text" id="codeInput" class="code-input" placeholder=" " maxlength="8" inputmode="numeric" autocomplete="one-time-code">
-        <label for="codeInput">Código de verificación</label>
-      </div>
-      <button type="button" class="auth-btn" id="verifyBtn">Verificar y Entrar</button>
-      <button type="button" class="auth-btn ghost" id="resendBtn">Reenviar código</button>
-      <button type="button" class="auth-btn ghost" id="backBtn">← Volver</button>
+      <div class="verify-info">We sent a verification code to:<strong id="verifyEmail"></strong></div>
+      <input class="f code" type="text" id="codeInput" placeholder="Code" maxlength="8" inputmode="numeric" autocomplete="one-time-code" aria-label="Verification code">
+      <button type="button" class="auth-btn" id="verifyBtn">Verify &amp; enter</button>
+      <button type="button" class="auth-btn ghost" id="resendBtn">Resend code</button>
+      <button type="button" class="auth-btn ghost" id="backBtn">← Back</button>
     </div>
 
     <!-- VISTA: sin créditos -->
     <div class="view" id="noAccessView">
-      <div class="verify-info">🔒 Tu cuenta está verificada, pero <strong>no tiene créditos asignados</strong>. Contacta al administrador para activar tu acceso.</div>
-      <a id="waBtn" class="auth-btn wa" target="_blank" rel="noopener">💬 Pedir recarga por WhatsApp</a>
-      <button type="button" class="auth-btn" id="recheckBtn">Ya me activaron, revisar</button>
-      <button type="button" class="auth-btn ghost" id="noAccessLogout">Cerrar sesión</button>
+      <div class="verify-info">🔒 Your account is verified, but <strong>it has no credits assigned</strong>. Contact the administrator to activate your access.</div>
+      <a id="waBtn" class="auth-btn wa" target="_blank" rel="noopener">💬 Request a top-up on WhatsApp</a>
+      <button type="button" class="auth-btn" id="recheckBtn">I was activated, check again</button>
+      <button type="button" class="auth-btn ghost" id="noAccessLogout">Log out</button>
     </div>
 
     <!-- VISTA: bloqueado -->
     <div class="view" id="blockedView">
-      <div class="verify-info">⛔ Tu cuenta fue <strong>bloqueada por el administrador</strong>. No puedes usar la aplicación hasta que sea desbloqueada.</div>
-      <a id="waBlockedBtn" class="auth-btn wa" target="_blank" rel="noopener">💬 Contactar al administrador</a>
-      <button type="button" class="auth-btn ghost" id="blockedLogout">Cerrar sesión</button>
+      <div class="verify-info">⛔ Your account was <strong>blocked by the administrator</strong>. You can't use the app until it is unblocked.</div>
+      <a id="waBlockedBtn" class="auth-btn wa" target="_blank" rel="noopener">💬 Contact the administrator</a>
+      <button type="button" class="auth-btn ghost" id="blockedLogout">Log out</button>
     </div>
-
-    <p class="status-text" id="statusText">Inicia sesión o regístrate para usar la aplicación</p>
-
-    <div class="k-chips" aria-hidden="true">
-      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M3 17a9 9 0 0118 0z"/><circle cx="8.6" cy="13" r="1" fill="#2a2552"/><circle cx="15.4" cy="13" r="1" fill="#2a2552"/><path d="M6.6 6.4L8.4 9M17.4 6.4L15.6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>APK</span>
-      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Premium</span>
-      <span class="k-chip"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z"/></svg>Seguro</span>
-    </div>
-
   </div>
-</div>
 
-<!-- ====== ETIQUETAS MODO DEMO ====== -->
-<div id="demoWatermark" aria-hidden="true"></div>
-<div id="demoBanner">🎭 Modo Demo · Modo Demo · Modo Demo · Modo Demo</div>
-<div id="demoBar"><span>🎭 MODO DEMO</span><button id="demoExit" type="button">SALIR DEMO ✕</button></div>
-<div class="demo-side l">MODO DEMO</div><div class="demo-side r">MODO DEMO</div>
-<div id="demoPill">🎭 MODO DEMO · Datos de prueba</div>
-<div id="demoLock" role="dialog" aria-modal="true">
-  <div class="demo-lock-card">
-    <div class="dl-ico">🔒</div>
-    <h3>🎭 Estás en Modo Demo</h3>
-    <p>La <b>Etapa 2</b> no está disponible en el modo demo.<br><b>Agrega créditos</b> para utilizar la aplicación completa.</p>
-    <a id="demoLockWa" class="auth-btn" target="_blank" rel="noopener">💬 Pedir créditos por WhatsApp</a>
-    <button type="button" class="auth-btn ghost" id="demoLockClose">Seguir explorando la demo</button>
+  <div id="googleWrap">
+    <div class="rule" aria-hidden="true"></div>
+    <button type="button" class="g" id="googleBtn">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.9 2.4 30.4 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.5 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.9 2.3-8.5 2.3-6.3 0-11.6-4-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+      <span>Log in with Google</span>
+    </button>
   </div>
-</div>
+
+  <p class="status-text" id="statusText"></p>
+</main>
 
 <!-- Aviso del administrador (llega a todos los usuarios) -->
 <div id="annLock" role="dialog" aria-modal="true">
-  <div class="demo-lock-card">
+  <div class="lock-card">
     <div class="dl-ico">📣</div>
     <h3 id="annTitle">Aviso importante</h3>
     <p class="ann-msg" id="annMsg"></p>
@@ -516,7 +388,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
 
 <!-- Aviso: sin créditos para continuar con el pedido -->
 <div id="noCreditLock" role="dialog" aria-modal="true">
-  <div class="demo-lock-card">
+  <div class="lock-card">
     <div class="dl-ico" id="noCreditIco">💳</div>
     <h3 id="noCreditTitle">Sin créditos</h3>
     <p id="noCreditMsg">Necesitas <b>al menos 1 crédito</b> para continuar con tu pedido.<br>Recarga para usar la aplicación completa.</p>
@@ -1857,7 +1729,7 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
     <!-- ========================================== -->
     <script>
         // PERMISOS: solo el administrador puede editar tiendas, logo, imagen, etc.
-        // La bandera la define la página padre al iniciar sesión (en modo demo es false).
+        // La bandera la define la página padre al iniciar sesión.
         const IS_ADMIN = (function () { try { return !!(window.parent && window.parent.appIsAdmin); } catch (e) { return false; } })();
         // Campos que un usuario normal SÍ puede editar: número del pedido y nombre del usuario
         const USER_EDITABLE_IDS = ['stage1-order-title', 'details-order-title'];
@@ -2627,8 +2499,6 @@ body.demo-on .demo-side{display:block;position:fixed;top:50%;z-index:190;pointer
             let moveX = (e.type.includes('mouse') ? e.pageX : e.changedTouches[0].pageX) - startX;
 
             if (moveX > maxDrag * 0.8) {
-                // MODO DEMO: no se permite entrar a la Etapa 2
-                try { if (window.parent && window.parent.isDemoMode) { slideThumb.style.transform = 'translateX(0px)'; window.parent.showDemoLock(); return; } } catch (err) {}
                 isSliderLoading = true; 
                 sliderContainer.style.pointerEvents = 'none';
                 slideThumb.style.transform = `translateX(${maxDrag}px)`;
@@ -3804,17 +3674,16 @@ catch (e) { console.error('Error iniciando Supabase:', e); }
 window.appDb = db;
 
 let isRegisterMode = false;
-let selectedVehicle = 'moto';
+const selectedVehicle = 'moto'; // valor por defecto (ya no se elige en el registro)
 let pendingEmail = '';
 
 const $ = id => document.getElementById(id);
 const tabLogin = $('tabLogin'), tabRegister = $('tabRegister');
 const authView = $('authView'), verifyView = $('verifyView'), noAccessView = $('noAccessView'), blockedView = $('blockedView');
-const vehicleSelector = $('vehicleSelector'), confirmGroup = $('confirmGroup');
+const confirmGroup = $('confirmGroup'), googleWrap = $('googleWrap');
 const authBtn = $('authBtn'), authForm = $('authForm');
 const userEmail = $('user'), userPass = $('pass'), userPass2 = $('pass2');
 const statusText = $('statusText');
-const vehicleSvg = $('vehicleSvg');
 
 function setStatus(msg, type) {
   statusText.textContent = msg;
@@ -3823,6 +3692,7 @@ function setStatus(msg, type) {
 function showView(view) {
   [authView, verifyView, noAccessView, blockedView].forEach(v => v.classList.remove('active'));
   view.classList.add('active');
+  googleWrap.style.display = view === authView ? '' : 'none';
 }
 
 /* ---------- Pestañas ---------- */
@@ -3830,55 +3700,15 @@ function switchMode(mode) {
   isRegisterMode = mode === 'register';
   tabRegister.classList.toggle('active', isRegisterMode);
   tabLogin.classList.toggle('active', !isRegisterMode);
-  vehicleSelector.classList.toggle('show', isRegisterMode);
   confirmGroup.style.display = isRegisterMode ? 'block' : 'none';
-  authBtn.textContent = isRegisterMode ? 'Crear Cuenta' : 'Ingresar al Sistema';
+  authBtn.textContent = isRegisterMode ? 'Create account' : 'Log in';
   userPass.autocomplete = isRegisterMode ? 'new-password' : 'current-password';
   setStatus(isRegisterMode
-    ? 'Elige tu vehículo, crea tu contraseña y te enviaremos un código a tu correo'
+    ? 'Crea tu contraseña y te enviaremos un código a tu correo'
     : 'Inicia sesión con tu cuenta verificada');
 }
 tabLogin.addEventListener('click', () => switchMode('login'));
 tabRegister.addEventListener('click', () => switchMode('register'));
-
-/* ---------- Vehículos ---------- */
-const VEHICLES = {
-  moto: `<path d="M 60 120 L 90 90 L 150 90 L 180 120 Z" fill="rgba(40,28,92,.85)" stroke-width="2"/>
-    <path d="M 120 90 L 140 60 L 170 80"/>
-    <path d="M 140 60 L 150 40 L 165 40" stroke="#5eead4" stroke-width="4"/>
-    <path d="M 100 90 C 80 70, 130 50, 140 60" fill="#ff7ac6" stroke="none"/>
-    <path d="M 90 140 L 40 130 L 30 135" stroke="#5eead4" stroke-width="4"/>
-    <line x1="195" y1="175" x2="160" y2="70" stroke-width="5"/>
-    <line x1="55" y1="175" x2="90" y2="90" stroke-width="5"/>
-    <circle cx="55" cy="175" r="30" fill="#1b1745" stroke="#4a3f95" stroke-width="8"/>
-    <circle class="wheel" cx="55" cy="175" r="22" stroke-width="4" fill="none"/>
-    <circle cx="195" cy="175" r="30" fill="#1b1745" stroke="#4a3f95" stroke-width="8"/>
-    <circle class="wheel" cx="195" cy="175" r="22" stroke-width="4" fill="none"/>
-    <polygon points="175,75 190,85 170,95" fill="#ff7ac6" stroke="none"/>`,
-  bike: `<circle cx="55" cy="150" r="35" stroke-width="4"/>
-    <circle class="wheel" cx="55" cy="150" r="28" stroke-width="2"/>
-    <circle cx="195" cy="150" r="35" stroke-width="4"/>
-    <circle class="wheel" cx="195" cy="150" r="28" stroke-width="2"/>
-    <path d="M 55 150 L 110 90 L 160 150" stroke-width="4"/>
-    <path d="M 110 90 L 130 60 L 150 60" stroke-width="4"/>
-    <path d="M 195 150 L 150 90" stroke-width="4"/>`,
-  car: `<path d="M 40 130 Q 60 100 110 100 L 160 100 Q 200 100 220 130 Z" fill="rgba(255,122,198,.2)" stroke-width="4"/>
-    <rect x="70" y="70" width="100" height="40" rx="15" stroke-width="4"/>
-    <circle cx="75" cy="150" r="22" fill="#1b1745" stroke="#5eead4" stroke-width="6"/>
-    <circle cx="175" cy="150" r="22" fill="#1b1745" stroke="#5eead4" stroke-width="6"/>`
-};
-const VEHICLE_LABEL = { moto: 'Moto 🏍️', bike: 'Bicicleta 🚲', car: 'Auto 🚗' };
-function updateVehicleSVG(type) { vehicleSvg.innerHTML = VEHICLES[type] || VEHICLES.moto; }
-updateVehicleSVG('moto');
-
-document.querySelectorAll('.v-option').forEach(opt => {
-  opt.addEventListener('click', () => {
-    document.querySelectorAll('.v-option').forEach(el => el.classList.remove('selected'));
-    opt.classList.add('selected');
-    selectedVehicle = opt.dataset.vehicle;
-    updateVehicleSVG(selectedVehicle);
-  });
-});
 
 /* ---------- Login / Registro ---------- */
 authForm.addEventListener('submit', async (e) => {
@@ -3898,13 +3728,13 @@ authForm.addEventListener('submit', async (e) => {
       authBtn.disabled = false;
       return setStatus('Las contraseñas no coinciden.', 'err');
     }
-    authBtn.textContent = 'Enviando código...';
+    authBtn.textContent = 'Sending code...';
     const { data, error } = await db.auth.signUp({
       email, password,
       options: { data: { vehicle: selectedVehicle } }
     });
     authBtn.disabled = false;
-    authBtn.textContent = 'Crear Cuenta';
+    authBtn.textContent = 'Create account';
 
     if (error) return setStatus('Error en registro: ' + error.message, 'err');
 
@@ -3917,10 +3747,10 @@ authForm.addEventListener('submit', async (e) => {
     showView(verifyView);
     setStatus('Revisa tu correo (y la carpeta de spam) e ingresa el código.', 'ok');
   } else {
-    authBtn.textContent = 'Verificando credenciales...';
+    authBtn.textContent = 'Verifying...';
     const { data, error } = await db.auth.signInWithPassword({ email, password });
     authBtn.disabled = false;
-    authBtn.textContent = 'Ingresar al Sistema';
+    authBtn.textContent = 'Log in';
 
     if (error) {
       if (/not confirmed/i.test(error.message)) {
@@ -3941,10 +3771,10 @@ $('verifyBtn').addEventListener('click', async () => {
   const token = $('codeInput').value.trim();
   if (token.length < 6) return setStatus('Ingresa el código completo que recibiste.', 'err');
   const btn = $('verifyBtn');
-  btn.disabled = true; btn.textContent = 'Verificando...';
+  btn.disabled = true; btn.textContent = 'Verifying...';
 
   const { data, error } = await db.auth.verifyOtp({ email: pendingEmail, token, type: 'signup' });
-  btn.disabled = false; btn.textContent = 'Verificar y Entrar';
+  btn.disabled = false; btn.textContent = 'Verify & enter';
 
   if (error) return setStatus('Código inválido o vencido: ' + error.message, 'err');
   onLoginSuccess(data.user || (data.session && data.session.user));
@@ -4101,8 +3931,8 @@ async function onLoginSuccess(user) {
   // NUEVO SISTEMA: entrar NO descuenta ni exige créditos. Todos pueden ver la app.
   // El crédito se pide al pulsar "Tengo el pedido" y se consume al deslizar "Salir" (ver requireCredits).
 
-  clearInterval(lineTimer);
-  document.querySelector('.environment').style.display = 'none';
+  if (window.stopAuthScene) window.stopAuthScene();
+  $('world').style.display = 'none';
   document.querySelector('.scene').style.display = 'none';
   
   // AQUÍ OCULTAMOS EL BOTÓN DE WHATSAPP PARA QUE NO SE VEA EN LA APLICACIÓN
@@ -4133,39 +3963,6 @@ async function onLoginSuccess(user) {
   }, 30000);
 }
 
-/* ---------- MODO DEMO ---------- */
-let demoMode = false;
-function startDemo() {
-  const src = $('appSource').value;
-  if (!/<!doctype|<html/i.test(src)) {
-    return setStatus('Falta el código de la app en el archivo.', 'err');
-  }
-  demoMode = true;
-  window.isDemoMode = true;     // el iframe consulta esta bandera
-  appOpen = true;               // evita cualquier lógica de sesión/créditos
-  window.appDb = null;          // la demo NO toca Supabase
-  window.appUser = null;        // sin usuario real
-  window.appIsAdmin = false;    // la demo se comporta como un usuario normal
-  try { localStorage.removeItem('didi_demo_stores_cache'); } catch (e) {}
-  // La demo guarda sus tiendas en una copia local aparte (no mezcla con datos reales)
-  const demoSrc = src.split('didi_stores_cache_v3_shared').join('didi_demo_stores_cache');
-
-  clearInterval(lineTimer);
-  document.querySelector('.environment').style.display = 'none';
-  document.querySelector('.scene').style.display = 'none';
-  $('globalWaBtn').style.display = 'none';
-  document.title = 'Didi Online — MODO DEMO';
-  document.body.classList.add('demo-on');
-
-  const frame = $('appFrame');
-  frame.srcdoc = demoSrc;
-  frame.style.display = 'block';
-}
-function showDemoLock() {
-  $('demoLockWa').href = waUrl('👋 ¡Hola! Estoy probando el *Modo Demo* de Didi Online 🎭\n\n💳 Quiero créditos para usar la aplicación completa ⚡\n\n¿Me ayudas, por favor? 🙏✨');
-  $('demoLock').classList.add('show');
-}
-window.showDemoLock = showDemoLock;
 
 /* ---------- CRÉDITOS POR USO ----------
    Todos pueden entrar y ver la app. Para avanzar hace falta crédito:
@@ -4197,7 +3994,6 @@ let creditBusy = false;
 // La app (iframe) la llama antes de "Tengo el pedido" (kind='pedido') y de "Salir" (kind='salir').
 // Devuelve true si puede avanzar; si no, muestra el aviso y devuelve false.
 window.requireCredits = async function (kind) {
-  if (window.isDemoMode || demoMode) return true;   // la demo ya tiene su propio bloqueo
   if (window.appIsAdmin) return true;               // el administrador no gasta créditos
   if (!db || !window.appUser) return true;
   if (creditBusy) return false;
@@ -4274,8 +4070,8 @@ async function flushUsageQueue() {
   writeUsageQueue(left);
 }
 window.logAppUsage = async function (info) {
-  // En modo demo o sin sesión real NO se registra nada
-  if (demoMode || window.isDemoMode || !db || !window.appUser) return;
+  // Sin sesión real NO se registra nada
+  if (!db || !window.appUser) return;
   try {
     info = info || {};
     const u = window.appUser;
@@ -4297,10 +4093,7 @@ window.logAppUsage = async function (info) {
     else flushUsageQueue();
   } catch (e) { console.warn('Historial: error', e); }
 };
-$('demoLockClose').addEventListener('click', () => $('demoLock').classList.remove('show'));
 $('noCreditClose').addEventListener('click', hideNoCredits);
-$('demoBtn').addEventListener('click', startDemo);
-$('demoExit').addEventListener('click', () => location.reload());
 
 async function logout() {
   if (db) await db.auth.signOut();
@@ -4382,7 +4175,7 @@ function annMarkSeen(u, id) {
   } catch (e) {}
 }
 function annShowNext() {
-  if (annShowing || !annQueue.length || window.isDemoMode) return;
+  if (annShowing || !annQueue.length) return;
   annShowing = annQueue.shift();
   $('annTitle').textContent = annShowing.title || 'Aviso importante';
   $('annMsg').textContent = annShowing.body || '';
@@ -4397,7 +4190,7 @@ function annClose() {
 }
 async function annCheck() {
   const user = window.appUser;
-  if (!db || !user || demoMode) return;
+  if (!db || !user) return;
   try {
     // No muestra avisos anteriores a la creación de la cuenta ni más viejos de ANN_DAYS días
     const since = new Date(Math.max(Date.now() - ANN_DAYS * 864e5, new Date(user.created_at || 0).getTime())).toISOString();
@@ -4571,54 +4364,121 @@ $('adminList').addEventListener('click', async (e) => {
 });
 
 /* ==========================================
-   2. EFECTO 3D / PARALLAX
+   2. FONDO: CIELO ESTRELLADO ANIMADO
    ========================================== */
-const panel = $('panel'), vehicleWrapper = $('vehicleWrapper'), sun =$('sun');
-let mx = 0, my = 0, tx = 0, ty = 0;
-window.addEventListener('mousemove', e => {
-  mx = e.clientX - innerWidth / 2;
-  my = e.clientY - innerHeight / 2;
-});
-(function render() {
-  tx += (mx - tx) * .08; ty += (my - ty) * .08;
-  panel.style.transform = `rotateX(${ty * -0.01}deg) rotateY(${tx * 0.015}deg)`;
-  vehicleWrapper.style.transform = `translateX(${tx * .15}px) translateY(${ty * .05}px) rotateZ(${tx * .04}deg)`;
-  sun.style.transform = `translate(calc(-50% + ${tx * -.05}px), ${ty * -.02}px)`;
-  requestAnimationFrame(render);
-})();
+(function () {
+  const world = $('world'), scene = $('scene'), sky = $('sky'), fx = $('fx');
+  const sx = sky.getContext('2d'), x = fx.getContext('2d');
+  const R = Math.random, PI = Math.PI;
+  const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let K = 1, OX = 0, OY = 0, XMIN = 0, XMAX = 736, YMIN = 0, alive = true, raf = 0, last = 0, t = 0, nx = 2, rt = 0;
+  let stars = [], dust = [], motes = [], glints = [], shoots = [];
 
-/* ==========================================
-   3. LÍNEAS DE VELOCIDAD
-   ========================================== */
-const linesContainer = $('speedLines');
-const SPARK_COLORS = ['#ffb3d9','#c4b5fd','#7de3ff','#ffffff','#ff8fc7','#a5f3fc'];
-function spawnSpark(initial) {
-  const s = document.createElement('div');
-  const isStar = Math.random() < .22;
-  const size = isStar ? (10 + Math.random() * 12) : (3 + Math.random() * 7);
-  const color = SPARK_COLORS[(Math.random() * SPARK_COLORS.length) | 0];
-  const dur = 8 + Math.random() * 8;
-  const delay = initial ? -(Math.random() * dur * .9) : 0;
-  s.className = 'spark' + (isStar ? ' star' : '');
-  s.style.left = (Math.random() * 100) + '%';
-  s.style.setProperty('--dx', ((Math.random() * 80) - 40) + 'px');
-  s.style.animationDuration = dur + 's';
-  if (delay) s.style.animationDelay = delay + 's';
-  if (isStar) {
-    s.textContent = '✦';
-    s.style.fontSize = size + 'px';
-    s.style.color = color;
-    s.style.textShadow = '0 0 8px ' + color;
-  } else {
-    s.style.width = s.style.height = size + 'px';
-    s.style.background = color;
-    s.style.boxShadow = '0 0 ' + Math.round(size * 2) + 'px ' + color;
+  function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let q = Math.imul(a ^ a >>> 15, 1 | a); q = q + Math.imul(q ^ q >>> 7, 61 | q) ^ q; return ((q ^ q >>> 14) >>> 0) / 4294967296; }; }
+  function layout() {
+    const r = scene.getBoundingClientRect(), w = world.clientWidth, h = world.clientHeight;
+    K = r.width / 736 || 1; OX = r.left; OY = r.top;
+    XMIN = -OX / K; XMAX = (w - OX) / K; YMIN = -OY / K;
   }
-  linesContainer.appendChild(s);
-  setTimeout(() => s.remove(), (dur + delay) * 1000 + 300);
-}
-for (let i = 0; i < 12; i++) spawnSpark(true);
-const lineTimer = setInterval(() => { if (!document.hidden) spawnSpark(false); }, 600);
+  function setup(cv) {
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(world.clientWidth * d); cv.height = Math.round(world.clientHeight * d);
+    return d;
+  }
+
+  /* Capa estática: Vía Láctea y polvo del horizonte */
+  function drawStatic() {
+    const d = setup(sky), c = sx, r = rng(11);
+    c.setTransform(d * K, 0, 0, d * K, d * OX, d * OY);
+    const G = () => (r() + r() + r() + r() - 2) * 1.73;
+    const blob = (px, py, rad, col, a) => { const q = c.createRadialGradient(px, py, 0, px, py, rad); q.addColorStop(0, 'rgba(' + col + ',' + a + ')'); q.addColorStop(1, 'rgba(' + col + ',0)'); c.fillStyle = q; c.fillRect(px - rad, py - rad, rad * 2, rad * 2); };
+    const dot = (px, py, s, col) => { c.fillStyle = col; c.beginPath(); c.arc(px, py, s, 0, 7); c.fill(); };
+    const cx = y => 592 - .08 * y, prof = y => Math.max(0, Math.sin(PI * Math.min(y, 640) / 640));
+    const YT = Math.min(0, YMIN); let i, y, px, p, s;
+    for (y = YT; y < 640; y += 13) { px = cx(y) + G() * 6 + Math.sin(y / 55) * 8; blob(px, y, 45 + r() * 40, '205,150,70', .03 + .06 * prof(y) * r()); }
+    blob(565, 570, 95, '210,150,60', .13);
+    const n = Math.min(12000, Math.round(7000 * (650 - YT) / 650));
+    for (i = 0; i < n; i++) {
+      y = YT + r() * (650 - YT); p = prof(y) + .15; s = 18 + 26 * p; px = cx(y) + G() * s * .9 + Math.sin(y / 55) * 8;
+      dot(px, y, .35 + r() * .9, 'rgba(' + (215 + r() * 30 | 0) + ',' + (150 + r() * 40 | 0) + ',' + (70 + r() * 40 | 0) + ',' + ((.08 + r() * .35) * Math.min(1, p)) + ')');
+    }
+    for (i = 0; i < 9; i++) { y = 60 + r() * 420; blob(cx(y) + (r() - .5) * 50, y, 14 + r() * 22, '8,16,18', .4); }
+    for (i = 0; i < 2800; i++) {
+      px = 368 + G() * 210; y = 702 + G() * 11;
+      dot(px, y, .4 + r() * .8, 'rgba(235,175,70,' + ((.1 + r() * .45) * Math.exp(-Math.pow((px - 368) / 300, 2))) + ')');
+    }
+  }
+
+  /* Capa animada */
+  const g2 = () => (R() + R() + R() + R() - 2) * 1.73;
+  function mkDust(init, milky) {
+    const o = { x0: milky ? 545 + g2() * 60 : 368 + g2() * 230, y0: milky ? 480 + R() * 170 : 705 + R() * 25, ttl: 9 + R() * 14, rise: milky ? 90 + R() * 200 : 150 + R() * 420, amp: 6 + R() * 18, f: .4 + R() * .9, ph: R() * 6.3, s: .5 + R() * 1.1, a: .3 + R() * .5, age: 0, m: milky };
+    if (init) o.age = R() * o.ttl; return o;
+  }
+  function initFx() {
+    let i; stars = []; dust = []; motes = []; glints = [];
+    const n = Math.min(700, Math.round(420 * (XMAX - XMIN) * (700 - YMIN) / (736 * 700)));
+    for (i = 0; i < n; i++) {
+      const rr = .35 + Math.pow(R(), 3) * 1.5;
+      stars.push({ x: XMIN + R() * (XMAX - XMIN), y: YMIN + Math.pow(R(), 1.1) * (700 - YMIN), r: rr, vx: -(1.2 + rr * 4.5), vy: rr * .5, ph: R() * 6.3, sp: .5 + R() * 2.6, a: .3 + R() * .7, g: R() < .5 ? '255,238,205' : '255,222,170' });
+    }
+    for (i = 0; i < 190; i++) dust.push(mkDust(true, i % 4 === 0));
+    for (i = 0; i < 28; i++) motes.push({ y: R() * 585, v: 35 + R() * 90, s: .8 + R() * 1.4, ph: R() * 6.3 });
+    for (i = 0; i < 190; i++) { const w = R() < .5; glints.push({ x: 368 + g2() * 230, y: w ? 728 + Math.abs(g2()) * 130 : 702 + g2() * 5, ph: R() * 6.3, sp: 1 + R() * 3, a: .5 + R() * .5 }); }
+  }
+  function render(dt, tt) {
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    x.setTransform(d * K, 0, 0, d * K, d * OX, d * OY);
+    x.clearRect(XMIN - 5, YMIN - 5, XMAX - XMIN + 10, 1104 - YMIN + 600);
+    let j, s, a, p, xx, yy;
+    for (j = 0; j < stars.length; j++) {
+      s = stars[j];
+      if (!rm) { s.x += s.vx * dt; s.y += s.vy * dt; if (s.x < XMIN - 3) s.x = XMAX + 3; if (s.y > 700) s.y = YMIN - 2; }
+      a = s.a * (.5 + .5 * Math.sin(tt * s.sp + s.ph)) * Math.min(1, (700 - s.y) / 110 + .1); if (a < .02) continue;
+      x.fillStyle = 'rgba(' + s.g + ',' + a + ')';
+      if (s.r > .9) { x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.3); x.fill(); x.fillStyle = 'rgba(' + s.g + ',' + a * .18 + ')'; x.beginPath(); x.arc(s.x, s.y, s.r * 3.2, 0, 6.3); x.fill(); }
+      else x.fillRect(s.x - s.r, s.y - s.r, s.r * 2, s.r * 2);
+    }
+    for (j = 0; j < dust.length; j++) {
+      s = dust[j]; s.age += dt; if (s.age > s.ttl) s = dust[j] = mkDust(false, s.m);
+      p = s.age / s.ttl; yy = s.y0 - s.rise * p; xx = s.x0 + Math.sin(s.age * s.f + s.ph) * s.amp; a = s.a * Math.sin(PI * p);
+      x.fillStyle = 'rgba(244,190,90,' + a + ')'; x.beginPath(); x.arc(xx, yy, s.s, 0, 6.3); x.fill();
+      x.fillStyle = 'rgba(244,190,90,' + a * .14 + ')'; x.beginPath(); x.arc(xx, yy, s.s * 3.4, 0, 6.3); x.fill();
+    }
+    for (j = 0; j < motes.length; j++) {
+      s = motes[j]; if (!rm) s.y -= s.v * dt; if (s.y < 0) s.y = 585 + R() * 30;
+      xx = 367 + Math.sin(tt * 2 + s.ph) * 2.2; a = (.5 + .5 * Math.sin(tt * 3 + s.ph)) * Math.min(1, s.y / 90) * Math.min(1, (600 - s.y) / 60); if (a <= 0) continue;
+      x.fillStyle = 'rgba(255,214,130,' + a * .9 + ')'; x.beginPath(); x.arc(xx, s.y, s.s, 0, 6.3); x.fill();
+      x.fillStyle = 'rgba(255,200,100,' + a * .2 + ')'; x.beginPath(); x.arc(xx, s.y, s.s * 4, 0, 6.3); x.fill();
+    }
+    for (j = 0; j < glints.length; j++) {
+      s = glints[j]; a = s.a * Math.pow(Math.max(0, Math.sin(tt * s.sp + s.ph)), 8) * Math.exp(-Math.pow((s.x - 368) / 260, 2)); if (a < .03) continue;
+      x.fillStyle = 'rgba(255,210,120,' + a + ')'; x.fillRect(s.x - .7, s.y - .7, 1.4, 1.4);
+      x.fillStyle = 'rgba(240,180,70,' + a * .25 + ')'; x.beginPath(); x.arc(s.x, s.y, 3.2, 0, 6.3); x.fill();
+    }
+    for (j = shoots.length - 1; j >= 0; j--) {
+      s = shoots[j]; s.age += dt; p = s.age / s.life; if (p >= 1) { shoots.splice(j, 1); continue; }
+      s.x += s.vx * dt; s.y += s.vy * dt; a = Math.sin(PI * p);
+      const L = Math.sqrt(s.vx * s.vx + s.vy * s.vy), tx = s.x - s.vx / L * 120, ty = s.y - s.vy / L * 120;
+      const gr = x.createLinearGradient(s.x, s.y, tx, ty); gr.addColorStop(0, 'rgba(255,238,205,' + a + ')'); gr.addColorStop(1, 'rgba(255,200,110,0)');
+      x.strokeStyle = gr; x.lineWidth = 1.4; x.beginPath(); x.moveTo(s.x, s.y); x.lineTo(tx, ty); x.stroke();
+    }
+  }
+  function frame(ts) {
+    if (!alive) return;
+    const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; t += dt; nx -= dt;
+    if (nx < 0) { shoots.push({ x: XMIN + 150 + R() * (XMAX - XMIN - 200), y: YMIN + 20 + R() * 260, vx: -(420 + R() * 200), vy: 170 + R() * 130, age: 0, life: .8 + R() * .5 }); nx = 3 + R() * 5; }
+    render(dt, t); raf = requestAnimationFrame(frame);
+  }
+  function start() { cancelAnimationFrame(raf); if (!alive) return; if (rm) { render(0, 1); return; } last = performance.now(); raf = requestAnimationFrame(frame); }
+  function rebuild() { if (!alive) return; layout(); drawStatic(); setup(fx); initFx(); start(); }
+
+  window.stopAuthScene = function () { alive = false; cancelAnimationFrame(raf); };
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(rebuild, 150); });
+  rebuild();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (alive) { layout(); } });
+})();
 </script>
 </body>
 </html>
