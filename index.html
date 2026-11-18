@@ -235,15 +235,24 @@ background:linear-gradient(180deg,#cf3a31,#a3231e);box-shadow:inset 0 1px 0 rgba
 .scene .auth-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E)!important;box-shadow:none!important;color:#fff;border:0}
 .scene .verify-info{background:rgba(12,24,36,.62);border:1px solid var(--line);border-radius:calc(15*var(--p));padding:calc(16*var(--p)) calc(20*var(--p));margin:0 0 calc(22*var(--p));font-size:max(12px,2.9cqw);line-height:1.45;color:var(--ink)}
 .scene .verify-info strong{color:#e6b95c;display:block;margin-top:2px;word-break:break-all}
-.scene .rule{position:absolute;left:32.6%;width:35.3%;top:83.5%;height:1px;background:linear-gradient(90deg,transparent,rgba(220,180,110,.3) 30%,rgba(220,180,110,.3) 70%,transparent);z-index:2}
-.scene .g{position:absolute;left:28.8%;width:42.26%;top:86.68%;height:5.98%;border:1px solid rgba(214,178,110,.42);border-radius:calc(22*var(--p));background:rgba(12,24,36,.58);
+.scene .rule{position:absolute;left:32.6%;width:35.3%;top:80.1%;height:1px;background:linear-gradient(90deg,transparent,rgba(220,180,110,.3) 30%,rgba(220,180,110,.3) 70%,transparent);z-index:2}
+.scene .g{position:absolute;left:28.8%;width:42.26%;top:83.28%;height:5.98%;border:1px solid rgba(214,178,110,.42);border-radius:calc(22*var(--p));background:rgba(12,24,36,.58);
 display:flex;align-items:center;justify-content:center;gap:calc(13*var(--p));cursor:pointer;color:var(--ink);font-size:max(13px,3.5cqw);font-weight:400;outline:0;transition:border-color .2s,background .2s;z-index:2}
 .scene .g:hover{border-color:rgba(240,200,120,.7);background:rgba(20,36,52,.62)}
 .scene .g:disabled{opacity:.6;cursor:wait}
 .scene .g svg{width:calc(28*var(--p));height:calc(28*var(--p));flex:none}
-.scene .status-text{position:absolute;left:8%;right:8%;top:94%;margin:0;text-align:center;font-size:max(11px,2.5cqw);font-weight:400;line-height:1.35;color:rgba(239,227,198,.7);z-index:2}
+.scene .g.wa-g{top:90.6%;text-decoration:none}
+.scene .status-text{position:absolute;left:8%;right:8%;bottom:.6%;margin:0;text-align:center;font-size:max(11px,2.5cqw);font-weight:400;line-height:1.35;color:rgba(239,227,198,.7);text-shadow:0 1px 6px rgba(0,0,0,.65);z-index:2}
 .scene .status-text.ok{color:#9be8b5}.scene .status-text.err{color:#ff9d8f}
 .scene .f:focus-visible,.scene .auth-btn:focus-visible,.scene .g:focus-visible,.atab:focus-visible{outline:2px solid rgba(240,200,120,.9);outline-offset:2px}
+#musicBtn{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 46px);right:14px;width:42px;height:42px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(12,24,36,.6);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;outline:0;transition:border-color .2s,background .2s}
+#musicBtn:hover{border-color:rgba(240,200,120,.8);background:rgba(20,36,52,.7)}
+#musicBtn:focus-visible{outline:2px solid rgba(240,200,120,.9);outline-offset:2px}
+#musicBtn svg{width:20px;height:20px}
+#musicBtn .s-on{display:none}#musicBtn.on .s-on{display:block}#musicBtn.on .s-off{display:none}
+#musicBtn.wait{animation:mPulse 2s ease-out infinite}
+@keyframes mPulse{0%{box-shadow:0 0 0 0 rgba(240,200,120,.55)}70%,100%{box-shadow:0 0 0 12px rgba(240,200,120,0)}}
+@media (prefers-reduced-motion:reduce){#musicBtn.wait{animation:none}}
 
 </style>
 <style>
@@ -376,8 +385,16 @@ display:flex;align-items:center;justify-content:center;gap:calc(13*var(--p));cur
     </button>
   </div>
 
+  <a id="globalWaBtn" class="g wa-g" href="https://wa.me/573102722613?text=Hola,%20necesito%20ayuda%20con%20DiDi%20Food%20Rider" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    <span>Help on WhatsApp</span>
+  </a>
   <p class="status-text" id="statusText"></p>
 </main>
+<button type="button" id="musicBtn" aria-label="Música de Navidad" title="Activar música navideña">
+  <svg class="s-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6M21 9l-5 6"/></svg>
+  <svg class="s-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+</button>
 
 <!-- Aviso del administrador (llega a todos los usuarios) -->
 <div id="annLock" role="dialog" aria-modal="true">
@@ -3649,12 +3666,6 @@ display:flex;align-items:center;justify-content:center;gap:calc(13*var(--p));cur
 </body>
 </html></textarea>
 
-<!-- Botón Flotante WhatsApp (Con ID asignado) -->
-<a id="globalWaBtn" href="https://wa.me/573102722613?text=Hola,%20necesito%20ayuda%20con%20DiDi%20Food%20Rider" class="float-wa" target="_blank" rel="noopener">
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-  </svg>
-</a>
 
 <script>
 /* ==========================================
@@ -4657,11 +4668,126 @@ $('adminList').addEventListener('click', async (e) => {
     drawMoon(); genTrees(); drawLand(); initFx(); start();
   }
 
-  window.stopAuthScene = function () { alive = false; cancelAnimationFrame(raf); };
+  window.stopAuthScene = function () { alive = false; cancelAnimationFrame(raf); if (window.stopAuthMusic) window.stopAuthMusic(); };
   document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(rebuild, 150); });
   rebuild();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (alive) { layout(); } });
+})();
+
+/* ==========================================
+   3. MÚSICA NAVIDEÑA (sintetizada: Jingle Bells + We Wish You a Merry Christmas)
+   Se activa con el primer toque (regla de los navegadores) y tiene botón de silencio.
+   ========================================== */
+(function () {
+  const btn = $('musicBtn'); if (!btn) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) { btn.style.display = 'none'; return; }
+  let pref = true; try { pref = localStorage.getItem('xmasMusic') !== 'off'; } catch (e) {}
+  const VOL = .55, BEAT = 60 / 126;
+  let ac = null, master = null, bus = null, playing = false, closed = false, hiddenPause = false, timer = 0, idx = 0, base = 0;
+
+  /* ---- partitura (beats) ---- */
+  const SEMI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  const hz = n => 440 * Math.pow(2, (12 * (+n[1] + 1) + SEMI[n[0]] - 69) / 12);
+  const jb = [
+    ['E5', 1], ['E5', 1], ['E5', 2], ['E5', 1], ['E5', 1], ['E5', 2], ['E5', 1], ['G5', 1], ['C5', 1.5], ['D5', .5], ['E5', 4],
+    ['F5', 1], ['F5', 1], ['F5', 1.5], ['F5', .5], ['F5', 1], ['E5', 1], ['E5', 1], ['E5', .5], ['E5', .5], ['E5', 1], ['D5', 1], ['D5', 1], ['E5', 1], ['D5', 2], ['G5', 2],
+    ['E5', 1], ['E5', 1], ['E5', 2], ['E5', 1], ['E5', 1], ['E5', 2], ['E5', 1], ['G5', 1], ['C5', 1.5], ['D5', .5], ['E5', 4],
+    ['F5', 1], ['F5', 1], ['F5', 1.5], ['F5', .5], ['F5', 1], ['E5', 1], ['E5', 1], ['E5', .5], ['E5', .5], ['G5', 1], ['G5', 1], ['F5', 1], ['D5', 1], ['C5', 4]
+  ];
+  const jbBass = ['C3', 'C3', 'C3', 'C3', 'F3', 'F3', 'C3', 'G3', 'C3', 'C3', 'C3', 'C3', 'F3', 'F3', 'G3', 'C3'];
+  const ww = [
+    ['G4', 1],
+    ['C5', 1], ['C5', .5], ['D5', .5], ['C5', .5], ['B4', .5], ['A4', 1], ['A4', 1], ['A4', 1],
+    ['D5', 1], ['D5', .5], ['E5', .5], ['D5', .5], ['C5', .5], ['B4', 1], ['G4', 1], ['G4', 1],
+    ['E5', 1], ['E5', .5], ['F5', .5], ['E5', .5], ['D5', .5], ['C5', 1], ['A4', 1], ['G4', .5], ['G4', .5],
+    ['A4', 1], ['D5', 1], ['B4', 1], ['C5', 3]
+  ];
+  const wwBass = ['C3', 'F3', 'G3', 'G3', 'C3', 'F3', 'G3', 'C3'];
+  const ev = []; let loopLen = 0;
+  (function build() {
+    let b = 0;
+    jb.forEach(n => { ev.push({ t: b, f: hz(n[0]), d: n[1], k: 0 }); b += n[1]; });
+    jbBass.forEach((n, i) => { ev.push({ t: i * 4, f: hz(n), d: 2, k: 1 }); ev.push({ t: i * 4 + 2, f: hz(n) * 1.5, d: 2, k: 1 }); });
+    b = 64 + 2; const s = b;
+    ww.forEach(n => { ev.push({ t: b, f: hz(n[0]), d: n[1], k: 0 }); b += n[1]; });
+    wwBass.forEach((n, i) => ev.push({ t: s + 1 + i * 3, f: hz(n), d: 3, k: 1 }));
+    loopLen = b + 5;
+    ev.sort((x, y) => x.t - y.t);
+  })();
+
+  /* ---- sonido: caja de música con eco suave ---- */
+  function graph() {
+    ac = new AC(); master = ac.createGain(); master.gain.value = 0;
+    const comp = ac.createDynamicsCompressor(); master.connect(comp); comp.connect(ac.destination);
+    bus = ac.createGain();
+    const dry = ac.createGain(); dry.gain.value = .85; bus.connect(dry); dry.connect(master);
+    const dl = ac.createDelay(1); dl.delayTime.value = .31; const fb = ac.createGain(); fb.gain.value = .34;
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
+    const wet = ac.createGain(); wet.gain.value = .38;
+    bus.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(wet); wet.connect(master);
+    ac.onstatechange = () => { if (ac && ac.state === 'running') tryBegin(); };
+  }
+  function tone(f, at, len, vol, parts) {
+    const g = ac.createGain(); g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .004); g.gain.exponentialRampToValueAtTime(.0001, at + len); g.connect(bus);
+    parts.forEach(p => {
+      const o = ac.createOscillator(), og = ac.createGain(); o.type = p[2]; o.frequency.value = f * p[0]; og.gain.value = p[1];
+      o.connect(og); og.connect(g); o.start(at); o.stop(at + len + .05);
+    });
+  }
+  const BELL = [[1, 1, 'sine'], [2, .32, 'sine'], [4.2, .1, 'sine']], BASS = [[1, 1, 'triangle'], [2, .25, 'sine']];
+  function sched() {
+    if (!playing) return;
+    for (;;) {
+      const e = ev[idx], at = base + e.t * BEAT;
+      if (at > ac.currentTime + .7) break;
+      if (at > ac.currentTime - .05) { if (e.k) tone(e.f, at, e.d * BEAT * 1.4, .15, BASS); else tone(e.f, at, Math.max(1, e.d * BEAT * 1.7), .2, BELL); }
+      if (++idx >= ev.length) { idx = 0; base += loopLen * BEAT; }
+    }
+  }
+  function begin() {
+    playing = true; idx = 0; base = ac.currentTime + .2;
+    const t = ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(VOL, t + 1.6);
+    clearInterval(timer); sched(); timer = setInterval(sched, 120); ui();
+  }
+  function tryBegin() { if (!closed && pref && !playing && !document.hidden && ac && ac.state === 'running') begin(); }
+  function start() {
+    if (closed || !pref || document.hidden) return;
+    if (!ac) { try { graph(); } catch (e) { btn.style.display = 'none'; return; } }
+    if (ac.state === 'running') tryBegin(); else { const p = ac.resume(); if (p && p.then) p.then(tryBegin).catch(() => {}); }
+  }
+  function halt() {
+    playing = false; clearInterval(timer); ui(); if (!ac) return;
+    const t = ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(0, t + .35);
+    setTimeout(() => { if (!playing && !closed && ac && ac.state === 'running') ac.suspend().catch(() => {}); }, 1500);
+  }
+  function ui() {
+    btn.classList.toggle('on', playing); btn.classList.toggle('wait', pref && !playing && !closed);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false'); btn.title = playing ? 'Silenciar música' : 'Activar música navideña';
+  }
+
+  /* ---- control ---- */
+  const GEST = ['click', 'touchend', 'keydown', 'pointerup'];
+  const unlock = e => { if (btn.contains(e.target)) return; if (pref && !playing) start(); };
+  GEST.forEach(n => document.addEventListener(n, unlock, { capture: true, passive: true }));
+  btn.addEventListener('click', () => {
+    if (playing) { pref = false; halt(); } else { pref = true; start(); }
+    try { localStorage.setItem('xmasMusic', pref ? 'on' : 'off'); } catch (e) {}
+    ui();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { if (playing) { hiddenPause = true; halt(); } }
+    else if (hiddenPause) { hiddenPause = false; start(); }
+  });
+  /* al iniciar sesión: la música se apaga con un fundido y el botón desaparece */
+  window.stopAuthMusic = function () {
+    closed = true; playing = false; clearInterval(timer); GEST.forEach(n => document.removeEventListener(n, unlock, true)); btn.style.display = 'none';
+    if (!ac) return;
+    const t = ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(0, t + .8);
+    setTimeout(() => { try { ac.close(); } catch (e) {} }, 1000);
+  };
+  ui(); start();
 })();
 </script>
 </body>
