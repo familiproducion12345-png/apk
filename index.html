@@ -261,6 +261,20 @@ html.gv-login,html.gv-login body{background:#0a0316!important}
 .gv-hint{position:absolute;top:calc(100% + 12px);right:0;white-space:nowrap;padding:8px 13px;border-radius:10px;background:linear-gradient(100deg,#ff3d7f,#ff7a2e);font-size:11px;font-weight:700;letter-spacing:.08em;color:#fff;box-shadow:0 12px 28px -8px rgba(255,46,147,.75);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .4s,transform .4s,visibility 0s .4s}
 .gv-hint::before{content:'';position:absolute;top:-5px;right:16px;width:10px;height:10px;background:#ff4f78;transform:rotate(45deg);border-radius:2px}
 .gv-hint.show{opacity:1;visibility:visible;transform:none;transition:opacity .4s,transform .4s;animation:gvBob 2.2s ease-in-out infinite}
+/* Título de la canción que suena (debajo del "Online") */
+.gv-statwrap{position:relative;display:flex}
+.gv-np{position:absolute;top:calc(100% + 8px);right:0;width:max-content;display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(14,4,30,.5);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--gv-ink);pointer-events:none;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .45s,transform .45s,visibility 0s .45s}
+.gv-np.show{opacity:1;visibility:visible;transform:none;transition:opacity .45s,transform .45s}
+.gv-np-bars{display:flex;align-items:flex-end;gap:2px;height:11px;flex:none}
+.gv-np-bars i{display:block;width:2.5px;height:100%;border-radius:1px;background:var(--gv-gold);transform-origin:50% 100%;transform:scaleY(.35);animation:gvNpBar 1s ease-in-out infinite}
+.gv-np-bars i:nth-child(2){animation-delay:-.35s}.gv-np-bars i:nth-child(3){animation-delay:-.7s}
+.gv-np-t{display:block;max-width:min(210px,52vw);overflow:hidden;white-space:nowrap}
+.gv-np-t b{display:inline-block;font-weight:inherit}
+.gv-np-t.mq b{animation:gvNpMq 9s ease-in-out infinite alternate}
+@keyframes gvNpBar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes gvNpMq{0%,12%{transform:translateX(0)}88%,100%{transform:translateX(var(--d,0))}}
+@media (max-width:480px){.gv-np{font-size:10.5px;padding:5px 10px}.gv-np-t{max-width:46vw}}
+@media (prefers-reduced-motion:reduce){.gv-np-bars i{animation:none;transform:scaleY(.7)}.gv-np-t.mq b{animation:none}}
 @keyframes gvBob{0%,100%{translate:0 0}50%{translate:0 -3px}}
 
 .gv-ticker{display:none;position:absolute;left:0;right:0;bottom:0;height:38px;overflow:hidden;align-items:center;border-top:1px solid rgba(255,170,215,.2);background:linear-gradient(0deg,rgba(10,3,22,.85),rgba(10,3,22,.35))}
@@ -451,6 +465,7 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
 .mus-btn:disabled{opacity:.6;cursor:wait}
 .mus-name{font-weight:800;font-size:14px;word-break:break-word}
 .mus-off{opacity:.6}
+.mus-title{flex:1;min-width:0;padding:7px 10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font:800 14px Outfit,sans-serif;outline:none}
 .mus-help{font-size:12px;color:#a1a1aa;line-height:1.5;margin:6px 0 12px}
 .mus-sql{display:none;width:100%;min-height:140px;margin-top:8px;padding:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#d4d4d8;font:11.5px/1.4 ui-monospace,Menlo,Consolas,monospace}
 </style>
@@ -526,7 +541,10 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
   <div class="gv-top">
     <div class="gv-chip gv-brandchip"><span class="gv-mark" aria-hidden="true">D</span><span class="gv-hud-name">Didi Online<small>Delivery crew</small></span></div>
     <div class="gv-hud-r">
-      <div class="gv-chip gv-stat"><span class="gv-live"><i></i>Online</span><span class="gv-clock" id="gvClock">--:--</span></div>
+      <div class="gv-statwrap">
+        <div class="gv-chip gv-stat"><span class="gv-live"><i></i>Online</span><span class="gv-clock" id="gvClock">--:--</span></div>
+        <div class="gv-np" id="gvNp" aria-live="polite"><span class="gv-np-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="gv-np-t" id="gvNpT"><b id="gvNpB"></b></span></div>
+      </div>
       <button type="button" class="gv-snd off" id="gvSound" aria-label="Sound" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <g class="eq"><rect x="3" y="4" width="3" height="16" rx="1.5"/><rect x="8" y="4" width="3" height="16" rx="1.5"/><rect x="13" y="4" width="3" height="16" rx="1.5"/><rect x="18" y="4" width="3" height="16" rx="1.5"/></g>
@@ -715,7 +733,7 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
         <label for="musStart">Empezar en el segundo</label>
         <input type="number" id="musStart" class="mus-num" min="0" value="0">
       </div>
-      <p class="mus-help">Máximo 25 MB por canción. Puedes elegir varias a la vez. Luego puedes cambiar el segundo de inicio de cada una.</p>
+      <p class="mus-help">Máximo 25 MB por canción. Puedes elegir varias a la vez. Luego puedes cambiar el título y el segundo de inicio de cada una. El título aparece en el login, debajo de “Online”, mientras suena.</p>
       <button type="button" class="auth-btn" id="musUpload">⬆️ Subir canciones</button>
     </div>
     <div class="ann-status" id="musStatus"></div>
@@ -4583,7 +4601,7 @@ function musRender() {
   $('musCount').textContent = musRows.length ? ('Canciones subidas · ' + musRows.length + ' · ' + act + ' activa' + (act === 1 ? '' : 's')) : 'Canciones subidas';
   box.innerHTML = musRows.length ? musRows.map(function (r) {
     return '<div class="ann-item ' + (r.active ? '' : 'mus-off') + '" data-id="' + esc(r.id) + '">' +
-      '<div class="ann-top"><span class="mus-name">🎵 ' + esc(r.name) + '</span>' +
+      '<div class="ann-top"><span aria-hidden="true">🎵</span><input type="text" class="mus-title" data-role="name" maxlength="120" placeholder="Título de la canción" value="' + esc(r.name) + '">' +
       '<button type="button" class="ann-del" data-act="del" title="Borrar">🗑</button></div>' +
       '<div class="mus-row"><button type="button" class="mus-btn play mus-play" data-act="play" data-id="' + esc(r.id) + '">▶ Probar</button>' +
       '<button type="button" class="mus-btn ' + (r.active ? 'on' : '') + '" data-act="toggle">' + (r.active ? '🟢 Activa' : '⚪ Desactivada') + '</button></div>' +
@@ -4605,7 +4623,7 @@ async function musUploadOne(f, start) {
     const up = await db.storage.from(MUS_BUCKET).upload(path, f, { contentType: f.type || 'audio/mpeg', cacheControl: '3600', upsert: false });
     if (up.error) return up.error.message;
     const url = db.storage.from(MUS_BUCKET).getPublicUrl(path).data.publicUrl;
-    const name = f.name.replace(/\.[^.]+$/, '').slice(0, 120) || 'Canción';
+    const name = cleanSongTitle(f.name.replace(/\.[^.]+$/, '')) || 'Canción';
     const ins = await db.from('login_music').insert({ name: name, path: path, url: url, start_sec: start, active: true });
     if (ins.error) { try { await db.storage.from(MUS_BUCKET).remove([path]); } catch (e) {} return ins.error.message; }
     return '';
@@ -4636,7 +4654,7 @@ $('musList').addEventListener('click', async function (e) {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const item = b.closest('.ann-item'); if (!item) return;
   const row = musRows.find(function (r) { return String(r.id) === item.dataset.id; }); if (!row) return;
-  const act = b.dataset.act, inp = item.querySelector('[data-role="start"]');
+  const act = b.dataset.act, inp = item.querySelector('[data-role="start"]'), nameInp = item.querySelector('[data-role="name"]');
   if (act === 'play') return musTogglePreview(row, inp ? inp.value : row.start_sec);
   b.disabled = true;
   try {
@@ -4645,11 +4663,12 @@ $('musList').addEventListener('click', async function (e) {
       if (r.error || !r.data || !r.data.length) musSetStatus('No se pudo cambiar: ' + ((r.error && r.error.message) || 'sin permiso (¿eres admin y ejecutaste el SQL?)'), 'err');
       else musSetStatus(!row.active ? '🟢 Canción activada.' : '⚪ Canción desactivada.', 'ok');
     } else if (act === 'save') {
-      const v = parseInt(inp && inp.value, 10);
+      const v = parseInt(inp && inp.value, 10), nm = String(nameInp ? nameInp.value : row.name).trim().slice(0, 120);
       if (!(v >= 0)) { musSetStatus('Escribe un segundo válido (0 o más).', 'err'); b.disabled = false; return; }
-      const r = await db.from('login_music').update({ start_sec: v }).eq('id', row.id).select('id');
+      if (!nm) { musSetStatus('Escribe un título para la canción.', 'err'); b.disabled = false; return; }
+      const r = await db.from('login_music').update({ name: nm, start_sec: v }).eq('id', row.id).select('id');
       if (r.error || !r.data || !r.data.length) musSetStatus('No se pudo guardar: ' + ((r.error && r.error.message) || 'sin permiso'), 'err');
-      else musSetStatus('✅ Guardado: empezará en el segundo ' + v + '.', 'ok');
+      else musSetStatus('✅ Guardado: “' + nm + '” empezará en el segundo ' + v + '.', 'ok');
     } else if (act === 'del') {
       if (!confirm('¿Borrar la canción “' + row.name + '”? Se elimina también el archivo.')) { b.disabled = false; return; }
       if (musPrevId === row.id) musStopPreview();
@@ -4797,6 +4816,15 @@ const LOGIN_MUSIC_URL = (function () {
 })();
 // Segundo desde el que arranca la canción (y al que vuelve cuando termina y se repite).
 const LOGIN_MUSIC_START = 45;
+// Título que se muestra en el login para la canción incrustada
+const LOGIN_MUSIC_NAME = 'Skrillex - All I Ask Of You (feat. Penny)';
+// Limpia nombres de archivo para mostrarlos como título (quita guiones bajos, "Y2Mate", ".mp3" al final...)
+function cleanSongTitle(n) {
+  return String(n || '').replace(/_/g, ' ')
+    .replace(/^\s*y2mate(?:[.\s]+(?:is|com|cc|nu))?\s*[-–—:]*\s*/i, '')
+    .replace(/\s+(?:mp3|m4a|wav|ogg)\s*$/i, '')
+    .replace(/\s{2,}/g, ' ').trim().slice(0, 120);
+}
 
 const GvAudio = (function () {
   const BPM = 100, S = 60 / BPM / 4, TARGET = 0.42, EL_VOL = 0.55;
@@ -4974,7 +5002,7 @@ const GvAudio = (function () {
   }
   // --- Lista de reproducción: canciones que subió el admin, en orden aleatorio ---
   let tracks = null, queue = [], cur = null, curStart = 0, errRun = 0, lastUrl = '';
-  function fallbackTrack() { return { url: LOGIN_MUSIC_URL, start: LOGIN_MUSIC_START, name: 'default', fb: true }; }
+  function fallbackTrack() { return { url: LOGIN_MUSIC_URL, start: LOGIN_MUSIC_START, name: LOGIN_MUSIC_NAME, fb: true }; }
   function shuffle(a) {
     const r = a.slice();
     for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)), t = r[i]; r[i] = r[j]; r[j] = t; }
@@ -5004,8 +5032,23 @@ const GvAudio = (function () {
   function playTrack(t) {
     if (!el || stopped || !t) return;
     cur = t; curStart = t.start || 0; lastUrl = t.url;
+    setNow(t.name);
     try { el.src = t.url; el.load(); } catch (e) {}
     tryPlayEl();
+  }
+  // --- Título de la canción en el HUD, debajo del "Online" ---
+  let npText = '';
+  function setNow(name) {
+    npText = cleanSongTitle(name);
+    const b = document.getElementById('gvNpB'), box = document.getElementById('gvNpT');
+    if (!b || !box) return;
+    b.textContent = npText;
+    box.classList.remove('mq'); box.style.removeProperty('--d');
+    const measure = function () {
+      const over = b.offsetWidth - box.clientWidth;
+      if (over > 4) { box.style.setProperty('--d', '-' + over + 'px'); box.classList.add('mq'); }   // título largo: se desplaza
+    };
+    if (window.requestAnimationFrame) window.requestAnimationFrame(measure); else measure();
   }
   function earlyEnough() { return !el || el.paused || (el.currentTime - curStart) < 8; }
 
@@ -5025,6 +5068,7 @@ const GvAudio = (function () {
     b.classList.toggle('off', !on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
     b.setAttribute('aria-label', on ? 'Mute music' : 'Play music');
+    const np = document.getElementById('gvNp'); if (np) np.classList.toggle('show', on && !!npText);
     if (h) h.classList.toggle('show', !run && !muted && !stopped);
   }
 
