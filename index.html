@@ -4816,6 +4816,8 @@ const GvAudio = (function () {
         tryPlayEl();
       });
       el.addEventListener('pause', sync); el.addEventListener('playing', sync);
+      // Autoplay inmediato: se intenta al cargar y de nuevo cuando el audio esté listo
+      el.addEventListener('canplay', function () { if (el && el.paused && !stopped) tryPlayEl(); }, { once: true });
       tryPlayEl();
       return;
     }
@@ -4848,7 +4850,7 @@ const GvAudio = (function () {
     setMuted(!muted);
   }
 
-  const GEST = ['pointerup', 'click', 'keydown', 'touchend'];
+  const GEST = ['pointerdown', 'mousedown', 'pointerup', 'click', 'keydown', 'touchstart', 'touchend'];
   function onGesture(e) {
     if (stopped) return detach();
     if (e && e.target && e.target.closest && e.target.closest('#gvSound')) return;
@@ -4887,6 +4889,8 @@ const GvAudio = (function () {
         else if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
       }
     });
+    window.addEventListener('load', function () { if (!stopped && el && el.paused) tryPlayEl(); });
+    window.addEventListener('pageshow', function () { if (!stopped && el && el.paused) tryPlayEl(); });
     start();                  // si el navegador permite autoplay, suena solo; si no, empieza con el primer toque
     sync();
     setTimeout(sync, 1400);   // el aviso "Tap to play" aparece cuando termina la animación de entrada
