@@ -438,6 +438,21 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
 .ann-body{font-size:13.5px;color:#d4d4d8;white-space:pre-wrap;word-break:break-word}
 .ann-date{font-size:11px;color:#8b8b95;margin-top:6px}
 .ann-empty{padding:14px;color:#a1a1aa;font-size:13px;text-align:center}
+/* ===== MUSICA DEL LOGIN (panel admin) ===== */
+#musPanel{display:none;position:fixed;inset:0;z-index:335;overflow:auto;padding:14px;color:#fff;font-family:Outfit,sans-serif;background:rgba(18,20,28,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.mus-up{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px;margin-bottom:10px}
+.mus-up input[type=file]{width:100%;margin-bottom:10px;color:#d4d4d8;font-size:13px}
+.mus-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.mus-row label{font-size:12px;color:#a1a1aa}
+.mus-num{width:84px;padding:8px 10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:13px;outline:none}
+.mus-btn{padding:7px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;font-size:12.5px;font-weight:700;cursor:pointer}
+.mus-btn.on{background:rgba(74,222,128,.2);border-color:#4ade80;color:#b6f5cf}
+.mus-btn.play{background:rgba(255,122,0,.22);border-color:rgba(255,122,0,.6)}
+.mus-btn:disabled{opacity:.6;cursor:wait}
+.mus-name{font-weight:800;font-size:14px;word-break:break-word}
+.mus-off{opacity:.6}
+.mus-help{font-size:12px;color:#a1a1aa;line-height:1.5;margin:6px 0 12px}
+.mus-sql{display:none;width:100%;min-height:140px;margin-top:8px;padding:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#d4d4d8;font:11.5px/1.4 ui-monospace,Menlo,Consolas,monospace}
 </style>
 <style>
 /* ===== HISTORIAL DE USO (panel admin) ===== */
@@ -661,6 +676,7 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
     </div>
     <button class="adm-hist-btn" id="admHistBtn" type="button">📜 Historial de uso</button>
     <button class="adm-hist-btn" id="admAnnBtn" type="button" style="margin-top:8px">📣 Enviar aviso a todos</button>
+    <button class="adm-hist-btn" id="admMusBtn" type="button" style="margin-top:8px">🎵 Música del login</button>
     <div class="adm-stats" id="admStats"></div>
     <input id="admSearch" class="adm-search" placeholder="🔎 Buscar por correo...">
     <div class="adm-chips" id="admChips">
@@ -683,6 +699,31 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
     <button type="button" class="auth-btn" id="annSend">📣 Enviar a todos</button>
     <div class="ann-h">Avisos enviados</div>
     <div id="annList"></div>
+  </div>
+</div>
+
+<!-- ====== PANEL MÚSICA DEL LOGIN (solo admin) ====== -->
+<div id="musPanel">
+  <div class="adm-wrap">
+    <div class="adm-head">
+      <div><div class="adm-title">🎵 Música del login</div><div class="adm-sub">Las canciones activas suenan al azar en la pantalla de inicio</div></div>
+      <div><button class="adm-ico" id="musRefresh" type="button">↻</button><button class="adm-ico close" id="musClose" type="button">✕</button></div>
+    </div>
+    <div class="mus-up">
+      <input type="file" id="musFile" accept="audio/*,.mp3,.m4a,.aac,.ogg,.wav,.opus" multiple>
+      <div class="mus-row" style="margin-top:0">
+        <label for="musStart">Empezar en el segundo</label>
+        <input type="number" id="musStart" class="mus-num" min="0" value="0">
+      </div>
+      <p class="mus-help">Máximo 25 MB por canción. Puedes elegir varias a la vez. Luego puedes cambiar el segundo de inicio de cada una.</p>
+      <button type="button" class="auth-btn" id="musUpload">⬆️ Subir canciones</button>
+    </div>
+    <div class="ann-status" id="musStatus"></div>
+    <div class="ann-h" id="musCount">Canciones subidas</div>
+    <div id="musList"></div>
+    <p class="mus-help">Si no hay ninguna canción activa, suena la canción por defecto.</p>
+    <button type="button" class="mus-btn" id="musSqlBtn">⚙️ Copiar SQL de configuración (solo la primera vez)</button>
+    <textarea class="mus-sql" id="musSqlBox" readonly spellcheck="false"></textarea>
   </div>
 </div>
 
@@ -4494,6 +4535,142 @@ $('annList').addEventListener('click', async (e) => {
   annLoadAdminList();
 });
 
+/* ---------- MÚSICA DEL LOGIN (panel admin) ---------- */
+const MUS_BUCKET = 'login-music', MUS_MAX_MB = 25;
+const MUS_SQL = ["-- ============================================================", "-- MUSICA DEL LOGIN - configuracion de Supabase", "-- Ejecutar UNA sola vez: Supabase > SQL Editor > New query > pegar todo > Run", "-- Es seguro volver a ejecutarlo (no borra nada).", "-- ============================================================", "", "-- 1) Funcion que dice si quien consulta es administrador", "create or replace function public.gv_is_admin()", "returns boolean", "language sql", "stable", "security definer", "set search_path = public", "as $$", "  select coalesce((select p.is_admin from public.profiles p where p.id = auth.uid()), false);", "$$;", "grant execute on function public.gv_is_admin() to anon, authenticated;", "", "-- 2) Tabla con las canciones", "create table if not exists public.login_music (", "  id uuid primary key default gen_random_uuid(),", "  name text not null,", "  path text not null,", "  url text not null,", "  start_sec integer not null default 0 check (start_sec >= 0),", "  active boolean not null default true,", "  created_at timestamptz not null default now()", ");", "alter table public.login_music enable row level security;", "", "-- Cualquiera puede LEER la lista (el login se ve antes de iniciar sesion)", "drop policy if exists \"login_music_select_all\" on public.login_music;", "create policy \"login_music_select_all\" on public.login_music", "  for select to anon, authenticated using (true);", "", "-- Solo el ADMIN puede agregar, editar o borrar", "drop policy if exists \"login_music_admin_insert\" on public.login_music;", "create policy \"login_music_admin_insert\" on public.login_music", "  for insert to authenticated with check (public.gv_is_admin());", "", "drop policy if exists \"login_music_admin_update\" on public.login_music;", "create policy \"login_music_admin_update\" on public.login_music", "  for update to authenticated using (public.gv_is_admin()) with check (public.gv_is_admin());", "", "drop policy if exists \"login_music_admin_delete\" on public.login_music;", "create policy \"login_music_admin_delete\" on public.login_music", "  for delete to authenticated using (public.gv_is_admin());", "", "-- 3) Carpeta (bucket) publica para los archivos de audio (max 25 MB c/u)", "insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)", "values ('login-music', 'login-music', true, 26214400, array['audio/*'])", "on conflict (id) do update", "  set public = true, file_size_limit = 26214400, allowed_mime_types = array['audio/*'];", "", "-- 4) Solo el ADMIN puede subir y borrar archivos en esa carpeta", "drop policy if exists \"login_music_obj_select\" on storage.objects;", "create policy \"login_music_obj_select\" on storage.objects", "  for select to authenticated using (bucket_id = 'login-music' and public.gv_is_admin());", "", "drop policy if exists \"login_music_obj_insert\" on storage.objects;", "create policy \"login_music_obj_insert\" on storage.objects", "  for insert to authenticated with check (bucket_id = 'login-music' and public.gv_is_admin());", "", "drop policy if exists \"login_music_obj_update\" on storage.objects;", "create policy \"login_music_obj_update\" on storage.objects", "  for update to authenticated using (bucket_id = 'login-music' and public.gv_is_admin())", "  with check (bucket_id = 'login-music' and public.gv_is_admin());", "", "drop policy if exists \"login_music_obj_delete\" on storage.objects;", "create policy \"login_music_obj_delete\" on storage.objects", "  for delete to authenticated using (bucket_id = 'login-music' and public.gv_is_admin());"].join('\n');
+let musRows = [], musPrev = null, musPrevId = null, musTok = 0, musBusy = false;
+
+function musSetStatus(msg, type) { const s = $('musStatus'); s.textContent = msg; s.className = 'ann-status' + (type ? ' ' + type : ''); }
+function musMarkPlaying() {
+  document.querySelectorAll('#musList .mus-play').forEach(function (b) {
+    const on = musPrev && !musPrev.paused && b.dataset.id === musPrevId;
+    b.textContent = on ? '⏸ Pausar' : '▶ Probar';
+  });
+}
+function musStopPreview() { if (musPrev) { try { musPrev.pause(); } catch (e) {} } musPrevId = null; musMarkPlaying(); }
+function musTogglePreview(row, startVal) {
+  if (!musPrev) {
+    musPrev = new Audio(); musPrev.preload = 'auto';
+    musPrev.addEventListener('pause', musMarkPlaying);
+    musPrev.addEventListener('playing', musMarkPlaying);
+    musPrev.addEventListener('ended', function () { musPrevId = null; musMarkPlaying(); });
+  }
+  if (musPrevId === row.id && !musPrev.paused) { musPrev.pause(); return; }
+  musPrevId = row.id;
+  const st = Math.max(0, parseInt(startVal, 10) || 0), tok = ++musTok;
+  musPrev.src = row.url;
+  musPrev.addEventListener('loadedmetadata', function () {
+    if (tok !== musTok) return;
+    try { musPrev.currentTime = st; } catch (e) {}
+    const p = musPrev.play(); if (p && p.catch) p.catch(function () {});
+  }, { once: true });
+  musPrev.load();
+}
+
+async function musLoad() {
+  const box = $('musList');
+  box.innerHTML = '<p class="ann-empty">Cargando...</p>';
+  const { data, error } = await db.from('login_music').select('id,name,path,url,start_sec,active,created_at').order('created_at', { ascending: false });
+  if (error) {
+    box.innerHTML = '<p class="ann-empty">⚠️ ' + esc(error.message) + '<br>¿Ya ejecutaste el SQL de música en Supabase? Toca “Copiar SQL de configuración” abajo.</p>';
+    return;
+  }
+  musRows = data || [];
+  musRender();
+}
+function musRender() {
+  const box = $('musList'), act = musRows.filter(function (r) { return r.active; }).length;
+  $('musCount').textContent = musRows.length ? ('Canciones subidas · ' + musRows.length + ' · ' + act + ' activa' + (act === 1 ? '' : 's')) : 'Canciones subidas';
+  box.innerHTML = musRows.length ? musRows.map(function (r) {
+    return '<div class="ann-item ' + (r.active ? '' : 'mus-off') + '" data-id="' + esc(r.id) + '">' +
+      '<div class="ann-top"><span class="mus-name">🎵 ' + esc(r.name) + '</span>' +
+      '<button type="button" class="ann-del" data-act="del" title="Borrar">🗑</button></div>' +
+      '<div class="mus-row"><button type="button" class="mus-btn play mus-play" data-act="play" data-id="' + esc(r.id) + '">▶ Probar</button>' +
+      '<button type="button" class="mus-btn ' + (r.active ? 'on' : '') + '" data-act="toggle">' + (r.active ? '🟢 Activa' : '⚪ Desactivada') + '</button></div>' +
+      '<div class="mus-row"><label>Empieza en el segundo</label>' +
+      '<input type="number" min="0" class="mus-num" data-role="start" value="' + (parseInt(r.start_sec, 10) || 0) + '">' +
+      '<button type="button" class="mus-btn" data-act="save">Guardar</button></div>' +
+      '<div class="ann-date">' + fmtUsageDate(r.created_at) + '</div></div>';
+  }).join('') : '<p class="ann-empty">Aún no has subido canciones. Mientras tanto suena la canción por defecto.</p>';
+  musMarkPlaying();
+}
+
+async function musUploadOne(f, start) {
+  try {
+    const ext = (f.name.split('.').pop() || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 5);
+    const isAudio = /^audio\//.test(f.type) || ['mp3', 'm4a', 'aac', 'ogg', 'wav', 'opus', 'webm'].indexOf(ext) >= 0;
+    if (!isAudio) return 'no es un archivo de audio';
+    if (f.size > MUS_MAX_MB * 1024 * 1024) return 'pesa más de ' + MUS_MAX_MB + ' MB';
+    const path = Date.now() + '_' + Math.random().toString(36).slice(2, 8) + '.' + (ext || 'mp3');
+    const up = await db.storage.from(MUS_BUCKET).upload(path, f, { contentType: f.type || 'audio/mpeg', cacheControl: '3600', upsert: false });
+    if (up.error) return up.error.message;
+    const url = db.storage.from(MUS_BUCKET).getPublicUrl(path).data.publicUrl;
+    const name = f.name.replace(/\.[^.]+$/, '').slice(0, 120) || 'Canción';
+    const ins = await db.from('login_music').insert({ name: name, path: path, url: url, start_sec: start, active: true });
+    if (ins.error) { try { await db.storage.from(MUS_BUCKET).remove([path]); } catch (e) {} return ins.error.message; }
+    return '';
+  } catch (e) { return (e && e.message) || 'error de red'; }
+}
+
+$('admMusBtn').addEventListener('click', function () { musSetStatus(''); $('musPanel').style.display = 'block'; musLoad(); });
+$('musClose').addEventListener('click', function () { musStopPreview(); $('musPanel').style.display = 'none'; });
+$('musRefresh').addEventListener('click', musLoad);
+$('musUpload').addEventListener('click', async function () {
+  if (musBusy) return;
+  const files = Array.from($('musFile').files || []);
+  if (!files.length) return musSetStatus('Elige al menos un archivo de audio.', 'err');
+  const start = Math.max(0, parseInt($('musStart').value, 10) || 0), btn = $('musUpload');
+  musBusy = true; btn.disabled = true;
+  let ok = 0; const fail = [];
+  for (let i = 0; i < files.length; i++) {
+    musSetStatus('Subiendo ' + (i + 1) + ' de ' + files.length + ': ' + files[i].name + ' ...');
+    const err = await musUploadOne(files[i], start);
+    if (err) fail.push(files[i].name + ' (' + err + ')'); else ok++;
+  }
+  musBusy = false; btn.disabled = false; $('musFile').value = '';
+  if (fail.length) musSetStatus((ok ? '✅ ' + ok + ' subida(s). ' : '') + '⚠️ No se pudo subir: ' + fail.join('; ') + (ok ? '' : '. ¿Ya ejecutaste el SQL de música?'), 'err');
+  else musSetStatus('✅ ' + ok + ' canción(es) subida(s). Ya suenan en el login.', 'ok');
+  musLoad();
+});
+$('musList').addEventListener('click', async function (e) {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const item = b.closest('.ann-item'); if (!item) return;
+  const row = musRows.find(function (r) { return String(r.id) === item.dataset.id; }); if (!row) return;
+  const act = b.dataset.act, inp = item.querySelector('[data-role="start"]');
+  if (act === 'play') return musTogglePreview(row, inp ? inp.value : row.start_sec);
+  b.disabled = true;
+  try {
+    if (act === 'toggle') {
+      const r = await db.from('login_music').update({ active: !row.active }).eq('id', row.id).select('id');
+      if (r.error || !r.data || !r.data.length) musSetStatus('No se pudo cambiar: ' + ((r.error && r.error.message) || 'sin permiso (¿eres admin y ejecutaste el SQL?)'), 'err');
+      else musSetStatus(!row.active ? '🟢 Canción activada.' : '⚪ Canción desactivada.', 'ok');
+    } else if (act === 'save') {
+      const v = parseInt(inp && inp.value, 10);
+      if (!(v >= 0)) { musSetStatus('Escribe un segundo válido (0 o más).', 'err'); b.disabled = false; return; }
+      const r = await db.from('login_music').update({ start_sec: v }).eq('id', row.id).select('id');
+      if (r.error || !r.data || !r.data.length) musSetStatus('No se pudo guardar: ' + ((r.error && r.error.message) || 'sin permiso'), 'err');
+      else musSetStatus('✅ Guardado: empezará en el segundo ' + v + '.', 'ok');
+    } else if (act === 'del') {
+      if (!confirm('¿Borrar la canción “' + row.name + '”? Se elimina también el archivo.')) { b.disabled = false; return; }
+      if (musPrevId === row.id) musStopPreview();
+      const r = await db.from('login_music').delete().eq('id', row.id).select('id');
+      if (r.error || !r.data || !r.data.length) musSetStatus('No se pudo borrar: ' + ((r.error && r.error.message) || 'sin permiso'), 'err');
+      else {
+        try { await db.storage.from(MUS_BUCKET).remove([row.path]); } catch (e2) {}
+        musSetStatus('🗑 Canción borrada.', 'ok');
+      }
+    }
+  } catch (e3) { musSetStatus('Error: ' + ((e3 && e3.message) || e3), 'err'); }
+  musLoad();
+});
+$('musSqlBtn').addEventListener('click', async function () {
+  const box = $('musSqlBox'); box.value = MUS_SQL; box.style.display = 'block';
+  let copied = false;
+  try { await navigator.clipboard.writeText(MUS_SQL); copied = true; }
+  catch (e) { try { box.focus(); box.select(); copied = document.execCommand('copy'); } catch (e2) {} }
+  musSetStatus(copied ? '✅ SQL copiado. Pégalo en Supabase → SQL Editor → Run.' : 'Copia el SQL de la caja de abajo y pégalo en Supabase → SQL Editor → Run.', copied ? 'ok' : '');
+});
+
 /* ---------- Historial de uso (panel admin) ---------- */
 let usageRows = [], usgFilter = 'all';
 const BOGOTA_TZ = 'America/Bogota';
@@ -4795,9 +4972,46 @@ const GvAudio = (function () {
       if (k >= 1) clearInterval(fadeT);
     }, 30);
   }
+  // --- Lista de reproducción: canciones que subió el admin, en orden aleatorio ---
+  let tracks = null, queue = [], cur = null, curStart = 0, errRun = 0, lastUrl = '';
+  function fallbackTrack() { return { url: LOGIN_MUSIC_URL, start: LOGIN_MUSIC_START, name: 'default', fb: true }; }
+  function shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)), t = r[i]; r[i] = r[j]; r[j] = t; }
+    return r;
+  }
+  function nextTrack() {
+    if (!tracks || !tracks.length) return fallbackTrack();
+    if (!queue.length) {
+      queue = shuffle(tracks);
+      if (queue.length > 1 && lastUrl && queue[0].url === lastUrl) queue.push(queue.shift());   // no repetir la misma seguida
+    }
+    return queue.shift();
+  }
+  function fetchTracks() {
+    return new Promise(function (resolve) {
+      try {
+        if (!db) return resolve([]);
+        db.from('login_music').select('url,name,start_sec').eq('active', true).then(function (r) {
+          const rows = (r && !r.error && r.data) || [];
+          resolve(rows.filter(function (x) { return x && x.url; }).map(function (x) {
+            return { url: x.url, name: x.name, start: Math.max(0, parseInt(x.start_sec, 10) || 0) };
+          }));
+        }, function () { resolve([]); });
+      } catch (e) { resolve([]); }
+    });
+  }
+  function playTrack(t) {
+    if (!el || stopped || !t) return;
+    cur = t; curStart = t.start || 0; lastUrl = t.url;
+    try { el.src = t.url; el.load(); } catch (e) {}
+    tryPlayEl();
+  }
+  function earlyEnough() { return !el || el.paused || (el.currentTime - curStart) < 8; }
+
   function tryPlayEl() {
-    if (!el) return;
-    try { if (el.currentTime < LOGIN_MUSIC_START) el.currentTime = LOGIN_MUSIC_START; } catch (e) {}
+    if (!el || !cur) return;
+    try { if (el.currentTime < curStart) el.currentTime = curStart; } catch (e) {}
     const p = el.play();
     if (p && p.then) p.then(function () { fadeEl(muted ? 0 : EL_VOL, 1200); sync(); }).catch(function () { sync(); });
   }
@@ -4818,20 +5032,38 @@ const GvAudio = (function () {
     if (built || stopped) return;
     built = true;
     if (LOGIN_MUSIC_URL) {
-      el = new Audio(LOGIN_MUSIC_URL); el.loop = false; el.preload = 'auto'; el.volume = 0;
-      // Empieza en el segundo 45 y, al terminar la canción, se repite desde el 45 otra vez
+      el = new Audio(); el.loop = false; el.preload = 'auto'; el.volume = 0;
+      // Cada canción empieza en su segundo de inicio (el que puso el admin)
       el.addEventListener('loadedmetadata', function () {
-        try { if (el && el.currentTime < LOGIN_MUSIC_START) el.currentTime = LOGIN_MUSIC_START; } catch (e) {}
+        try {
+          if (isFinite(el.duration) && curStart >= el.duration - 2) { curStart = 0; el.currentTime = 0; }   // inicio inválido -> desde el principio
+          else if (el.currentTime < curStart) el.currentTime = curStart;
+        } catch (e) {}
       });
-      el.addEventListener('ended', function () {
-        if (!el || stopped) return;
-        try { el.currentTime = LOGIN_MUSIC_START; } catch (e) {}
-        tryPlayEl();
+      // Al terminar una canción pasa a la siguiente de la lista al azar
+      el.addEventListener('ended', function () { if (el && !stopped) playTrack(nextTrack()); });
+      // Si una canción falla, salta a otra; si todas fallan, usa la incrustada
+      el.addEventListener('error', function () {
+        if (!el || stopped || !cur || cur.fb) return;
+        errRun++;
+        if (tracks && tracks.length && errRun < Math.min(tracks.length, 4)) playTrack(nextTrack());
+        else playTrack(fallbackTrack());
       });
-      el.addEventListener('pause', sync); el.addEventListener('playing', sync);
+      el.addEventListener('pause', sync);
+      el.addEventListener('playing', function () { errRun = 0; sync(); });
       // Autoplay inmediato: se intenta al cargar y de nuevo cuando el audio esté listo
-      el.addEventListener('canplay', function () { if (el && el.paused && !stopped) tryPlayEl(); }, { once: true });
-      tryPlayEl();
+      el.addEventListener('canplay', function () { if (el && el.paused && !stopped && !document.hidden) tryPlayEl(); }, { once: true });
+      // Canciones activas que subió el admin (Supabase). Si no hay o tardan, suena la incrustada.
+      const P = fetchTracks();
+      P.then(function (list) {
+        if (!list.length || stopped) return;
+        tracks = list;
+        if (cur && cur.fb && earlyEnough()) playTrack(nextTrack());   // llegó la lista justo cuando arrancaba la incrustada
+      });
+      Promise.race([P, new Promise(function (r) { setTimeout(r, 3500); })]).then(function () {
+        if (stopped || !el) return;
+        if (!cur) playTrack(nextTrack());
+      });
       return;
     }
     if (!build()) return;
@@ -4844,7 +5076,7 @@ const GvAudio = (function () {
     if (stopped) return;
     gestured = true;
     if (!built) start();
-    if (el) { if (el.paused) tryPlayEl(); }
+    if (el) { if (!cur) playTrack(fallbackTrack()); else if (el.paused) tryPlayEl(); }
     else if (ctx && ctx.state !== 'running') {
       try { const r = ctx.resume(); if (r && r.then) r.then(sync).catch(function () {}); } catch (e) {}
     }
