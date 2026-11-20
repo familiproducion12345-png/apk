@@ -1260,8 +1260,17 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
     <!-- AJUSTE A LA PANTALLA DEL CELULAR: la app ocupa SIEMPRE el alto real visible (sin franja en blanco bajo "Salir").
          Se usa 100% del contenedor en lugar de 100vh, porque en el celular 100vh puede ser menor que la pantalla visible. -->
     <style id="phone-fit-fix">
-        html { height: 100%; width: 100%; margin: 0; padding: 0; background: #f5f6f8; }
+        html { height: 100%; width: 100%; margin: 0; padding: 0; background: #ffffff; }
         html.dark { background: #1e2128; }
+        /* En el celular, si el navegador reporta un alto menor al de la pantalla, lo que quede bajo la barra "Salir"
+           se ve del mismo color que la barra (continuo hasta el borde), nunca como una franja gris. */
+        @media (max-width: 639px) {
+            html:not(.dark) body { background: #ffffff !important; }
+            #app-container { box-shadow: none !important; }
+            html:not(.dark) #app-container {
+                background-image: linear-gradient(to bottom, rgba(255,255,255,0) calc(100% - 140px), #ffffff calc(100% - 140px));
+            }
+        }
         body { height: 100% !important; min-height: 100% !important; width: 100% !important; }
         #stage-1, #stage-2, #stage-3 { height: 100% !important; }
         #app-container { height: 100% !important; }
@@ -4528,6 +4537,19 @@ async function onLoginSuccess(user) {
   window.appIsAdmin = !!prof.is_admin;
 
   const frame = $('appFrame');
+  // El fondo de la página detrás de la app toma el color de la app (blanco / oscuro) para que no se vea ninguna franja
+  const syncShellBg = () => {
+    try {
+      const dark = frame.contentDocument.documentElement.classList.contains('dark');
+      const c = dark ? '#1e2128' : '#ffffff';
+      document.documentElement.style.background = c;
+      document.body.style.background = c;
+    } catch (e) {}
+  };
+  frame.addEventListener('load', () => {
+    syncShellBg();
+    try { new MutationObserver(syncShellBg).observe(frame.contentDocument.documentElement, { attributes: true, attributeFilter: ['class'] }); } catch (e) {}
+  });
   frame.srcdoc = src;
   frame.style.display = 'block';
   $('creditPill').textContent = '💳 ' + prof.credits;
