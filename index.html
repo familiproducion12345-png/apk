@@ -1210,6 +1210,53 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
         .fb-send:disabled { background: #fed8c5; cursor: default; }
         .fb-send:not(:disabled):active { transform: scale(.985); }
     </style>
+    <!-- ====== ETAPA 1 · ajustes de estilo según la imagen de referencia ====== -->
+    <style id="stage1-reference-styles">
+        /* Contador de fotos (esquina inferior derecha de la imagen del restaurante) */
+        .photo-counter-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 32px;
+            padding: 0 11px;
+            border-radius: 9px;
+            background: rgba(0, 0, 0, 0.85);
+            -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .photo-counter-badge .pc-gallery-icon { flex-shrink: 0; display: block; }
+        .photo-counter-badge #dark-mode-icon { width: 18px; text-align: center; font-size: 14px !important; line-height: 18px; }
+
+        /* Barra "Salir" bloqueada (antes de pulsar "Tengo el pedido"): idéntica a la referencia.
+           Solo aplica mientras el contenedor conserva la clase opacity-60 (estado bloqueado);
+           al activarse, la lógica existente quita esa clase y vuelve a mandar el naranja. */
+        html:not(.dark) #slide-to-exit-container.opacity-60 {
+            background: #f2f2f4 !important;
+            border: 0 !important;
+            opacity: 1 !important;
+            border-radius: 18px;
+        }
+        html:not(.dark) #slide-to-exit-container.opacity-60 #slide-text-container span {
+            color: #d8d7dc !important;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        html:not(.dark) #slide-to-exit-container.opacity-60 #slide-thumb {
+            background: transparent !important;
+            box-shadow: none !important;
+            left: 1px;
+        }
+        html:not(.dark) #slide-to-exit-container.opacity-60 #slide-thumb-icon {
+            stroke: #dadadc;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 dark:bg-[#1e2128] text-gray-900 dark:text-white flex justify-center items-center h-screen w-screen p-0 m-0 overflow-hidden transition-colors duration-300">
 
@@ -1432,11 +1479,12 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
                         <i class="fa-solid fa-store text-[#ff5a00] text-[15px]"></i> Tiendas
                     </button>
                 </div>
-                <div class="absolute bottom-9 right-4 z-20">
-                    <div id="btn-dark-mode-toggle" role="button" title="Modo oscuro / claro" class="bg-black/60 text-white text-[13px] font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm cursor-pointer active:scale-95 transition-transform">
-                        <span contenteditable="false" data-editable="true">1/1</span>
+                <div class="absolute z-20" style="right:11px;bottom:30px">
+                    <!-- Contador de fotos: mismo estilo que la app original. Sigue funcionando como interruptor de modo oscuro/claro -->
+                    <div id="btn-dark-mode-toggle" role="button" title="Modo oscuro / claro" class="photo-counter-badge cursor-pointer active:scale-95 transition-transform">
+                        <svg id="dm-chevron" class="pc-gallery-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2.2" width="13.6" height="13.6" rx="3.3"></rect><path d="M4.6 6.4v8.6a3.2 3.2 0 0 0 3.2 3.2h9.4"></path><path d="M10.6 12.9l2.5-3.3 1.6 1.9 1.2-1.4 2.3 2.8z" fill="currentColor" stroke-width="1.2"></path></svg>
                         <i id="dark-mode-icon" class="fa-solid fa-moon text-[12px] text-white" style="display:none"></i>
-                        <svg id="dm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        <span contenteditable="false" data-editable="true">1/1</span>
                     </div>
                 </div>
             </div>
@@ -1541,7 +1589,10 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-900 dark:text-white shrink-0"><path d="M19.6 11.4 14.2 3.1a2 2 0 0 0-3.5 0L2.9 17a2.1 2.1 0 0 0 1.8 3.2h9.9"/><path d="M21.4 14.2l-3.5 6.5"/><path d="M12.4 9.4v3.4"/><path d="M12.4 16.8h.01"/></svg>
                             <span contenteditable="false" data-editable="true" class="text-[15px] font-bold text-gray-900 dark:text-white">Centro de ayuda</span>
                         </div>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><path d="m9 18 6-6-6-6"/></svg>
+                        <div class="flex items-center shrink-0" style="gap:3px">
+                            <span id="help-center-red-dot" aria-hidden="true" style="display:block;width:7px;height:7px;border-radius:9999px;background:#ff3660"></span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400" style="color:#a9a9ae"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
                     </div>
 
                     <!-- OPINIÓN SOBRE LA TIENDA: al tocar No o Sí se abre la pantalla de motivos -->
@@ -1563,7 +1614,7 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-[#1e2128] px-5 pt-3 pb-6 shrink-0 z-30 shadow-[0_-10px_20px_rgba(255,255,255,1)] dark:shadow-[0_-10px_20px_rgba(18,18,18,1)] flex items-center gap-3 relative">
+            <div class="bg-white dark:bg-[#1e2128] px-5 pt-3 pb-5 shrink-0 z-30 shadow-[0_-10px_20px_rgba(255,255,255,1)] dark:shadow-[0_-10px_20px_rgba(18,18,18,1)] flex items-center gap-[10px] relative">
                 <button class="w-[50px] h-[50px] bg-transparent flex items-center justify-start pl-[9px] shrink-0 text-gray-900 dark:text-white">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M1.2 5.2H11.2M18.5 5.2H22.6"/>
@@ -2550,8 +2601,8 @@ linear-gradient(var(--gv-pink),var(--gv-pink)) 100% 100%/16px 2px no-repeat,line
             clearTimeout(dmIconTimer);
             dmIconTimer = setTimeout(() => { ic.style.display = 'none'; ch.style.display = ''; }, 8000);
         }
-        showDarkIcon();
-        window.addEventListener('load', showDarkIcon);
+        // (aviso automático luna/sol al cargar retirado: el contador se ve como la referencia)
+        // (aviso automático luna/sol al cargar retirado)
         document.getElementById('btn-dark-mode-toggle').addEventListener('click', (e) => {
             e.stopPropagation();
             if (typeof isEditMode !== 'undefined' && isEditMode && e.target.closest('[contenteditable="true"]')) return;
